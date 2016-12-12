@@ -1,0 +1,51 @@
+@CHARSET "UTF-8";
+@font-face {
+    font-family: 'Roboto_Condensed';
+    src: url('../fonts/Roboto_Condensed/RobotoCondensed-Bold.ttf');
+    src: url('../fonts/Roboto_Condensed/RobotoCondensed-BoldItalic.ttf');
+    src: url('../fonts/Roboto_Condensed/RobotoCondensed-Italic.ttf');
+    src: url('../fonts/Roboto_Condensed/RobotoCondensed-Light.ttf');
+    src: url('../fonts/Roboto_Condensed/RobotoCondensed-LightItalic.ttf');
+    src: url('../fonts/Roboto_Condensed/RobotoCondensed-Regular.ttf');
+}
+*{
+    font-family: "Roboto_Condensed";
+}
+.glyphicon {
+    font-family: 'Glyphicons Halflings' !important;
+}
+.fa {
+    font-family: 'FontAwesome' !important;
+}
+.form-control {
+    box-shadow: none !important;
+}
+body {
+    font-size: 14px;
+}
+.table-bordered>thead>tr>th, .table-bordered>tbody>tr>th, .table-bordered>tfoot>tr>th, .table-bordered>thead>tr>td, .table-bordered>tbody>tr>td, .table-bordered>tfoot>tr>td {border: 1px solid #ddd !important;}
+/*-----------------------------------------------------------------------------------*/
+.scroll {
+    overflow-x: auto;
+}
+
+.scroll::-webkit-scrollbar {
+    height: 5px;
+}
+
+.scroll::-webkit-scrollbar-track {
+    background: #F1F1F1;
+}
+
+.scroll::-webkit-scrollbar-thumb {
+    background: #BCBCBC;
+}
+.content-header>.breadcrumb {
+    position: relative;
+    float: none;
+    padding: 5px 12px;
+    top: 0;
+}
+.table tr th {
+    text-align: center;
+}
