@@ -348,13 +348,17 @@ class AdminCRUDMakeCommand extends GeneratorCommandBase
                 $relationName = lcfirst(\StringHelper::snake2Camel($fieldName));
                 $idName = \StringHelper::camel2Spinal($relationName);
 
-                $template = '                    @if( !empty($%%class%%->%%relation%%) )'
-                    .PHP_EOL.'                        <img width="400" src="{!! $%%class%%->%%relation%%->getThumbnailUrl(480, 300) !!}" alt="" class="margin" />'
-                    .PHP_EOL.'                    @endif'
-                    .PHP_EOL.'                    <div class="form-group">'
-                    .PHP_EOL.'                        <label for="%%field%%">@lang(\'admin.pages.%%classes-spinal%%.columns.%%column%%\')</label>'
-                    .PHP_EOL.'                        <input type="file" id="%%id%%-image" name="%%field%%">'
-                    .PHP_EOL.'                        <p class="help-block">@lang(\'admin.pages.%%classes-spinal%%.columns.%%column%%\')</p>'
+                $template = '                    <div class="form-group text-center">'
+                    .PHP_EOL.'                      @if( !empty($%%class%%->%%relation%%) )'
+                    .PHP_EOL.'                          <img id="%%id%%-preview"  style="max-width: 500px; width: 100%;" src="{!! $%%class%%->%%relation%%->getThumbnailUrl(480, 300) !!}" alt="" class="margin" />'
+                    .PHP_EOL.'                      @else'
+                    .PHP_EOL.'                          <img id="%%id%%-preview" style="max-width: 500px; width: 100%;" src="{!! \URLHelper::asset(\'img/no_image.jpg\', \'common\') !!}" alt="" class="margin" />'
+                    .PHP_EOL.'                      @endif'
+                    .PHP_EOL.'                      <input type="file" style="display: none;"  id="%%id%%" name="%%field%%">'
+                    .PHP_EOL.'                      <p class="help-block" style="font-weight: bolder;">'
+                    .PHP_EOL.'                          @lang(\'admin.pages.%%classes-spinal%%.columns.%%column%%\')'
+                    .PHP_EOL.'                          <label for="%%id%%" style="font-weight: 100; color: #549cca; margin-left: 10px; cursor: pointer;">@lang(\'admin.pages.common.buttons.edit\')</label>'
+                    .PHP_EOL.'                      </p>'
                     .PHP_EOL.'                    </div>';
                 $this->replaceTemplateVariable($template, 'column', $column['name']);
                 $this->replaceTemplateVariable($template, 'field', $fieldName);
