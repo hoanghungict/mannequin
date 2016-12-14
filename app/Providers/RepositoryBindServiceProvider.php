@@ -77,15 +77,10 @@ class RepositoryBindServiceProvider extends ServiceProvider
         );
 
         $this->app->singleton(
-            'App\Repositories\customerInterface',
-            'App\Repositories\Eloquent\customer'
-        );
-
-        $this->app->singleton(
             'App\Repositories\CustomerRepositoryInterface',
             'App\Repositories\Eloquent\CustomerRepository'
         );
-
+        
         /* NEW BINDING */
     }
 }
