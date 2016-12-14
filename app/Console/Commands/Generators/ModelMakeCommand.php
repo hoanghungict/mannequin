@@ -65,10 +65,6 @@ class ModelMakeCommand extends GeneratorCommandBase
             }, $columns)).',' : '';
         $this->replaceTemplateVariable($stub, 'API', $api);
 
-        $columns = $this->getDateTimeColumns($tableName);
-        $datetimes = count($columns) > 0 ? "'".implode("','", $columns)."'" : '';
-        $this->replaceTemplateVariable($stub, 'DATETIMES', $datetimes);
-
         $relations = "";
         foreach ($columns as $column) {
             if (preg_match('/^(.*_image)_id$/', $column, $matches)) {
@@ -83,6 +79,10 @@ class ModelMakeCommand extends GeneratorCommandBase
             }
         }
         $this->replaceTemplateVariable($stub, 'RELATIONS', $relations);
+
+        $columns = $this->getDateTimeColumns($tableName);
+        $datetimes = count($columns) > 0 ? "'".implode("','", $columns)."'" : '';
+        $this->replaceTemplateVariable($stub, 'DATETIMES', $datetimes);
 
         $hasSoftDelete = $this->hasSoftDeleteColumn($tableName);
         $this->replaceTemplateVariable($stub, 'SOFT_DELETE_CLASS_USE',
