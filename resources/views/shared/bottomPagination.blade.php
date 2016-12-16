@@ -1,9 +1,9 @@
 <div class="text-center">
     <ul class="pagination">
         @if( isset($firstPageLink) )
-            <li><a href="{!! $firstPageLink!!}">«</a></li>
+            <li><a href="{!! $firstPageLink!!}"><i class="fa fa-angle-double-left" aria-hidden="true"></i></a></li>
         @else
-            <li class="disabled"><a>«</a></li>
+            <li class="disabled"><a><i class="fa fa-angle-double-left" aria-hidden="true"></i></a></li>
         @endif
         @foreach( $pages as $page)
             @if( $page['current'] )
@@ -13,9 +13,9 @@
             @endif
         @endforeach
         @if( isset($lastPageLink) )
-            <li><a href="{!! $lastPageLink!!}">»</a></li>
+            <li><a href="{!! $lastPageLink!!}"><i class="fa fa-angle-double-right" aria-hidden="true"></i></a></li>
         @else
-            <li class="disabled"><a>»</a></li>
+            <li class="disabled"><a><i class="fa fa-angle-double-right" aria-hidden="true"></i></a></li>
         @endif
     </ul>
 </div>

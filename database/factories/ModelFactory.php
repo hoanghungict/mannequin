@@ -149,9 +149,11 @@ $factory->define(
     App\Models\Customer::class,
     function( Faker\Generator $faker ) {
         return [
-            'name'      => $faker->name,
-            'address'   => $faker->address,
-            'telephone' => $faker->phoneNumber
+            'name'        => $faker->name,
+            'address'     => $faker->address,
+            'telephone'   => $faker->phoneNumber,
+            'province_id' => 0,
+            'district_id' => 0
         ];
     }
 );
@@ -162,7 +164,9 @@ $factory->define(
         return [
             'name'      => $faker->name,
             'address'   => $faker->address,
-            'telephone' => $faker->phoneNumber
+            'telephone' => $faker->phoneNumber,
+            'province_id' => 0,
+            'district_id' => 0
         ];
     }
 );

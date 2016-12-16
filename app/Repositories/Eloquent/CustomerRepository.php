@@ -14,6 +14,10 @@ class CustomerRepository extends SingleKeyModelRepository implements CustomerRep
     public function rules()
     {
         return [
+            'name'         => 'required|string',
+            'telephone'    => 'required|string',
+            'province_id'  => 'required|numeric',
+            'district_id'  => 'required|numeric',
         ];
     }
 

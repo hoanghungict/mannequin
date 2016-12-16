@@ -2,7 +2,8 @@
 
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Customer extends Base {
+class Customer extends Base
+{
 
     use SoftDeletes;
 
@@ -22,6 +23,9 @@ class Customer extends Base {
         'name',
         'address',
         'telephone',
+        'province_id',
+        'district_id',
+        'avatar_image_id',
     ];
 
     /**
@@ -31,20 +35,33 @@ class Customer extends Base {
      */
     protected $hidden = [];
 
-    protected $dates = ['deleted_at'];
+    protected $dates  = ['deleted_at'];
 
-    //    protected $presenter = \App\Presenters\CustomerPresenter::class;
+    protected $presenter = \App\Presenters\CustomerPresenter::class;
 
     // Relations
+    public function avatarImage()
+    {
+        return $this->hasOne(\App\Models\Image::class, 'id', 'avatar_image_id');
+    }
+
+
+
+    // Utility Functions
+
     /*
      * API Presentation
      */
-    public function toAPIArray() {
+    public function toAPIArray()
+    {
         return [
-            'id'        => $this->id,
-            'name'      => $this->name,
-            'address'   => $this->address,
-            'telephone' => $this->telephone,
+            'id'              => $this->id,
+            'name'            => $this->name,
+            'address'         => $this->address,
+            'telephone'       => $this->telephone,
+            'province_id'     => $this->province_id,
+            'district_id'     => $this->district_id,
+            'avatar_image_id' => $this->avatar_image_id,
         ];
     }
 

@@ -33,11 +33,14 @@ return [
     'pages'    => [
         'common'                   => [
             'label'   => [
+                'page'             => 'Page',
                 'actions'          => 'Actions',
-                'is_enabled'       => 'State',
+                'is_enabled'       => 'Status',
                 'is_enabled_true'  => 'Enabled',
                 'is_enabled_false' => 'Disabled',
                 'search_results'   => 'Total: :count results',
+                'select_province'  => 'Select a Province',
+                'select_district'  => 'Select a District',
             ],
             'buttons' => [
                 'create'          => 'Create New',
@@ -45,6 +48,7 @@ return [
                 'save'            => 'Save',
                 'delete'          => 'Delete',
                 'cancel'          => 'Cancel',
+                'back'            => 'Back',
                 'add'             => 'Add',
                 'preview'         => 'Preview',
                 'forgot_password' => 'Send Me Email!',
@@ -146,11 +150,14 @@ return [
                 'is_enabled_false'       => 'Disabled',
             ],
         ],
-        'customers'   => [
-            'columns'  => [
-                'name' => 'Name',
-                'address' => 'Address',
-                'telephone' => 'Telephone',
+        'customers'                => [
+            'columns' => [
+                'name'            => 'Name',
+                'address'         => 'Address',
+                'telephone'       => 'Telephone',
+                'avatar_image_id' => 'Avatar',
+                'province_id'     => 'Province',
+                'district_id'     => 'District',
             ],
         ],
         /* NEW PAGE STRINGS */
