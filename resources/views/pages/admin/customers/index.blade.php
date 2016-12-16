@@ -24,15 +24,25 @@
 @section('content')
     <div class="box box-primary">
         <div class="box-header with-border">
-            <h3 class="box-title">
-                <p class="text-right">
-                    <a href="{!! URL::action('Admin\CustomerController@create') !!}"
-                       class="btn btn-block btn-primary btn-sm"
-                       style="width: 125px;">@lang('admin.pages.common.buttons.create')</a>
-                </p>
-            </h3>
-            <p>@lang('admin.pages.common.label.search_results', ['count' => $count])</p>
-            {!! \PaginationHelper::render($offset, $limit, $count, $baseUrl, []) !!}
+            <div class="row">
+                <div class="col-sm-6">
+                    <h3 class="box-title">
+                        <p class="text-right">
+                            <a href="{!! URL::action('Admin\CustomerController@create') !!}"
+                               class="btn btn-block btn-primary btn-sm"
+                               style="width: 125px;">@lang('admin.pages.common.buttons.create')
+                            </a>
+                        </p>
+                    </h3>
+                    <br>
+                    <p style="display: inline-block;">@lang('admin.pages.common.label.search_results', ['count' => $count])</p>
+                </div>
+                <div class="col-sm-6 wrap-top-pagination">
+                    <div class="heading-page-pagination">
+                        {!! \PaginationHelper::render($paginate['order'], $paginate['direction'], $paginate['offset'], $paginate['limit'], $count, $paginate['baseUrl'], [], $count, 'shared.topPagination') !!}
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="box-body">
             <table class="table table-bordered">
@@ -44,25 +54,25 @@
 
                     <th style="width: 40px">@lang('admin.pages.common.label.actions')</th>
                 </tr>
-                @foreach( $models as $model )
+                @foreach( $customers as $customer )
                     <tr>
-                        <td>{{ $model->id }}</td>
-                        <td>{{ $model->name }}</td>
-                        <td>{{ $model->address }}</td>
-                        <td>{{ $model->telephone }}</td>
+                        <td>{{ $customer->id }}</td>
+                        <td>{{ $customer->name }}</td>
+                        <td>{{ $customer->address }}</td>
+                        <td>{{ $customer->telephone }}</td>
 
                         <td>
-                            <a href="{!! URL::action('Admin\CustomerController@show', $model->id) !!}"
+                            <a href="{!! URL::action('Admin\CustomerController@show', $customer->id) !!}"
                                class="btn btn-block btn-primary btn-xs">@lang('admin.pages.common.buttons.edit')</a>
                             <a href="#" class="btn btn-block btn-danger btn-xs delete-button"
-                               data-delete-url="{!! action('Admin\CustomerController@destroy', $model->id) !!}">@lang('admin.pages.common.buttons.delete')</a>
+                               data-delete-url="{!! action('Admin\CustomerController@destroy', $customer->id) !!}">@lang('admin.pages.common.buttons.delete')</a>
                         </td>
                     </tr>
                 @endforeach
             </table>
         </div>
         <div class="box-footer">
-            {!! \PaginationHelper::render($offset, $limit, $count, $baseUrl, []) !!}
+            {!! \PaginationHelper::render($paginate['order'], $paginate['direction'], $paginate['offset'], $paginate['limit'], $count, $paginate['baseUrl'], []) !!}
         </div>
     </div>
 @stop

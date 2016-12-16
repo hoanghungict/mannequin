@@ -10,12 +10,27 @@
     <script src="{{ \URLHelper::asset('libs/moment/moment.min.js', 'admin') }}"></script>
     <script src="{{ \URLHelper::asset('libs/datetimepicker/js/bootstrap-datetimepicker.min.js', 'admin') }}"></script>
     <script>
+        Boilerplate.districts = {!! $districts !!};
+
         $('.datetime-field').datetimepicker({'format': 'YYYY-MM-DD HH:mm:ss'});
 
         $(document).ready(function () {
             $('#avatar-image').change(function (event) {
                 $('#avatar-image-preview').attr('src', URL.createObjectURL(event.target.files[0]));
             });
+
+            $('select[name="province_id"]').on('change', function () {
+                generateDistricts();
+            });
+
+            function generateDistricts() {
+                $('select[name="district_id"]').html('');
+                Boilerplate.districts.forEach(function (district) {
+                    if( district.province_id == $('select[name="province_id"]').val() ) {
+                        $('select[name="district_id"]').append('<option value="' + district.id + '">' + district.name + '</option>');
+                    }
+                });
+            }
         });
     </script>
 @stop
@@ -96,6 +111,41 @@
                                     <input type="text" class="form-control" id="telephone" name="telephone" value="{{ old('telephone') ? old('telephone') : $customer->telephone }}">
                                 </td>
                             </tr>
+
+                            <tr class="@if ($errors->has('province_id')) has-error @endif">
+                                <td>
+                                    <label for="province_id">@lang('admin.pages.customers.columns.province_id')</label>
+                                </td>
+                                <td>
+                                    <select class="form-control" name="province_id" style="margin-bottom: 15px;">
+                                        <option value="">@lang('admin.pages.common.label.select_province')</option>
+                                        @foreach( $provinces as $key => $province )
+                                            <option value="{!! $province->id !!}" @if( (old('province_id') && old('province_id') == $province->id) || ( ($customer->province_id != null) && ($province->id === $customer->province_id) ) ) selected @endif >
+                                                {{ $province->present()->name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </td>
+                            </tr>
+
+                            <tr class="@if ($errors->has('district_id')) has-error @endif">
+                                <td>
+                                    <label for="district_id">@lang('admin.pages.customers.columns.district_id')</label>
+                                </td>
+                                <td>
+                                    <select class="form-control" name="district_id" style="margin-bottom: 15px;">
+                                        <option value="">@lang('admin.pages.common.label.select_district')</option>
+                                        @foreach( $districts as $key => $district )
+                                            @if( isset($customer->province_id) && $district->province_id == $customer->province_id )
+                                                <option value="{!! $district->id !!}" @if( (old('district_id') && old('district_id') == $district->id) || ($district->id === $customer->district_id) ) selected @endif >
+                                                    {{ $district->name }}
+                                                </option>
+                                            @endif
+                                        @endforeach
+                                    </select>
+                                </td>
+                            </tr>
+
                             <tr class="@if ($errors->has('address')) has-error @endif">
                                 <td>
                                     <label for="address">@lang('admin.pages.customers.columns.address')</label>
