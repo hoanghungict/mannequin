@@ -173,3 +173,132 @@ input.cmn-toggle-round-flat:checked + label:after {
 }
 /* End: edit user profile */
 /*----------------------------------------------------------------*/
+/* Begin: Pagination */
+.heading-page-pagination {
+    display: inline-block;
+    float: right;
+    margin: 15px 30px 10px 0;
+}
+.t-pagination {
+    display: inline-block;
+    width: 250px;
+}
+.t-pagination-number {
+    display: inline-block;
+    margin: 0 5px 0 5px;
+}
+.t-pagination > a {
+    border: 1px solid #ccc;
+    padding: 5px 10px;
+    border-radius: 3px;
+}
+.t-pagination > a:hover {
+    border: 1px solid #337ab7;
+}
+.t-pagination a > i.fa {
+    /*font-size: 1.5em;*/
+    /*vertical-align: middle;*/
+}
+.t-pagination-number {
+    width: 150px;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    padding: 4px 10px 3px 10px;
+    margin: 0 5px;
+    position: relative;
+}
+.t-pagination-number:hover {
+    cursor: pointer;
+    border: 1px solid #337ab7;
+    border-radius: 3px;
+}
+.t-pagination-number > i.fa {
+    float: right;
+    line-height: 20px;
+    color: #337ab7;
+}
+.t-pagination-dropdown {
+    display: none;
+    position: absolute;
+    width: 150px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    background: #FFFFFF;
+    left: 0;
+    top: 30px;
+}
+.t-pagination-dropdown ul {
+    list-style: none;
+    padding: 10px 20px;
+    max-height: 175px;
+    overflow-y: scroll;
+}
+.t-pagination-dropdown > ul > li > a {
+    color: #000000;
+    text-decoration: none;
+}
+.t-pagination-dropdown > ul > li:hover a {
+    color: #337ab7 !important;
+    cursor: pointer;
+}
+@media screen and (max-width: 620px) {
+    .wrap-top-pagination {
+        text-align: center;
+    }
+    .heading-page-pagination {
+        margin: 0;
+        float: none;
+    }
+}
+/*----------------*/
+.b-pagination {
+    text-align: center;
+}
+.b-pagination > ul {
+    list-style: none;
+    padding: 0;
+    font-size: 16px;
+    display: inline-block;
+}
+.b-pagination > ul > li {
+    display: inline-block;
+    width: 25px;
+    text-align: center;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    margin: 0 2px;
+}
+.b-pagination > ul > li:hover {
+    border: 1px solid #337ab7;
+    border-radius: 3px;
+    cursor: pointer;
+}
+.b-pagination > ul > li > a {
+    color: #000000;
+    text-decoration: none;
+    width: 25px;
+    display: inline-block;
+}
+.b-pagination .b-pagination-first {
+    width: 100px;
+}
+.b-pagination .b-pagination-first > a {
+    width: 100px;
+}
+.b-pagination .b-pagination-first i.fa {
+    margin-right: 5px;
+    font-size: 14px;
+}
+.b-pagination .b-pagination-last {
+    width: 100px;
+}
+.b-pagination .b-pagination-last > a {
+    width: 100px;
+}
+.b-pagination .b-pagination-last i.fa {
+    margin-left: 5px;
+    font-size: 14px;
+}
+/* End: Pagination */
+/*-----------------------------------------------------------------------------------*/
