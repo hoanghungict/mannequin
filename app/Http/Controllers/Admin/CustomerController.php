@@ -150,7 +150,6 @@ class CustomerController extends Controller {
      * @return \Response
      */
     public function update( $id, CustomerRequest $request ) {
-        dd($request->rules());
         /** @var \App\Models\Customer $model */
         $customer = $this->customerRepository->find( $id );
         if( empty( $customer ) ) {
