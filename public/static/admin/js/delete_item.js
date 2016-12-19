@@ -12,7 +12,7 @@ $(function () {
                     '_token': Boilerplate.csrfToken
                 },
                 error: function (xhr, error) {
-                    console.log(error);
+                    console.log(xhr);
                     self.loading = false;
                     location.reload();
                 },
