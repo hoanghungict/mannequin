@@ -91,6 +91,11 @@ class RepositoryBindServiceProvider extends ServiceProvider
             'App\Repositories\Eloquent\DistrictRepository'
         );
 
+        $this->app->singleton(
+            'App\Repositories\EmployeeRepositoryInterface',
+            'App\Repositories\Eloquent\EmployeeRepository'
+        );
+
         /* NEW BINDING */
     }
 }

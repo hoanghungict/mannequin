@@ -69,11 +69,11 @@ class ModelMakeCommand extends GeneratorCommandBase
         foreach ($columns as $column) {
             if (preg_match('/^(.*_image)_id$/', $column, $matches)) {
                 $key = $matches[1];
-                $relationName = \StringHelper::camel2Spinal($key);
+                $relationName = lcfirst(\StringHelper::snake2Camel($key));
                 $relations .= '    public function '.$relationName.'()'.PHP_EOL.'    {'.PHP_EOL.'        return $this->hasOne(\App\Models\Image::class, \'id\', \''.$column.'\');'.PHP_EOL.'    }'.PHP_EOL.PHP_EOL;
             } elseif (preg_match('/^(.*)_id$/', $column, $matches)) {
                 $key = $matches[1];
-                $relationName = \StringHelper::camel2Spinal($key);
+                $relationName = lcfirst(\StringHelper::snake2Camel($key));
                 $relatedModelName = ucfirst($relationName);
                 $relations .= '    public function '.$relationName.'()'.PHP_EOL.'    {'.PHP_EOL.'        return $this->belongsTo(\App\Models\\'.$relatedModelName.'::class, \''.$column.'\', \'id\');'.PHP_EOL.'    }'.PHP_EOL.PHP_EOL;
             }

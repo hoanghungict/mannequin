@@ -160,6 +160,16 @@ return [
                 'district_id'     => 'District',
             ],
         ],
+        'employees'                => [
+            'columns' => [
+                'name'            => 'Name',
+                'address'         => 'Address',
+                'telephone'       => 'Telephone',
+                'avatar_image_id' => 'Avatar',
+                'province_id'     => 'Province',
+                'district_id'     => 'District',
+            ],
+        ],
         /* NEW PAGE STRINGS */
     ],
     'roles'    => [

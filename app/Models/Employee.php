@@ -23,6 +23,8 @@ class Employee extends Base
         'name',
         'address',
         'telephone',
+        'province_id',
+        'district_id',
         'avatar_image_id',
     ];
 
@@ -38,6 +40,16 @@ class Employee extends Base
     protected $presenter = \App\Presenters\EmployeePresenter::class;
 
     // Relations
+    public function province()
+    {
+        return $this->belongsTo(\App\Models\Province::class, 'province_id', 'id');
+    }
+
+    public function district()
+    {
+        return $this->belongsTo(\App\Models\District::class, 'district_id', 'id');
+    }
+
     public function avatarImage()
     {
         return $this->hasOne(\App\Models\Image::class, 'id', 'avatar_image_id');
@@ -57,6 +69,8 @@ class Employee extends Base
             'name' => $this->name,
             'address' => $this->address,
             'telephone' => $this->telephone,
+            'province_id' => $this->province_id,
+            'district_id' => $this->district_id,
             'avatar_image_id' => $this->avatar_image_id,
         ];
     }

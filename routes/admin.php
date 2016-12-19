@@ -36,6 +36,7 @@
         \Route::resource('admin-user-notifications', 'Admin\AdminUserNotificationController');
         \Route::resource('images', 'Admin\ImageController');
         \Route::resource('customers', 'Admin\CustomerController');
-                /* NEW ADMIN RESOURCE ROUTE */
+        \Route::resource('employees', 'Admin\EmployeeController');
+        /* NEW ADMIN RESOURCE ROUTE */
     });
 });

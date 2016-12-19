@@ -3,16 +3,16 @@
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
-use App\Repositories\CustomerRepositoryInterface;
-use App\Http\Requests\Admin\CustomerRequest;
+use App\Repositories\EmployeeRepositoryInterface;
+use App\Http\Requests\Admin\EmployeeRequest;
 use App\Http\Requests\PaginationRequest;
 use App\Repositories\ProvinceRepositoryInterface;
 use App\Repositories\DistrictRepositoryInterface;
 
-class CustomerController extends Controller {
+class EmployeeController extends Controller {
 
-    /** @var \App\Repositories\CustomerRepositoryInterface */
-    protected $customerRepository;
+    /** @var \App\Repositories\EmployeeRepositoryInterface */
+    protected $employeeRepository;
 
     /** @var \App\Repositories\ProvinceRepositoryInterface */
     protected $provinceRepository;
@@ -21,11 +21,11 @@ class CustomerController extends Controller {
     protected $districtRepository;
 
     public function __construct(
-        CustomerRepositoryInterface $customerRepository,
+        EmployeeRepositoryInterface $employeeRepository,
         ProvinceRepositoryInterface $provinceRepository,
         DistrictRepositoryInterface $districtRepository
     ) {
-        $this->customerRepository = $customerRepository;
+        $this->employeeRepository = $employeeRepository;
         $this->provinceRepository = $provinceRepository;
         $this->districtRepository = $districtRepository;
     }
@@ -38,21 +38,26 @@ class CustomerController extends Controller {
      * @return \Response
      */
     public function index( PaginationRequest $request ) {
-        $paginate['offset']     = $request->offset();
-        $paginate['limit']      = $request->limit();
-        $paginate['order']      = $request->order();
-        $paginate['direction']  = $request->direction();
-        $paginate['baseUrl']    = action( 'Admin\CustomerController@index' );
+        $paginate[ 'offset' ] = $request->offset();
+        $paginate[ 'limit' ] = $request->limit();
+        $paginate[ 'order' ] = $request->order();
+        $paginate[ 'direction' ] = $request->direction();
+        $paginate[ 'baseUrl' ] = action( 'Admin\EmployeeController@index' );
 
-        $count = $this->customerRepository->count();
-        $customers = $this->customerRepository->get( $paginate['order'], $paginate['direction'], $paginate['offset'], $paginate['limit'] );
+        $count = $this->employeeRepository->count();
+        $models = $this->employeeRepository->get(
+            $paginate[ 'order' ],
+            $paginate[ 'direction' ],
+            $paginate[ 'offset' ],
+            $paginate[ 'limit' ]
+        );
 
         return view(
-            'pages.admin.customers.index',
+            'pages.admin.employees.index',
             [
-                'customers' => $customers,
-                'count'     => $count,
-                'paginate'  => $paginate,
+                'models'   => $models,
+                'count'    => $count,
+                'paginate' => $paginate,
             ]
         );
     }
@@ -64,10 +69,10 @@ class CustomerController extends Controller {
      */
     public function create() {
         return view(
-            'pages.admin.customers.edit',
+            'pages.admin.employees.edit',
             [
                 'isNew'     => true,
-                'customer'  => $this->customerRepository->getBlankModel(),
+                'employee'  => $this->employeeRepository->getBlankModel(),
                 'provinces' => $this->provinceRepository->all(),
                 'districts' => $this->districtRepository->all()
             ]
@@ -81,7 +86,7 @@ class CustomerController extends Controller {
      *
      * @return \Response
      */
-    public function store( CustomerRequest $request ) {
+    public function store( EmployeeRequest $request ) {
         $input = $request->only(
             [
                 'name',
@@ -92,16 +97,17 @@ class CustomerController extends Controller {
             ]
         );
 
-        $customer = $this->customerRepository->create( $input );
+        $input[ 'is_enabled' ] = $request->get( 'is_enabled', 0 );
+        $model = $this->employeeRepository->create( $input );
 
-        if( empty( $customer ) ) {
+        if( empty( $model ) ) {
             return redirect()
                 ->back()
                 ->withErrors( trans( 'admin.errors.general.save_failed' ) );
         }
 
         return redirect()
-            ->action( 'Admin\CustomerController@index' )
+            ->action( 'Admin\EmployeeController@index' )
             ->with( 'message-success', trans( 'admin.messages.general.create_success' ) );
     }
 
@@ -113,16 +119,16 @@ class CustomerController extends Controller {
      * @return \Response
      */
     public function show( $id ) {
-        $customer = $this->customerRepository->find( $id );
-        if( empty( $customer ) ) {
+        $model = $this->employeeRepository->find( $id );
+        if( empty( $model ) ) {
             \App::abort( 404 );
         }
 
         return view(
-            'pages.admin.customers.edit',
+            'pages.admin.employees.edit',
             [
                 'isNew'     => false,
-                'customer'  => $customer,
+                'employee'  => $model,
                 'provinces' => $this->provinceRepository->all(),
                 'districts' => $this->districtRepository->all()
             ]
@@ -148,10 +154,10 @@ class CustomerController extends Controller {
      *
      * @return \Response
      */
-    public function update( $id, CustomerRequest $request ) {
-        /** @var \App\Models\Customer $model */
-        $customer = $this->customerRepository->find( $id );
-        if( empty( $customer ) ) {
+    public function update( $id, EmployeeRequest $request ) {
+        /** @var \App\Models\Employee $model */
+        $model = $this->employeeRepository->find( $id );
+        if( empty( $model ) ) {
             \App::abort( 404 );
         }
         $input = $request->only(
@@ -164,10 +170,11 @@ class CustomerController extends Controller {
             ]
         );
 
-        $this->customerRepository->update( $customer, $input );
+        $input[ 'is_enabled' ] = $request->get( 'is_enabled', 0 );
+        $this->employeeRepository->update( $model, $input );
 
         return redirect()
-            ->action( 'Admin\CustomerController@show', [$id] )
+            ->action( 'Admin\EmployeeController@show', [$id] )
             ->with( 'message-success', trans( 'admin.messages.general.update_success' ) );
     }
 
@@ -179,15 +186,15 @@ class CustomerController extends Controller {
      * @return \Response
      */
     public function destroy( $id ) {
-        /** @var \App\Models\Customer $model */
-        $model = $this->customerRepository->find( $id );
+        /** @var \App\Models\Employee $model */
+        $model = $this->employeeRepository->find( $id );
         if( empty( $model ) ) {
             \App::abort( 404 );
         }
-        $this->customerRepository->delete( $model );
+        $this->employeeRepository->delete( $model );
 
         return redirect()
-            ->action( 'Admin\CustomerController@index' )
+            ->action( 'Admin\EmployeeController@index' )
             ->with( 'message-success', trans( 'admin.messages.general.delete_success' ) );
     }
 

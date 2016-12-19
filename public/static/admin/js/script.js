@@ -2,9 +2,6 @@
  * Created by thanhnt on 12/16/16.
  */
 
-var Boilerplate = {
-    'csrfToken': "{!! csrf_token() !!}"
-};
 toastr.options = {
     "closeButton": true,
     "debug": false,
