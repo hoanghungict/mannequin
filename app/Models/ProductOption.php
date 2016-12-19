@@ -2,7 +2,6 @@
 
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-
 class ProductOption extends Base
 {
 
@@ -27,6 +26,7 @@ class ProductOption extends Base
         'export_price',
         'quantity',
         'unit_id',
+        'is_block',
     ];
 
     /**
@@ -38,13 +38,27 @@ class ProductOption extends Base
 
     protected $dates  = ['deleted_at'];
 
-//    protected $presenter = \App\Presenters\SubcategoryPresenter::class;
+    protected $presenter = \App\Presenters\ProductOptionPresenter::class;
 
     // Relations
     public function product()
     {
-        return $this->belongsTo('App\Models\Product', 'product_id', 'id');
+        return $this->belongsTo(\App\Models\Product::class, 'product_id', 'id');
     }
+
+    public function propertyValue()
+    {
+        return $this->belongsTo(\App\Models\PropertyValue::class, 'property_value_id', 'id');
+    }
+
+    public function unit()
+    {
+        return $this->belongsTo(\App\Models\Unit::class, 'unit_id', 'id');
+    }
+
+
+
+    // Utility Functions
 
     /*
      * API Presentation
@@ -52,12 +66,14 @@ class ProductOption extends Base
     public function toAPIArray()
     {
         return [
-            'product_id'        => $this->product_id,
+            'id' => $this->id,
+            'product_id' => $this->product_id,
             'property_value_id' => $this->property_value_id,
-            'import_price'      => $this->import_price,
-            'export_price'      => $this->export_price,
-            'quantity'          => $this->quantity,
-            'unit_id'           => $this->unit_id,
+            'import_price' => $this->import_price,
+            'export_price' => $this->export_price,
+            'quantity' => $this->quantity,
+            'unit_id' => $this->unit_id,
+            'is_block' => $this->is_block,
         ];
     }
 

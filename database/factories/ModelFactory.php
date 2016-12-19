@@ -199,7 +199,7 @@ $factory->define(
             'name'           => $faker->name,
             'subcategory_id' => 1,
             'descriptions'   => $faker->sentences(3, true),
-            'is_block'       => 0,
+            'is_enabled'     => 1,
         ];
     }
 );

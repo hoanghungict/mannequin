@@ -21,7 +21,7 @@ class CreateProductOptionsTable extends Migration
             $table->bigInteger('export_price');
             $table->integer('quantity');
             $table->integer('unit_id');
-            $table->integer('is_block')->default(0);
+            $table->integer('is_enabled')->default(1);
 
             $table->softDeletes();
             $table->timestamps();

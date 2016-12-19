@@ -19,7 +19,7 @@ class CreateProductsTable extends Migration
             $table->string('name');
             $table->integer('subcategory_id');
             $table->text('descriptions')->nullable();
-            $table->integer('is_block')->default(0);
+            $table->integer('is_enabled')->default(1);
 
             $table->softDeletes();
             $table->timestamps();

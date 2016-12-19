@@ -2,7 +2,6 @@
 
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-
 class Product extends Base
 {
 
@@ -25,7 +24,7 @@ class Product extends Base
         'name',
         'subcategory_id',
         'descriptions',
-        'is_block',
+        'is_enabled',
     ];
 
     /**
@@ -37,18 +36,21 @@ class Product extends Base
 
     protected $dates  = ['deleted_at'];
 
-//    protected $presenter = \App\Presenters\SubcategoryPresenter::class;
+    protected $presenter = \App\Presenters\ProductPresenter::class;
 
     // Relations
-    public function category()
+    public function subcategory()
     {
-        return $this->belongsTo('App\Models\Subcategory', 'subcategory_id', 'id');
+        return $this->belongsTo(\App\Models\Subcategory::class, 'subcategory_id', 'id');
     }
 
     public function options()
     {
         return $this->hasMany('App\Models\ProductOption', 'product_id', 'id');
     }
+
+
+    // Utility Functions
 
     /*
      * API Presentation
@@ -61,7 +63,7 @@ class Product extends Base
             'name'           => $this->name,
             'subcategory_id' => $this->subcategory_id,
             'descriptions'   => $this->descriptions,
-            'is_block'       => $this->is_block,
+            'is_enabled'     => $this->is_enabled,
         ];
     }
 
