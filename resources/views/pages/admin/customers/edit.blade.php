@@ -9,6 +9,13 @@
 @section('scripts')
     <script src="{{ \URLHelper::asset('libs/moment/moment.min.js', 'admin') }}"></script>
     <script src="{{ \URLHelper::asset('libs/datetimepicker/js/bootstrap-datetimepicker.min.js', 'admin') }}"></script>
+
+    @php
+        foreach( $districts as $key => $district ) {
+            $districts[$key]['full_name'] = $district->present()->fullName;
+        }
+    @endphp
+
     <script>
         Boilerplate.districts = {!! $districts !!};
 
@@ -27,7 +34,7 @@
                 $('select[name="district_id"]').html('');
                 Boilerplate.districts.forEach(function (district) {
                     if( district.province_id == $('select[name="province_id"]').val() ) {
-                        $('select[name="district_id"]').append('<option value="' + district.id + '">' + district.name + '</option>');
+                        $('select[name="district_id"]').append('<option value="' + district.id + '">' + district.full_name + '</option>');
                     }
                 });
             }
@@ -138,7 +145,7 @@
                                         @foreach( $districts as $key => $district )
                                             @if( isset($customer->province_id) && $district->province_id == $customer->province_id )
                                                 <option value="{!! $district->id !!}" @if( (old('district_id') && old('district_id') == $district->id) || ($district->id === $customer->district_id) ) selected @endif >
-                                                    {{ $district->name }}
+                                                    {{ $district->present()->fullName }}
                                                 </option>
                                             @endif
                                         @endforeach
