@@ -22,17 +22,26 @@ class ProductSeeder extends Seeder
                     ]
                 );
                 // Create options
-                $propertyValueId = [];
-                foreach( range(1, 5) as $numberPropertyValue ) {
-                    array_push($propertyValueId, rand(1, $propertyValues));
-                }
                 factory( ProductOption::class )->create(
                     [
                         'product_id'        => $product->id,
-                        'property_value_id' => json_encode($propertyValueId),
-//                        'unit_id'           => $product->id,
+                        'property_value_id' => json_encode([]),
+                        // 'unit_id'           => $product->id,
                     ]
                 );
+                foreach( range(1, 5) as $numberProductOption ) {
+                    $propertyValueId = [];
+                    foreach( range(1, 5) as $numberPropertyValue ) {
+                        array_push($propertyValueId, rand(1, $propertyValues));
+                    }
+                    factory( ProductOption::class )->create(
+                        [
+                            'product_id'        => $product->id,
+                            'property_value_id' => json_encode($propertyValueId),
+                            // 'unit_id'           => $product->id,
+                        ]
+                    );
+                }
             }
         }
     }

@@ -33,14 +33,18 @@ return [
     'pages'    => [
         'common'                   => [
             'label'   => [
-                'page'             => 'Page',
-                'actions'          => 'Actions',
-                'is_enabled'       => 'Status',
-                'is_enabled_true'  => 'Enabled',
-                'is_enabled_false' => 'Disabled',
-                'search_results'   => 'Total: :count results',
-                'select_province'  => 'Select a Province',
-                'select_district'  => 'Select a District',
+                'page'               => 'Page',
+                'actions'            => 'Actions',
+                'is_enabled'         => 'Status',
+                'is_enabled_true'    => 'Enabled',
+                'is_enabled_false'   => 'Disabled',
+                'search_results'     => 'Total: :count results',
+                'select_province'    => 'Select a Province',
+                'select_district'    => 'Select a District',
+                'all'                => 'All',
+                'select_category'    => 'Select Category',
+                'select_subcategory' => 'Select Subcategory',
+                'select_unit'        => 'Select Unit',
             ],
             'buttons' => [
                 'create'          => 'Create New',
@@ -168,6 +172,20 @@ return [
                 'avatar_image_id' => 'Avatar',
                 'province_id'     => 'Province',
                 'district_id'     => 'District',
+            ],
+        ],
+        'products'                 => [
+            'columns' => [
+                'code'           => 'Code',
+                'name'           => 'Name',
+                'category_id'    => 'Category',
+                'subcategory_id' => 'Subcategory',
+                'unit_id'        => 'Unit',
+                'descriptions'   => 'Descriptions',
+                'quantity'       => 'Quantity',
+                'import_price'   => 'Import Prices',
+                'export_price'   => 'Export Prices',
+                'price'          => 'Prices',
             ],
         ],
         /* NEW PAGE STRINGS */

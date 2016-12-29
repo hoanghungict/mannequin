@@ -37,6 +37,7 @@
         \Route::resource('images', 'Admin\ImageController');
         \Route::resource('customers', 'Admin\CustomerController');
         \Route::resource('employees', 'Admin\EmployeeController');
+        \Route::resource('products', 'Admin\ProductController');
         /* NEW ADMIN RESOURCE ROUTE */
     });
 });
