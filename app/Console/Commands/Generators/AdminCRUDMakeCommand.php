@@ -258,7 +258,7 @@ class AdminCRUDMakeCommand extends GeneratorCommandBase
     {
         $sideMenu = $this->files->get($this->getSideBarViewPath());
 
-        $value = '<li @if( $menu==\''.\StringHelper::camel2Snake($name).'s\') class="active" @endif ><a href="{!! action(\'Admin\\'.$name.'Controller@index\') !!}"><i class="fa fa-users"></i> <span>'.\StringHelper::pluralize($name).'</span></a></li>'.PHP_EOL.'            <!-- %%SIDEMENU%% -->';
+        $value = '<li @if( $menu==\''.\StringHelper::camel2Snake($name).'s\') class="active" @endif ><a href="{!! \URL::action(\'Admin\\'.$name.'Controller@index\') !!}"><i class="fa fa-users"></i> <span>'.\StringHelper::pluralize($name).'</span></a></li>'.PHP_EOL.'            <!-- %%SIDEMENU%% -->';
 
         $sideMenu = str_replace('<!-- %%SIDEMENU%% -->', $value, $sideMenu);
         $this->files->put($this->getSideBarViewPath(), $sideMenu);
@@ -376,7 +376,7 @@ class AdminCRUDMakeCommand extends GeneratorCommandBase
                 case 'TextType':
                     $template = '                    <div class="form-group @if ($errors->has(\'%%column%%\')) has-error @endif">'
                         .PHP_EOL.'                        <label for="%%column%%">@lang(\'admin.pages.%%classes-spinal%%.columns.%%column%%\')</label>'
-                        .PHP_EOL.'                        <textarea name="%%column%%" class="form-control" rows="5" placeholder="@lang(\'admin.pages.%%classes-spinal%%.columns.%%column%%\')">{{{ old(\'%%column%%\') ? old(\'%%column%%\') : $%%class%%->%%column%% }}}</textarea>'
+                        .PHP_EOL.'                        <textarea name="%%column%%" class="form-control" rows="5" placeholder="@lang(\'admin.pages.%%classes-spinal%%.columns.%%column%%\')">{{ old(\'%%column%%\') ? old(\'%%column%%\') : $%%class%%->%%column%% }}</textarea>'
                         .PHP_EOL.'                    </div>';
                     $this->replaceTemplateVariable($template, 'column', $column['name']);
                     $this->replaceTemplateVariable($template, 'class', strtolower(substr($name, 0, 1)).substr($name, 1));
