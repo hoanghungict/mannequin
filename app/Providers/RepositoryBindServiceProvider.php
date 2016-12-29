@@ -96,6 +96,31 @@ class RepositoryBindServiceProvider extends ServiceProvider
             'App\Repositories\Eloquent\EmployeeRepository'
         );
 
+        $this->app->singleton(
+            'App\Repositories\ProductRepositoryInterface',
+            'App\Repositories\Eloquent\ProductRepository'
+        );
+
+        $this->app->singleton(
+            'App\Repositories\ProductOptionRepositoryInterface',
+            'App\Repositories\Eloquent\ProductOptionRepository'
+        );
+
+        $this->app->singleton(
+            'App\Repositories\CategoryRepositoryInterface',
+            'App\Repositories\Eloquent\CategoryRepository'
+        );
+
+        $this->app->singleton(
+            'App\Repositories\SubcategoryRepositoryInterface',
+            'App\Repositories\Eloquent\SubcategoryRepository'
+        );
+
+        $this->app->singleton(
+            'App\Repositories\UnitRepositoryInterface',
+            'App\Repositories\Eloquent\UnitRepository'
+        );
+
         /* NEW BINDING */
     }
 }

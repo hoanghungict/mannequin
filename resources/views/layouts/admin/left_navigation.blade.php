@@ -36,6 +36,7 @@
             <li @if( $menu=='images') class="active" @endif ><a href="{!! URL::action('Admin\ImageController@index') !!}"><i class="fa fa-file-image-o"></i> <span>Images</span></a></li>
             <li @if( $menu=='customers') class="active" @endif ><a href="{!! action('Admin\CustomerController@index') !!}"><i class="fa fa-users"></i> <span>Customers</span></a></li>
             <li @if( $menu=='employees') class="active" @endif ><a href="{!! action('Admin\EmployeeController@index') !!}"><i class="fa fa-users"></i> <span>Employees</span></a></li>
+            <li @if( $menu=='products') class="active" @endif ><a href="{!! action('Admin\ProductController@index') !!}"><i class="fa fa-users"></i> <span>Products</span></a></li>
             <!-- %%SIDEMENU%% -->
         </ul>
     </section>
