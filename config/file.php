@@ -35,6 +35,19 @@ return [
             'seedPrefix' => 'article-cover',
             'format' => 'jpeg',
         ],
+        'user-profile-image' => [
+            'name' => 'user-profile-image',
+            'type' => 'image',
+            'region' => env('AWS_IMAGE_REGION'),
+            'buckets' => [
+                env('AWS_IMAGE_BUCKET'),
+            ],
+            'size' => [328, 328],
+            'thumbnails' => [
+            ],
+            'seedPrefix' => 'user-profile',
+            'format' => 'jpeg',
+        ],
         'article-image' => [
             'name' => 'article-image',
             'type' => 'image',

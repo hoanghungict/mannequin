@@ -1,17 +1,17 @@
 <?php namespace App\Http\Requests\Admin;
 
 use App\Http\Requests\BaseRequest;
-use App\Repositories\ArticleRepositoryInterface;
+use App\Repositories\AdminUserRepositoryInterface;
 
-class ArticleRequest extends BaseRequest
+class AdminUserRequest extends BaseRequest
 {
 
-    /** @var \App\Repositories\ArticleRepositoryInterface */
-    protected $articleRepository;
+    /** @var \App\Repositories\AdminUserRepositoryInterface */
+    protected $adminUserRepository;
 
-    public function __construct(ArticleRepositoryInterface $articleRepository)
+    public function __construct(AdminUserRepositoryInterface $adminUserRepository)
     {
-        $this->articleRepository = $articleRepository;
+        $this->adminUserRepository = $adminUserRepository;
     }
 
     /**
@@ -31,12 +31,12 @@ class ArticleRequest extends BaseRequest
      */
     public function rules()
     {
-        return $this->articleRepository->rules();
+        return $this->adminUserRepository->rules();
     }
 
     public function messages()
     {
-        return $this->articleRepository->messages();
+        return $this->adminUserRepository->messages();
     }
 
 }

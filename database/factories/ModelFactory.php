@@ -126,9 +126,9 @@ $factory->define(
     App\Models\Category::class,
     function( Faker\Generator $faker ) {
         return [
-            'name'      => $faker->word,
-            'slug'      => $faker->word,
-            'order'     => 1,
+            'name'  => $faker->word,
+            'slug'  => $faker->word,
+            'order' => 1,
         ];
     }
 );
@@ -162,9 +162,9 @@ $factory->define(
     App\Models\Employee::class,
     function( Faker\Generator $faker ) {
         return [
-            'name'      => $faker->name,
-            'address'   => $faker->address,
-            'telephone' => $faker->phoneNumber,
+            'name'        => $faker->name,
+            'address'     => $faker->address,
+            'telephone'   => $faker->phoneNumber,
             'province_id' => 0,
             'district_id' => 0
         ];
@@ -198,7 +198,7 @@ $factory->define(
             'code'           => $faker->word,
             'name'           => $faker->name,
             'subcategory_id' => 1,
-            'descriptions'   => $faker->sentences(3, true),
+            'descriptions'   => $faker->sentences( 3, true ),
             'is_enabled'     => 1,
         ];
     }
@@ -210,9 +210,9 @@ $factory->define(
         return [
             'product_id'        => 1,
             'property_value_id' => "[1]",
-            'import_price'      => rand(50000, 200000),
-            'export_price'      => rand(200000, 500000),
-            'quantity'          => rand(50, 250),
+            'import_price'      => rand( 50000, 200000 ),
+            'export_price'      => rand( 200000, 500000 ),
+            'quantity'          => rand( 50, 250 ),
             'unit_id'           => 1,
         ];
     }
