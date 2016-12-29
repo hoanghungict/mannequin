@@ -18,6 +18,7 @@ class DatabaseSeeder extends Seeder
         $this->call('PropertyTableSeeder');
         $this->call('ProvinceTableSeeder');
         $this->call('DistrictTableSeeder');
+        $this->call('UnitTableSeeder');
 
         if (App::environment() === 'testing') {
             // Add More Seed For Testing
