@@ -6,7 +6,7 @@ class PaginationRequest extends BaseRequest
 {
     public $offset = 0;
 
-    public $limit = 10;
+    public $limit = 15;
 
     public $order = 'id';
 
