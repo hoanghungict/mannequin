@@ -25,10 +25,10 @@
             $('#avatar-image').change(function (event) {
                 $('#avatar-image-preview').attr('src', URL.createObjectURL(event.target.files[0]));
             });
-        });
 
-        $('select[name="province_id"]').on('change', function () {
-            generateDistricts();
+            $('select[name="province_id"]').on('change', function () {
+                generateDistricts();
+            });
         });
 
         function generateDistricts() {
