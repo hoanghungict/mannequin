@@ -63,16 +63,16 @@ class PaginationRequest extends BaseRequest
     {
         $order = $this->get('order', $this->order);
 
-        return strtolower($this->order);
+        return $order;
     }
 
     public function direction()
     {
         $direction = strtolower($this->get('direction', $this->direction));
         if (!in_array($direction, ['asc', 'desc'])) {
-            $this->direction = 'desc';
+            $direction = 'desc';
         }
 
-        return strtolower($this->direction);
+        return $direction;
     }
 }

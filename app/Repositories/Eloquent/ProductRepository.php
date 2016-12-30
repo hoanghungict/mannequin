@@ -27,7 +27,6 @@ class ProductRepository extends SingleKeyModelRepository implements ProductRepos
     public function messages()
     {
         return [
-            'code'    => 'We need to know your e-mail address!',
         ];
     }
 
@@ -43,10 +42,10 @@ class ProductRepository extends SingleKeyModelRepository implements ProductRepos
                          ->orWhere('descriptions', 'like', '%'.$keyword.'%');
         });
 
-        return $productModel->get();
+        return $productModel->orderBy($order, $direction)->skip($offset)->take($limit)->get();
     }
 
-    public function countWithFilter($filter, $order, $direction, $offset, $limit)
+    public function countWithFilter($filter)
     {
         $productModel = $this->getBlankModel()
                              ->select( 'products.id', 'products.code', 'products.name', 'products.subcategory_id', 'products.is_enabled' );

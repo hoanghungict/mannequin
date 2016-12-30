@@ -38,6 +38,7 @@
         \Route::resource('customers', 'Admin\CustomerController');
         \Route::resource('employees', 'Admin\EmployeeController');
         \Route::resource('products', 'Admin\ProductController');
-        /* NEW ADMIN RESOURCE ROUTE */
+        \Route::resource('logs', 'Admin\LogController');
+                /* NEW ADMIN RESOURCE ROUTE */
     });
 });

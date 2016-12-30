@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
+use App\Models\AdminUser;
 use App\Models\AdminUserRole;
 
 class AdminUserTableSeeder extends Seeder
@@ -10,22 +11,19 @@ class AdminUserTableSeeder extends Seeder
      */
     public function run()
     {
+        $adminUser = factory( AdminUser::class )->create(
+            [
+                'name'     => 'TestUser',
+                'email'    => 'test@example.com',
+                'password' => '123',
+            ]
+        );
 
-        /** @var \App\Repositories\AdminUserRepositoryInterface $adminUserRepository */
-        $adminUserRepository = \App::make('App\Repositories\AdminUserRepositoryInterface');
-        /** @var \App\Repositories\AdminUserRoleRepositoryInterface $adminUserRoleRepository */
-        $adminUserRoleRepository = \App::make('App\Repositories\AdminUserRoleRepositoryInterface');
-
-        /** @var \App\Models\AdminUser $adminUser */
-        $adminUser = $adminUserRepository->create([
-            'name' => 'TestUser',
-            'email' => 'test@example.com',
-            'password' => 'test',
-        ]);
-
-        $adminUserRoleRepository->create([
-            'admin_user_id' => $adminUser->id,
-            'role' => AdminUserRole::ROLE_SUPER_USER,
-        ]);
+        factory( AdminUserRole::class )->create(
+            [
+                'admin_user_id' => $adminUser->id,
+                'role'          => AdminUserRole::ROLE_SUPER_USER,
+            ]
+        );
     }
 }
