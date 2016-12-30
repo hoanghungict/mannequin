@@ -39,7 +39,7 @@
             </section>
 
             <!-- Main content -->
-            <section class="content">
+            <section class="content" style="min-height: 650px;">
                 @yield('content')
             </section>
             <!-- /.content -->
