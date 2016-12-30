@@ -4,6 +4,7 @@ namespace App\Repositories\Eloquent;
 
 use App\Repositories\SingleKeyModelRepositoryInterface;
 use Illuminate\Support\Str;
+use App\Models\Log;
 
 class SingleKeyModelRepository extends BaseRepository implements SingleKeyModelRepositoryInterface
 {
@@ -100,9 +101,30 @@ class SingleKeyModelRepository extends BaseRepository implements SingleKeyModelR
 
     public function create($input)
     {
-        $model = $this->getBlankModel();
+        \DB::connection()->enableQueryLog();
 
-        return $this->update($model, $input);
+        $model = $this->getBlankModel();
+        $model = $this->update($model, $input);
+
+        $query = \DB::getQueryLog()[0];
+        foreach( $query['bindings'] as $key => $value ) {
+            $query['query'] = preg_replace("/\?/", "`$value`", $query['query'], 1);
+        }
+
+        // crud actions must be execute by repository
+        $admin = \Auth::guard('admins')->user();
+
+        Log::create(
+            [
+                'user_name' => $admin->name,
+                'email'     => $admin->email,
+                'table'     => $model->getTable(),
+                'action'    => Log::TYPE_ACTION_INSERT,
+                'record_id' => $model->id,
+                'query'     => $query['query'],
+            ]
+        );
+        return $model;
     }
 
     public function update($model, $input)
@@ -120,7 +142,33 @@ class SingleKeyModelRepository extends BaseRepository implements SingleKeyModelR
             \Cache::forget($key);
         }
 
-        return $this->save($model);
+        if( isset($model->id) && $model->id ) {
+            \DB::connection()->enableQueryLog();
+            $model = $this->save($model);
+
+            $query = \DB::getQueryLog()[0];
+            foreach( $query['bindings'] as $key => $value ) {
+                $query['query'] = preg_replace("/\?/", "`$value`", $query['query'], 1);
+            }
+
+            // crud actions must be execute by repository
+            $admin = \Auth::guard('admins')->user();
+
+            Log::create(
+                [
+                    'user_name' => $admin->name,
+                    'email'     => $admin->email,
+                    'table'     => $model->getTable(),
+                    'action'    => Log::TYPE_ACTION_UPDATE,
+                    'record_id' => $model->id,
+                    'query'     => $query['query'],
+                ]
+            );
+        } else {
+            $model = $this->save($model);
+        }
+
+        return $model;
     }
 
     public function save($model)
@@ -134,7 +182,29 @@ class SingleKeyModelRepository extends BaseRepository implements SingleKeyModelR
 
     public function delete($model)
     {
-        return $model->delete();
+        \DB::connection()->enableQueryLog();
+        $deleted = $model->delete();
+
+        $query = \DB::getQueryLog()[0];
+        foreach( $query['bindings'] as $key => $value ) {
+            $query['query'] = preg_replace("/\?/", "`$value`", $query['query'], 1);
+        }
+
+        // crud actions must be execute by repository
+        $admin = \Auth::guard('admins')->user();
+
+        Log::create(
+            [
+                'user_name' => $admin->name,
+                'email'     => $admin->email,
+                'table'     => $model->getTable(),
+                'action'    => Log::TYPE_ACTION_DELETE,
+                'record_id' => $model->id,
+                'query'     => $query['query'],
+            ]
+        );
+
+        return $deleted;
     }
 
     public function __call($method, $parameters)
