@@ -16,5 +16,5 @@ interface ProductRepositoryInterface extends SingleKeyModelRepositoryInterface
      * @param array     $filter ['keyword', $price['from'], $price['to'], $subcategory]
      * @return array    App\Model\Product
      * */
-    public function countWithFilter($filter, $order, $direction, $offset, $limit);
+    public function countWithFilter($filter);
 }
