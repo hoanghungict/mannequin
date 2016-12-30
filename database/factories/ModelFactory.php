@@ -36,6 +36,16 @@ $factory->define(
 );
 
 $factory->define(
+    App\Models\AdminUserRole::class,
+    function( Faker\Generator $faker ) {
+        return [
+            'admin_user_id' => $faker->randomNumber(),
+            'role'          => 'supper_user'
+        ];
+    }
+);
+
+$factory->define(
     App\Models\SiteConfiguration::class,
     function( Faker\Generator $faker ) {
         return [
@@ -218,3 +228,14 @@ $factory->define(
     }
 );
 
+$factory->define(App\Models\Log::class, function (Faker\Generator $faker) {
+    return [
+        'user_name' => $faker->userName,
+        'action'    => $faker->word,
+        'table'     => $faker->word,
+        'record_id' => $faker->randomNumber(),
+        'query'     => $faker->sentence,
+    ];
+});
+
+/* NEW MODEL FACTORY */
