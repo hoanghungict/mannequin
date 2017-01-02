@@ -1,24 +1,43 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>@yield('title', config('site.name', ''))</title>
-    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-    @include('layouts.user.metadata')
+    <!-------------------------------- Begin: Meta ----------------------------------->
+    @include('layouts.user.meta')
+    @yield('metadata')
+    <!-------------------------------- End: Meta ----------------------------------->
+
+    <!-------------------------------- Begin: stylesheet ----------------------------------->
     @include('layouts.user.styles')
-    @section('styles')
-    @show
-    <meta name="csrf-token" content="{!! csrf_token() !!}">
+    @yield('styles')
+    <!-------------------------------- End: stylesheet ----------------------------------->
+
 </head>
-<body class="{!! isset($bodyClasses) ? $bodyClasses : '' !!}">
-@if( isset($noFrame) && $noFrame == true )
-@yield('content')
-@else
-@include('layouts.user.frame')
-@endif
+<body>
+@include('layouts.user.header')
+@include('layouts.user.topNavigation')
+@include('layouts.user.mainSlideShow')
+<hr style="margin-bottom: 0;"/>
+<div id="Content">
+    <div id="LeftBanner">
+            <img src="{!! \URLHelper::asset('libs/userlte/banner/120x600.jpg', 'user') !!}" alt="">
+        </div>
+
+        <div id="MainContent">
+            <section>
+                @yield('content')
+            </section>
+        </div>
+
+        <div id="RightBanner">
+            <img src="{!! \URLHelper::asset('libs/userlte/banner/120x600.jpg', 'user') !!}" alt="">
+
+    </div>
+</div>
+@include('layouts.user.footer')
+
+<!-------------------------------- Begin: Script ----------------------------------->
 @include('layouts.user.scripts')
-@section('scripts')
-@show
+@yield('scripts')
+<!-------------------------------- End: Script ----------------------------------->
 </body>
 </html>

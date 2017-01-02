@@ -24,4 +24,15 @@
     \Route::group(['middleware' => ['user.auth']], function () {
 
     });
+    \Route::get('products', [
+        'as' => 'product', 
+        'uses' => 'User\ProductController@index'
+    ]);
+
+    \Route::get('details', [
+        'as' => 'detail', 
+        'uses' => 'User\ProductController@showDetail'
+    ]);
+
+
 });
