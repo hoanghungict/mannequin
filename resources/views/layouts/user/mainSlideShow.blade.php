@@ -1,3 +1,4 @@
+@include('layouts.user.styles')
 <div id="carousel-example-generic" class="carousel slide" data-ride="carousel" ng-controller="Home">
     <!-- Indicators -->
     <ol class="carousel-indicators slide-show-pagination">
@@ -42,4 +43,4 @@
     <!-- Controls -->
     <a class="right carousel-control slide-show-right" href="#carousel-example-generic" role="button" data-slide="prev">  </a>
     <a class="left carousel-control slide-show-left" href="#carousel-example-generic" role="button" data-slide="next">  </a>
-</div>
+</div>  

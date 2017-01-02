@@ -2,7 +2,7 @@
     <div class="header-content">
         <div class="header-image">
             <a href="/#/">
-                <img src="{!! \URLHelper::asset('libs/userlte/banner/120x600.jpg', 'user') !!}" alt="">
+                <img src="{!! \URLHelper::asset('libs/userlte/logo.png', 'user') !!}" alt="">
 
             </a>
         </div>

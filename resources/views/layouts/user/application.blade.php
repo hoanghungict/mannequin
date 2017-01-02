@@ -17,6 +17,9 @@
 @include('layouts.user.topNavigation')
 @include('layouts.user.mainSlideShow')
 <hr style="margin-bottom: 0;"/>
+<div class="banner970x90">
+    <img src="{!! \URLHelper::asset('libs/userlte/banner/970x90.png', 'user') !!}" alt="">
+</div>
 <div id="Content">
     <div id="LeftBanner">
             <img src="{!! \URLHelper::asset('libs/userlte/banner/120x600.jpg', 'user') !!}" alt="">

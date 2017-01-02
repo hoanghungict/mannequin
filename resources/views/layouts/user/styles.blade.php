@@ -12,3 +12,4 @@
 <link rel="stylesheet" href="{!! \URLHelper::asset('libs/bootstrap/css/bootstrap-theme.min.css', 'admin') !!}">
 
 <link rel="stylesheet" href="{!! \URLHelper::asset('css/app.css', 'user') !!}">
+<link rel="stylesheet" href="{!! \URLHelper::asset('css/toastr.css', 'user') !!}">

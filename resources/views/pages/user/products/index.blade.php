@@ -1,6 +1,29 @@
-@extends('layouts.user.application')
-@section('content')
-<div class="banner970x250" >
+<!DOCTYPE html>
+<html>
+<head>
+    <!-------------------------------- Begin: Meta ----------------------------------->
+    @include('layouts.user.meta')
+    @yield('metadata')
+    <!-------------------------------- End: Meta ----------------------------------->
+
+    <!-------------------------------- Begin: stylesheet ----------------------------------->
+    @include('layouts.user.styles')
+    @yield('styles')
+    <!-------------------------------- End: stylesheet ----------------------------------->
+
+</head>
+<body>
+@include('layouts.user.header')
+@include('layouts.user.topNavigation')
+<hr style="margin-bottom: 0;"/>
+<div id="Content">
+    <div id="LeftBanner">
+            <img src="{!! \URLHelper::asset('libs/userlte/banner/120x600.jpg', 'user') !!}" alt="">
+        </div>
+
+        <div id="MainContent">
+            <section>
+                <div class="banner970x250" >
     <img src="{!! \URLHelper::asset('libs/userlte/banner/970x250.jpg', 'user') !!}" alt="">
 
 </div>
@@ -13,8 +36,8 @@
         </div>
 
         <div class="pull-right" style="margin-top: 20px;">
-            @include('pages.user.products.tSort')
-            @include('pages.user.products.tPagination')
+            <div style="display: inline-block;">@include('pages.user.products.tSort')</div>
+            <div style="display: inline-block;">@include('pages.user.products.tPagination')</div>
         </div>
     </div>
 
@@ -320,8 +343,23 @@
     </div>
 
     <div class="banner970x90">
-        <img src="{!! \URLHelper::asset('libs/userlte/banner/970x90.jpg', 'user') !!}" alt="">
+        <img src="{!! \URLHelper::asset('libs/userlte/banner/970x90.png', 'user') !!}" alt="">
 
     </div>
 </div>
-@endsection
+            </section>
+        </div>
+
+        <div id="RightBanner">
+            <img src="{!! \URLHelper::asset('libs/userlte/banner/120x600.jpg', 'user') !!}" alt="">
+
+    </div>
+</div>
+@include('layouts.user.footer')
+
+<!-------------------------------- Begin: Script ----------------------------------->
+@include('layouts.user.scripts')
+@yield('scripts')
+<!-------------------------------- End: Script ----------------------------------->
+</body>
+</html>
