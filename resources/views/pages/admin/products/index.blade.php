@@ -65,14 +65,14 @@
         <div class="box-body">
             <table class="table table-bordered products-index">
                 <tr>
-                    <th style="width: 10px">ID</th>
-                    <th>@lang('admin.pages.products.columns.code')</th>
-                    <th>@lang('admin.pages.products.columns.name')</th>
+                    <th style="width: 10px">{!! \PaginationHelper::sort('id', 'ID') !!}</th>
+                    <th>{!! \PaginationHelper::sort('code', trans('admin.pages.products.columns.code')) !!}</th>
+                    <th>{!! \PaginationHelper::sort('name', trans('admin.pages.products.columns.name')) !!}</th>
                     <th style="width: 10px;">@lang('admin.pages.products.columns.quantity')</th>
                     <th>@lang('admin.pages.products.columns.import_price')</th>
                     <th>@lang('admin.pages.products.columns.export_price')</th>
 
-                    <th style="width: 40px">@lang('admin.pages.common.label.is_enabled')</th>
+                    <th style="width: 40px">{!! \PaginationHelper::sort('is_enabled', trans('admin.pages.common.label.is_enabled')) !!}</th>
                     <th style="width: 40px">@lang('admin.pages.common.label.actions')</th>
                 </tr>
 
