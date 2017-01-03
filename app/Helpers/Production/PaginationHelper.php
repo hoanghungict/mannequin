@@ -3,6 +3,7 @@
 namespace App\Helpers\Production;
 
 use App\Helpers\PaginationHelperInterface;
+use Illuminate\Support\Facades\Request;
 
 class PaginationHelper implements PaginationHelperInterface
 {
@@ -82,6 +83,19 @@ class PaginationHelper implements PaginationHelperInterface
         $data['nextPageLink'] = $page >= $lastPage ? '' : $this->generateLink($page + 1, $path, $query, $order, $direction);
 
         return $data;
+    }
+
+    public function sort($orderField, $displayName)
+    {
+        $page       = Request::get('page', 1);
+        $order      = Request::get('order', 'id');
+        $direction  = ( Request::get('direction', 'desc') == 'desc' ) ? 'asc' : 'desc';
+        if( $order == $orderField ) {
+            $link = "<a href='?page=$page&order=$orderField&direction=$direction'>$displayName</a>";
+        } else {
+            $link = "<a href='?page=$page&order=$orderField&direction=asc'>$displayName</a>";
+        }
+        return $link;
     }
 
     public function render(

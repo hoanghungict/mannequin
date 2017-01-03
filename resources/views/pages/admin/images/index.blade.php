@@ -47,17 +47,17 @@
         <div class="box-body" style=" overflow-x: scroll; ">
             <table class="table table-bordered">
                 <tr>
-                    <th style="width: 10px">ID</th>
-                    <th>@lang('admin.pages.images.columns.url')</th>
-                    <th style="width: 10px">@lang('admin.pages.images.columns.entity_type')</th>
-                    <th>@lang('admin.pages.images.columns.is_local')</th>
-                    <th>@lang('admin.pages.images.columns.media_type')</th>
-                    <th>@lang('admin.pages.images.columns.format')</th>
-                    <th>@lang('admin.pages.images.columns.file_size')</th>
-                    <th>@lang('admin.pages.images.columns.width')</th>
-                    <th>@lang('admin.pages.images.columns.height')</th>
+                    <th style="width: 10px">{!! \PaginationHelper::sort('id', 'ID') !!}</th>
+                    <th>{!! \PaginationHelper::sort('url', trans('admin.pages.images.columns.url')) !!}</th>
+                    <th style="width: 10px">{!! \PaginationHelper::sort('entity_type', trans('admin.pages.images.columns.entity_type')) !!}</th>
+                    <th>{!! \PaginationHelper::sort('is_local', trans('admin.pages.images.columns.is_local')) !!}</th>
+                    <th>{!! \PaginationHelper::sort('media_type', trans('admin.pages.images.columns.media_type')) !!}</th>
+                    <th>{!! \PaginationHelper::sort('format', trans('admin.pages.images.columns.format')) !!}</th>
+                    <th>{!! \PaginationHelper::sort('file_size', trans('admin.pages.images.columns.file_size')) !!}</th>
+                    <th>{!! \PaginationHelper::sort('width', trans('admin.pages.images.columns.width')) !!}</th>
+                    <th>{!! \PaginationHelper::sort('height', trans('admin.pages.images.columns.height')) !!}</th>
 
-                    <th style="width: 40px">@lang('admin.pages.common.label.is_enabled')</th>
+                    <th style="width: 40px">{!! \PaginationHelper::sort('is_enabled', trans('admin.pages.common.label.is_enabled')) !!}</th>
                     <th style="width: 40px">@lang('admin.pages.common.label.actions')</th>
                 </tr>
                 @foreach( $models as $model )
