@@ -47,12 +47,11 @@
         <div class="box-body" style=" overflow-x: scroll; ">
             <table class="table table-bordered">
                 <tr>
-                    <th style="width: 10px">ID</th>
-                    <th style="width: 10px">@lang('admin.pages.admin-user-notifications.columns.locale')</th>
-                    <th style="width: 10px">@lang('admin.pages.admin-user-notifications.columns.read')</th>
-                    <th>@lang('admin.pages.admin-user-notifications.columns.category_type')</th>
-                    <th>@lang('admin.pages.admin-user-notifications.columns.type')</th>
-                    <th>@lang('admin.pages.admin-user-notifications.columns.sent_at')</th>
+                    <th style="width: 10px">{!! \PaginationHelper::sort('id', 'ID') !!}</th>
+                    <th style="width: 10px">{!! \PaginationHelper::sort('read', trans('admin.pages.admin-user-notifications.columns.read')) !!}</th>
+                    <th>{!! \PaginationHelper::sort('category_type', trans('admin.pages.admin-user-notifications.columns.category_type')) !!}</th>
+                    <th>{!! \PaginationHelper::sort('type', trans('admin.pages.admin-user-notifications.columns.type')) !!}</th>
+                    <th>{!! \PaginationHelper::sort('sent_at', trans('admin.pages.admin-user-notifications.columns.sent_at')) !!}</th>
 
                     <th style="width: 40px">@lang('admin.pages.common.label.actions')</th>
                 </tr>

@@ -47,10 +47,10 @@
         <div class="box-body" style=" overflow-x: scroll; ">
             <table class="table table-bordered">
                 <tr>
-                    <th style="width: 10px">ID</th>
-                    <th>@lang('admin.pages.users.columns.name')</th>
-                    <th>@lang('admin.pages.users.columns.email')</th>
-                    <th>@lang('admin.pages.users.columns.locale')</th>
+                    <th style="width: 10px">{!! \PaginationHelper::sort('id', 'ID') !!}</th>
+                    <th>{!! \PaginationHelper::sort('name', trans('admin.pages.users.columns.name')) !!}</th>
+                    <th>{!! \PaginationHelper::sort('email', trans('admin.pages.users.columns.email')) !!}</th>
+                    <th>{!! \PaginationHelper::sort('locale', trans('admin.pages.users.columns.locale')) !!}</th>
 
                     <th style="width: 40px">@lang('admin.pages.common.label.actions')</th>
                 </tr>

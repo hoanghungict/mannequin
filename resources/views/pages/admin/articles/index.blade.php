@@ -47,13 +47,13 @@
         <div class="box-body" style=" overflow-x: scroll; ">
             <table class="table table-bordered">
                 <tr>
-                    <th style="width: 10px">ID</th>
-                    <th>@lang('admin.pages.articles.columns.title')</th>
-                    <th>@lang('admin.pages.articles.columns.slug')</th>
-                    <th>@lang('admin.pages.articles.columns.publish_started_at')</th>
-                    <th>@lang('admin.pages.articles.columns.publish_ended_at')</th>
+                    <th style="width: 10px">{!! \PaginationHelper::sort('id', 'ID') !!}</th>
+                    <th>{!! \PaginationHelper::sort('title', trans('admin.pages.articles.columns.title')) !!}</th>
+                    <th>{!! \PaginationHelper::sort('slug', trans('admin.pages.articles.columns.slug')) !!}</th>
+                    <th>{!! \PaginationHelper::sort('publish_started_at', trans('admin.pages.articles.columns.publish_started_at')) !!}</th>
+                    <th>{!! \PaginationHelper::sort('publish_ended_at', trans('admin.pages.articles.columns.publish_ended_at')) !!}</th>
 
-                    <th style="width: 40px">@lang('admin.pages.common.label.is_enabled')</th>
+                    <th style="width: 40px">{!! \PaginationHelper::sort('is_enabled', trans('admin.pages.common.label.is_enabled')) !!}</th>
                     <th style="width: 40px">@lang('admin.pages.common.label.actions')</th>
                 </tr>
                 @foreach( $models as $model )
