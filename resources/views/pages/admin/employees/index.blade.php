@@ -47,10 +47,10 @@
         <div class="box-body">
             <table class="table table-bordered">
                 <tr>
-                    <th style="width: 10px">ID</th>
-                    <th>@lang('admin.pages.employees.columns.name')</th>
-                    <th>@lang('admin.pages.employees.columns.address')</th>
-                    <th>@lang('admin.pages.employees.columns.telephone')</th>
+                    <th style="width: 10px">{!! \PaginationHelper::sort('id', 'ID') !!}</th>
+                    <th>{!! \PaginationHelper::sort('name', trans('admin.pages.employees.columns.name')) !!}</th>
+                    <th>{!! \PaginationHelper::sort('address', trans('admin.pages.employees.columns.address')) !!}</th>
+                    <th>{!! \PaginationHelper::sort('telephone', trans('admin.pages.employees.columns.telephone')) !!}</th>
 
                     <th style="width: 40px">@lang('admin.pages.common.label.actions')</th>
                 </tr>
