@@ -72,6 +72,26 @@ class ServiceBindServiceProvider extends ServiceProvider
             \App\Services\Production\AdminUserNotificationService::class
         );
 
+        $this->app->singleton(
+            \App\Services\ProductServiceInterface::class,
+            \App\Services\Production\ProductService::class
+        );
+
+        $this->app->singleton(
+            \App\Services\ProductOptionServiceInterface::class,
+            \App\Services\Production\ProductOptionService::class
+        );
+
+        $this->app->singleton(
+            \App\Services\PropertyServiceInterface::class,
+            \App\Services\Production\PropertyService::class
+        );
+
+        $this->app->singleton(
+            \App\Services\PropertyValueServiceInterface::class,
+            \App\Services\Production\PropertyValueService::class
+        );
+
         /* NEW BINDING */
     }
 }

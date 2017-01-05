@@ -126,6 +126,16 @@ class RepositoryBindServiceProvider extends ServiceProvider
             'App\Repositories\Eloquent\LogRepository'
         );
 
+        $this->app->singleton(
+            'App\Repositories\PropertyRepositoryInterface',
+            'App\Repositories\Eloquent\PropertyRepository'
+        );
+
+        $this->app->singleton(
+            'App\Repositories\PropertyValueRepositoryInterface',
+            'App\Repositories\Eloquent\PropertyValueRepository'
+        );
+
         /* NEW BINDING */
     }
 }

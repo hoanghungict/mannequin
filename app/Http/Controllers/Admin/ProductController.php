@@ -9,7 +9,8 @@ use App\Http\Requests\PaginationRequest;
 use App\Repositories\CategoryRepositoryInterface;
 use App\Repositories\SubcategoryRepositoryInterface;
 use App\Repositories\UnitRepositoryInterface;
-use App\Repositories\Eloquent\ProductOptionRepository;
+use App\Repositories\ProductOptionRepositoryInterface;
+use App\Services\ProductOptionServiceInterface;
 
 class ProductController extends Controller {
     /** @var \App\Repositories\ProductRepositoryInterface */
@@ -17,6 +18,9 @@ class ProductController extends Controller {
 
     /** @var \App\Repositories\ProductOptionRepositoryInterface */
     protected $productOptionRepository;
+
+    /** @var \App\Services\ProductOptionServiceInterface */
+    protected $productOptionService;
 
     /** @var \App\Repositories\CategoryRepositoryInterface */
     protected $categoryRepository;
@@ -28,17 +32,19 @@ class ProductController extends Controller {
     protected $unitRepository;
 
     public function __construct(
-        ProductRepositoryInterface      $productRepository,
-        CategoryRepositoryInterface     $categoryRepository,
-        SubcategoryRepositoryInterface  $subcategoryRepository,
-        UnitRepositoryInterface         $unitRepository,
-        ProductOptionRepository         $productOptionRepository
+        ProductRepositoryInterface          $productRepository,
+        CategoryRepositoryInterface         $categoryRepository,
+        SubcategoryRepositoryInterface      $subcategoryRepository,
+        UnitRepositoryInterface             $unitRepository,
+        ProductOptionRepositoryInterface    $productOptionRepository,
+        ProductOptionServiceInterface       $productOptionService
     ) {
         $this->productRepository        = $productRepository;
         $this->categoryRepository       = $categoryRepository;
         $this->subcategoryRepository    = $subcategoryRepository;
         $this->unitRepository           = $unitRepository;
         $this->productOptionRepository  = $productOptionRepository;
+        $this->productOptionService     = $productOptionService;
     }
 
     /**
@@ -154,11 +160,12 @@ class ProductController extends Controller {
      * @return \Response
      */
     public function show( $id ) {
-        $model = $this->productRepository->find( $id );
-        if( empty( $model ) ) {
+        $product = $this->productRepository->find( $id );
+        if( empty( $product ) ) {
             \App::abort( 404 );
         }
 
+        $options        = $this->productOptionService->getProductOptions($id);
         $categories     = $this->categoryRepository->all();
         $subcategories  = $this->subcategoryRepository->all();
         $units          = $this->unitRepository->all();
@@ -167,7 +174,8 @@ class ProductController extends Controller {
             'pages.admin.products.edit',
             [
                 'isNew'         => false,
-                'product'       => $model,
+                'product'       => $product,
+                'options'       => $options,
                 'categories'    => $categories,
                 'subcategories' => $subcategories,
                 'units'         => $units
