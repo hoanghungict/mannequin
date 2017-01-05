@@ -56,7 +56,7 @@
                                 <li>
                                     <a href="#">
                                         <div class="pull-left">
-                                            <img src="dist/img/user4-128x128.jpg" class="img-circle"
+                                            <img src="{!! \URLHelper::asset('libs/adminlte/img/user4-128x128.jpg','admin') !!}" class="img-circle"
                                                  alt="User Image">
                                         </div>
                                         <h4>
@@ -69,7 +69,7 @@
                                 <li>
                                     <a href="#">
                                         <div class="pull-left">
-                                            <img src="dist/img/user3-128x128.jpg" class="img-circle"
+                                            <img src="{!! \URLHelper::asset('libs/adminlte/img/user3-128x128.jpg','admin') !!}" class="img-circle"
                                                  alt="User Image">
                                         </div>
                                         <h4>
@@ -82,7 +82,7 @@
                                 <li>
                                     <a href="#">
                                         <div class="pull-left">
-                                            <img src="dist/img/user4-128x128.jpg" class="img-circle"
+                                            <img src="{!! \URLHelper::asset('libs/adminlte/img/user4-128x128.jpg','admin') !!}" class="img-circle"
                                                  alt="User Image">
                                         </div>
                                         <h4>
@@ -231,7 +231,7 @@
                     <ul class="dropdown-menu">
                         <!-- User image -->
                         <li class="user-header">
-                            <img src="dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+                            <img src="{!! \URLHelper::asset('libs/adminlte/img/user2-160x160.jpg','admin') !!}" class="img-circle" alt="User Image">
 
                             <p>
                                 Alexander Pierce - Web Developer
@@ -259,7 +259,7 @@
                                 <a href="{{ action('Admin\MeController@index') }}" class="btn btn-default btn-flat">Profile</a>
                             </div>
                             <div class="pull-right">
-                                <form id="signout" method="post" action="{!! URL::action('Admin\AuthController@postSignOut') !!}">{!! csrf_field(); !!}</form>
+                                <form id="signout" method="post" action="{!! URL::action('Admin\AuthController@postSignOut') !!}">{!! csrf_field() !!}</form>
                                 <a href="#" class="btn btn-default btn-flat" onclick="$('#signout').submit(); return false;">Sign out</a>
                             </div>
                         </li>

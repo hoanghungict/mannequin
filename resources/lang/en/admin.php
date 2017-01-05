@@ -13,6 +13,9 @@ return [
             'create_success' => 'Successfully created.',
             'delete_success' => 'Successfully deleted.',
         ],
+        'errors'  => [
+            'params_invalid' => 'Parameters is Invalid !!!'
+        ],
     ],
     'errors'   => [
         'general'  => [
@@ -53,6 +56,7 @@ return [
                 'delete'          => 'Delete',
                 'cancel'          => 'Cancel',
                 'back'            => 'Back',
+                'close'           => 'Close',
                 'add'             => 'Add',
                 'preview'         => 'Preview',
                 'forgot_password' => 'Send Me Email!',
@@ -207,6 +211,11 @@ return [
                 'export_price'   => 'Export Prices',
                 'price'          => 'Prices',
             ],
+            'options' => [
+                'create_option_title'  => 'Create New Option',
+                'create_option_button' => 'Create Option',
+                'properties'           => 'Properties',
+            ]
         ],
         'logs'                     => [
             'columns' => [

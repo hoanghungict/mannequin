@@ -35,10 +35,14 @@
         \Route::resource('user-notifications', 'Admin\UserNotificationController');
         \Route::resource('admin-user-notifications', 'Admin\AdminUserNotificationController');
         \Route::resource('images', 'Admin\ImageController');
+        \Route::resource('logs', 'Admin\LogController');
+
         \Route::resource('customers', 'Admin\CustomerController');
         \Route::resource('employees', 'Admin\EmployeeController');
+
         \Route::resource('products', 'Admin\ProductController');
-        \Route::resource('logs', 'Admin\LogController');
-                /* NEW ADMIN RESOURCE ROUTE */
+        \Route::post('product-options', 'Admin\ProductOptionController@create');
+
+        /* NEW ADMIN RESOURCE ROUTE */
     });
 });

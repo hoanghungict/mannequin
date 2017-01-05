@@ -7,29 +7,10 @@
 @stop
 
 @section('scripts')
-    <script src="{{ \URLHelper::asset('libs/moment/moment.min.js', 'admin') }}"></script>
-    <script src="{{ \URLHelper::asset('libs/datetimepicker/js/bootstrap-datetimepicker.min.js', 'admin') }}"></script>
-
     <script>
         Boilerplate.subcategories = {!! $subcategories !!};
-
-        $('.datetime-field').datetimepicker({'format': 'YYYY-MM-DD HH:mm:ss'});
-
-        $(document).ready(function () {
-            $('select[name="category_id"]').on('change', function () {
-                generateSubcategories();
-            });
-        });
-
-        function generateSubcategories() {
-            $('select[name="subcategory_id"]').html('');
-            Boilerplate.subcategories.forEach(function (subcategory) {
-                if( subcategory.category_id == $('select[name="category_id"]').val() ) {
-                    $('select[name="subcategory_id"]').append('<option value="' + subcategory.id + '">' + subcategory.name + '</option>');
-                }
-            });
-        }
     </script>
+    <script src="{!! \URLHelper::asset('js/pages/products/edit.js', 'admin') !!}"></script>
 @stop
 
 @section('title')
@@ -129,13 +110,13 @@
                     <div class="col-sm-6">
                         <div class="form-group @if ($errors->has('import_price')) has-error @endif">
                             <label for="import_price">@lang('admin.pages.products.columns.import_price')</label>
-                            <input type="text" class="form-control" id="import_price" name="import_price" required value="{{ old('import_price') ? old('import_price') : (isset($product->present()->getStandardOption->import_price) ? $product->present()->getStandardOption->import_price : 0) }}">
+                            <input type="number" class="form-control" id="import_price" name="import_price" required value="{{ old('import_price') ? old('import_price') : (isset($product->present()->getStandardOption->import_price) ? $product->present()->getStandardOption->import_price : 0) }}">
                         </div>
                     </div>
                     <div class="col-sm-6">
                         <div class="form-group @if ($errors->has('export_price')) has-error @endif">
                             <label for="export_price">@lang('admin.pages.products.columns.export_price')</label>
-                            <input type="text" class="form-control" id="export_price" name="export_price" required value="{{ old('export_price') ? old('export_price') : (isset($product->present()->getStandardOption->export_price) ? $product->present()->getStandardOption->export_price : 0) }}">
+                            <input type="number" class="form-control" id="export_price" name="export_price" required value="{{ old('export_price') ? old('export_price') : (isset($product->present()->getStandardOption->export_price) ? $product->present()->getStandardOption->export_price : 0) }}">
                         </div>
                     </div>
                 </div>
@@ -144,7 +125,7 @@
                     <div class="col-sm-6">
                         <div class="form-group @if ($errors->has('quantity')) has-error @endif">
                             <label for="quantity">@lang('admin.pages.products.columns.quantity')</label>
-                            <input type="text" class="form-control" id="quantity" name="quantity" required value="{{ old('quantity') ? old('quantity') : (isset($product->present()->getStandardOption->quantity) ? $product->present()->getStandardOption->quantity : 0) }}">
+                            <input type="number" @if( !$isNew ) disabled @endif class="form-control" id="quantity" name="quantity" required value="{{ old('quantity') ? old('quantity') : (isset($product->present()->getStandardOption->quantity) ? $product->present()->getStandardOption->quantity : 0) }}">
                         </div>
                     </div>
                     <div class="col-sm-6">
@@ -174,4 +155,120 @@
             </div>
         </div>
     </form>
+
+    @if( !$isNew )
+        <form action="{{ \URL::action('Admin\ProductOptionController@create') }}" method="post" onsubmit="return confirm('Are you sure to create new Product Options');">
+            {!! csrf_field() !!}
+            <input type="hidden" name="product_id" value="{{ $product->id }}">
+            <div class="box">
+                <div class="box-header with-border">
+                    <strong style="font-size: 18px;"></strong>
+                    <h3 class="box-title">
+                        <span class="btn btn-block btn-default btn-sm" data-toggle="modal" data-target="#ModalOptions" onclick="resetModalProductOption();"  style="width: 125px;">@lang('admin.pages.products.options.create_option_button')</span>
+                    </h3>
+                </div>
+
+                <div class="box-body">
+                    <table class="table table-bordered create-product-options">
+                        <tr>
+                            <th width="100px">@lang('admin.pages.products.columns.import_price')</th>
+                            <th width="100px">@lang('admin.pages.products.columns.export_price')</th>
+                            <th width="100px">@lang('admin.pages.products.columns.quantity')</th>
+                            <th>@lang('admin.pages.products.options.properties')</th>
+                            <th width="100px">@lang('admin.pages.common.label.actions')</th>
+                        </tr>
+                        @foreach( $options as $option )
+                            <tr>
+                                <td>{{ number_format($option['import_price'], '0', ',', ' ') }}</td>
+                                <td>{{ number_format($option['export_price'], '0', ',', ' ') }}</td>
+                                <td>{{ number_format($option['quantity'], '0', ',', ' ') }}</td>
+                                <td>{{ $option['properties'] }}</td>
+                                <td></td>
+                            </tr>
+                        @endforeach
+                    </table>
+                </div>
+
+                <div class="box-footer">
+                    <button type="submit" class="btn btn-primary btn-sm" style="width: 125px;">@lang('admin.pages.common.buttons.save')</button>
+                </div>
+            </div>
+        </form>
+
+        <!------------------------------------------------------------------->
+        <!-- line modal: create product option -->
+        <div class="modal fade" id="ModalOptions" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+            <div class="modal-dialog" style="margin-top: 60px;">
+                <div class="modal-content">
+                    <form action="#" onsubmit="return false;">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">
+                                <span aria-hidden="true">×</span>
+                                <span class="sr-only">@lang('admin.pages.common.buttons.close')</span>
+                            </button>
+                            <h3 class="modal-title box-title" id="lineModalLabel" style="text-align: center;">@lang('admin.pages.products.options.create_option_title')</h3>
+                        </div>
+
+                        <div class="modal-body" style="padding-bottom: 0;">
+                            <table class="table" id="" style="margin-bottom: 0;">
+                                <tr>
+                                    <th style="">@lang('admin.pages.products.columns.import_price')</th>
+                                    <td>
+                                        <input type="number" name="option_import_price" class="form-control" required="required" min="0" style="width: 70%;" index="-1" id="option-import-price" value="0">
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <th style="width: 175px;">@lang('admin.pages.products.columns.export_price')</th>
+                                    <td>
+                                        <input type="number" name="option_export_price" class="form-control" required="required" min="0" style="width: 70%;" id="option-export-price" value="0">
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <th style="width: 175px;">@lang('admin.pages.products.columns.quantity')</th>
+                                    <td>
+                                        <input type="number" name="option_quantity" class="form-control" required="required" min="0" style="width: 70%;" id="option-quantity" value="0">
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td colspan="2">
+                                        <table class="table " style="display: table; margin-bottom: 0;">
+                                            <tr>
+                                                <td style="border: none;">
+                                                    <section>
+                                                        <div id="initRow" style="margin-bottom: 10px;">
+                                                            <input class="form-control" name="property_name[]" placeholder="Property" style="width: 35%; display: inline-block;">
+                                                            <input class="form-control" name="property_values[]" placeholder="Values (Ex: value 1, value 2)" style="width: 55%; display: inline-block;">
+                                                        </div>
+                                                    </section>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+
+                        <div class="modal-footer">
+                            <div class="btn-group btn-group-justified" role="group" aria-label="group button">
+                                <div class="btn-group" role="group">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal" role="button">
+                                        @lang('admin.pages.common.buttons.close')
+                                    </button>
+                                </div>
+                                <div class="btn-group" role="group">
+                                    <button type="submit" id="save-properties" class="btn btn-default btn-hover-green" data-action="save" role="button">
+                                        @lang('admin.pages.common.buttons.save')
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!------------------------------------------------------------------->
+    @endif
 @stop
