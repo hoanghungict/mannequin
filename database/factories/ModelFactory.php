@@ -228,14 +228,28 @@ $factory->define(
     }
 );
 
-$factory->define(App\Models\Log::class, function (Faker\Generator $faker) {
-    return [
-        'user_name' => $faker->userName,
-        'action'    => $faker->word,
-        'table'     => $faker->word,
-        'record_id' => $faker->randomNumber(),
-        'query'     => $faker->sentence,
-    ];
-});
+$factory->define(
+    App\Models\Log::class,
+    function( Faker\Generator $faker ) {
+        return [
+            'user_name' => $faker->userName,
+            'action'    => $faker->word,
+            'table'     => $faker->word,
+            'record_id' => $faker->randomNumber(),
+            'query'     => $faker->sentence,
+        ];
+    }
+);
+
+$factory->define(
+    App\Models\ProductImage::class,
+    function( Faker\Generator $faker ) {
+        return [
+            'product_id' => 0,
+            'image_id'   => 0,
+            'order'      => 0,
+        ];
+    }
+);
 
 /* NEW MODEL FACTORY */
