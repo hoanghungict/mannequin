@@ -19,7 +19,6 @@ class ProductRepository extends SingleKeyModelRepository implements ProductRepos
             'subcategory_id' => 'integer|required',
             'import_price'   => 'integer|required',
             'export_price'   => 'integer|required',
-            'quantity'       => 'integer|required',
             'unit_id'        => 'integer|required',
         ];
     }

@@ -4,12 +4,14 @@
 @stop
 
 @section('styles')
+    <link rel="stylesheet" href="{!! \URLHelper::asset('libs/plugins/jquery-filer/css/jquery.filer.css', 'admin') !!}">
 @stop
 
 @section('scripts')
     <script>
         Boilerplate.subcategories = {!! $subcategories !!};
     </script>
+    <script src="{!! \URLHelper::asset('libs/plugins/jquery-filer/js/jquery.filer.min.js', 'admin') !!}"></script>
     <script src="{!! \URLHelper::asset('js/pages/products/edit.js', 'admin') !!}"></script>
 @stop
 
@@ -149,7 +151,14 @@
                         </div>
                     </div>
                 </div>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <input type="file" name="images[]" id="product-images" multiple="multiple">
+                    </div>
+                </div>
             </div>
+
             <div class="box-footer">
                 <button type="submit" class="btn btn-primary btn-sm" style="width: 125px;">@lang('admin.pages.common.buttons.save')</button>
             </div>

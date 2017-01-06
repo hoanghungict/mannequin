@@ -2,4 +2,5 @@
 
 interface ProductServiceInterface extends BaseServiceInterface
 {
+    public function updateImages($id, $images);
 }

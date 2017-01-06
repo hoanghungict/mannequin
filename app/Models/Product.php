@@ -49,6 +49,10 @@ class Product extends Base
         return $this->hasMany('App\Models\ProductOption', 'product_id', 'id');
     }
 
+    public function images()
+    {
+        return $this->belongsToMany('App\Models\Image', ProductImage::getTableName(), 'product_id', 'image_id');
+    }
 
     // Utility Functions
 

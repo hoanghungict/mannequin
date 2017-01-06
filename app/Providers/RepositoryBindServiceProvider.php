@@ -136,6 +136,11 @@ class RepositoryBindServiceProvider extends ServiceProvider
             'App\Repositories\Eloquent\PropertyValueRepository'
         );
 
+        $this->app->singleton(
+            'App\Repositories\ProductImageRepositoryInterface',
+            'App\Repositories\Eloquent\ProductImageRepository'
+        );
+
         /* NEW BINDING */
     }
 }
