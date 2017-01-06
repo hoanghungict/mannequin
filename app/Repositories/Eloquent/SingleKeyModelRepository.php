@@ -145,25 +145,31 @@ class SingleKeyModelRepository extends BaseRepository implements SingleKeyModelR
         if( isset($model->id) && $model->id ) {
             \DB::connection()->enableQueryLog();
             $model = $this->save($model);
-
-            $query = \DB::getQueryLog()[0];
-            foreach( $query['bindings'] as $key => $value ) {
-                $query['query'] = preg_replace("/\?/", "`$value`", $query['query'], 1);
+            if( !$model ) {
+                return false;
             }
 
-            // crud actions must be execute by repository
-            $admin = \Auth::guard('admins')->user();
+            if( count(\DB::getQueryLog()) ) {
+                $queries = \DB::getQueryLog();
+                $query = $queries[count($queries) - 1];
+                foreach( $query['bindings'] as $key => $value ) {
+                    $query['query'] = preg_replace("/\?/", "`$value`", $query['query'], 1);
+                }
 
-            Log::create(
-                [
-                    'user_name' => $admin->name,
-                    'email'     => $admin->email,
-                    'table'     => $model->getTable(),
-                    'action'    => Log::TYPE_ACTION_UPDATE,
-                    'record_id' => $model->id,
-                    'query'     => $query['query'],
-                ]
-            );
+                // crud actions must be execute by repository
+                $admin = \Auth::guard('admins')->user();
+
+                Log::create(
+                    [
+                        'user_name' => $admin->name,
+                        'email'     => $admin->email,
+                        'table'     => $model->getTable(),
+                        'action'    => Log::TYPE_ACTION_UPDATE,
+                        'record_id' => $model->id,
+                        'query'     => $query['query'],
+                    ]
+                );
+            }
         } else {
             $model = $this->save($model);
         }

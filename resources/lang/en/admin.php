@@ -14,7 +14,8 @@ return [
             'delete_success' => 'Successfully deleted.',
         ],
         'errors'  => [
-            'params_invalid' => 'Parameters is Invalid !!!'
+            'params_invalid' => 'Parameters is Invalid !!!',
+            'code_invalid'   => 'This code has been used !!!'
         ],
     ],
     'errors'   => [

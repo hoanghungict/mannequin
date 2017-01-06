@@ -228,14 +228,41 @@ $factory->define(
     }
 );
 
-$factory->define(App\Models\Log::class, function (Faker\Generator $faker) {
-    return [
-        'user_name' => $faker->userName,
-        'action'    => $faker->word,
-        'table'     => $faker->word,
-        'record_id' => $faker->randomNumber(),
-        'query'     => $faker->sentence,
-    ];
-});
+$factory->define(
+    App\Models\Log::class,
+    function( Faker\Generator $faker ) {
+        return [
+            'user_name' => $faker->userName,
+            'action'    => $faker->word,
+            'table'     => $faker->word,
+            'record_id' => $faker->randomNumber(),
+            'query'     => $faker->sentence,
+        ];
+    }
+);
+
+$factory->define(
+    App\Models\ImportPriceHistory::class,
+    function( Faker\Generator $faker ) {
+        return [
+            'product_option_id' => 0,
+            'price'             => 0,
+            'creator_id'        => 0,
+            'notes'             => $faker->sentence,
+        ];
+    }
+);
+
+$factory->define(
+    App\Models\ExportPriceHistory::class,
+    function( Faker\Generator $faker ) {
+        return [
+            'product_option_id' => 0,
+            'price'             => 0,
+            'creator_id'        => 0,
+            'notes'             => $faker->sentence,
+        ];
+    }
+);
 
 /* NEW MODEL FACTORY */

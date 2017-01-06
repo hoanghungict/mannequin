@@ -3,6 +3,8 @@
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
+use App\Models\ExportPriceHistory;
+use App\Models\ImportPriceHistory;
 use App\Repositories\ProductRepositoryInterface;
 use App\Http\Requests\Admin\ProductRequest;
 use App\Http\Requests\PaginationRequest;
@@ -11,6 +13,7 @@ use App\Repositories\SubcategoryRepositoryInterface;
 use App\Repositories\UnitRepositoryInterface;
 use App\Repositories\ProductOptionRepositoryInterface;
 use App\Services\ProductOptionServiceInterface;
+use App\Services\AdminUserServiceInterface;
 
 class ProductController extends Controller {
     /** @var \App\Repositories\ProductRepositoryInterface */
@@ -31,20 +34,25 @@ class ProductController extends Controller {
     /** @var \App\Repositories\UnitRepositoryInterface */
     protected $unitRepository;
 
+    /** @var \App\Services\AdminUserServiceInterface */
+    protected $adminUserService;
+
     public function __construct(
-        ProductRepositoryInterface          $productRepository,
-        CategoryRepositoryInterface         $categoryRepository,
-        SubcategoryRepositoryInterface      $subcategoryRepository,
-        UnitRepositoryInterface             $unitRepository,
-        ProductOptionRepositoryInterface    $productOptionRepository,
-        ProductOptionServiceInterface       $productOptionService
+        ProductRepositoryInterface              $productRepository,
+        CategoryRepositoryInterface             $categoryRepository,
+        SubcategoryRepositoryInterface          $subcategoryRepository,
+        UnitRepositoryInterface                 $unitRepository,
+        ProductOptionRepositoryInterface        $productOptionRepository,
+        ProductOptionServiceInterface           $productOptionService,
+        AdminUserServiceInterface               $adminUserService
     ) {
-        $this->productRepository        = $productRepository;
-        $this->categoryRepository       = $categoryRepository;
-        $this->subcategoryRepository    = $subcategoryRepository;
-        $this->unitRepository           = $unitRepository;
-        $this->productOptionRepository  = $productOptionRepository;
-        $this->productOptionService     = $productOptionService;
+        $this->productRepository                = $productRepository;
+        $this->categoryRepository               = $categoryRepository;
+        $this->subcategoryRepository            = $subcategoryRepository;
+        $this->unitRepository                   = $unitRepository;
+        $this->productOptionRepository          = $productOptionRepository;
+        $this->productOptionService             = $productOptionService;
+        $this->adminUserService                 = $adminUserService;
     }
 
     /**
@@ -62,13 +70,7 @@ class ProductController extends Controller {
         $paginate[ 'baseUrl' ] = action( 'Admin\ProductController@index' );
         $filter[ 'keyword' ] = $request->get( 'p_search_keyword', '' );
 
-        $count = $this->productRepository->countWithFilter(
-            $filter,
-            $paginate[ 'order' ],
-            $paginate[ 'direction' ],
-            $paginate[ 'offset' ],
-            $paginate[ 'limit' ]
-        );
+        $count = $this->productRepository->countWithFilter( $filter );
         $products = $this->productRepository->getWithFilter(
             $filter,
             $paginate[ 'order' ],
@@ -127,6 +129,13 @@ class ProductController extends Controller {
             ]
         );
 
+        $check = $this->productRepository->getByCode($input['code']);
+        if( $check ) {
+            return redirect()
+                ->back()
+                ->withErrors( trans( 'admin.messages.errors.code_invalid' ) );
+        }
+
         $input[ 'is_enabled' ] = $request->get( 'is_enabled', 0 );
         $product = $this->productRepository->create( $input );
 
@@ -144,6 +153,22 @@ class ProductController extends Controller {
                 'export_price'      => $request->get( 'export_price', 0 ),
                 'quantity'          => $request->get( 'quantity', 0 ),
                 'unit_id'           => $request->get( 'unit_id', 1 ),
+            ]
+        );
+
+        $admin = $this->adminUserService->getUser();
+        ImportPriceHistory::create(
+            [
+                'product_option_id' => $standardOption->id,
+                'price'             => $standardOption->import_price,
+                'creator_id'        => $admin->id,
+            ]
+        );
+        ExportPriceHistory::create(
+            [
+                'product_option_id' => $standardOption->id,
+                'price'             => $standardOption->export_price,
+                'creator_id'        => $admin->id,
             ]
         );
 
@@ -220,22 +245,46 @@ class ProductController extends Controller {
         $input[ 'is_enabled' ] = $request->get( 'is_enabled', 0 );
         $this->productRepository->update( $product, $input );
 
-        $standardOption = $this->productOptionRepository->getBlankModel() ->where(
+        $standardOption = $this->productOptionRepository->getBlankModel()->where(
             [
                 ['product_id', '=', $product->id],
                 ['property_value_id', '=', '[]'],
             ]
         )->first();
 
-        $standardOption = $this->productOptionRepository->update(
-            $standardOption,
-            [
-                'import_price'      => $request->get( 'import_price', 0 ),
-                'export_price'      => $request->get( 'export_price', 0 ),
-                'quantity'          => $request->get( 'quantity', 0 ),
-                'unit_id'           => $request->get( 'unit_id', 1 ),
-            ]
-        );
+        $admin = $this->adminUserService->getUser();
+        if( $request->get( 'import_price' ) && ($request->get( 'import_price' ) != $standardOption->import_price) ) {
+            $this->productOptionRepository->update(
+                $standardOption,
+                [
+                    'import_price'      => $request->get( 'import_price' ),
+                    'unit_id'           => $request->get( 'unit_id', 1 ),
+                ]
+            );
+            ImportPriceHistory::create(
+                [
+                    'product_option_id' => $standardOption->id,
+                    'price'             => $request->get( 'import_price', 0 ),
+                    'creator_id'        => $admin->id,
+                ]
+            );
+        }
+        if( $request->get( 'export_price' ) && ($request->get( 'export_price' ) != $standardOption->export_price) ) {
+            $this->productOptionRepository->update(
+                $standardOption,
+                [
+                    'export_price'      => $request->get( 'export_price' ),
+                    'unit_id'           => $request->get( 'unit_id', 1 ),
+                ]
+            );
+            ExportPriceHistory::create(
+                [
+                    'product_option_id' => $standardOption->id,
+                    'price'             => $request->get( 'export_price', 0 ),
+                    'creator_id'        => $admin->id,
+                ]
+            );
+        }
 
         return redirect()
             ->action( 'Admin\ProductController@show', [$id] )
