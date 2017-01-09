@@ -238,7 +238,7 @@ class AdminCRUDMakeCommand extends GeneratorCommandBase
                         continue;
                     }
                     $tableHeader .= '                <th>@lang(\'admin.pages.%%classes-spinal%%.columns.'.$column['name'].'\')</th>'.PHP_EOL;
-                    $tableContent .= '                <td>{{ $model->'.$column['name'].' }}</td>'.PHP_EOL;
+                    $tableContent .= '                <td>{{ $%%class%%->'.$column['name'].' }}</td>'.PHP_EOL;
                 }
                 $this->replaceTemplateVariable($stub, 'TABLE_HEADER', $tableHeader);
                 $this->replaceTemplateVariable($stub, 'TABLE_CONTENT', $tableContent);
