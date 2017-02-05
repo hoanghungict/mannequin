@@ -15,11 +15,14 @@ class CreateImportsTable extends Migration
     {
         Schema::create('imports', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('code');
-            $table->integer('store_id');
+            $table->string('code')->default('');
 
-            $table->dateTime('times');
+            $table->date('times');
+            $table->bigInteger('total_amount')->default(0);
             $table->text('notes')->nullable();
+
+            $table->string('employee_id')->default('[]');
+            $table->bigInteger('creator_id')->default(0);
 
             $table->softDeletes();
             $table->timestamps();

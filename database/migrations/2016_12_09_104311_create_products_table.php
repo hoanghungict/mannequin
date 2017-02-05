@@ -18,6 +18,7 @@ class CreateProductsTable extends Migration
             $table->string('code');
             $table->string('name');
             $table->integer('subcategory_id');
+            $table->integer('unit_id');
             $table->text('descriptions')->nullable();
             $table->integer('is_enabled')->default(1);
 

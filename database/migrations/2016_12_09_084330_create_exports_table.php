@@ -15,18 +15,19 @@ class CreateExportsTable extends Migration
     {
         Schema::create('exports', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('employee_id');
-            $table->string('customer_id');
+            $table->string('employee_id')->default('[]');
+            $table->integer('customer_id');
             $table->integer('store_id');
 
-            $table->dateTime('times');
+            $table->date('times');
 
-            $table->integer('discount')->default(0);
+            $table->bigInteger('discount')->default(0);
             $table->integer('discount_unit')->default(0);
+            $table->bigInteger('total_amount')->default(0);
 
             $table->text('notes')->nullable();
 
-            $table->bigInteger('creator_id');
+            $table->bigInteger('creator_id')->default(0);
 
             $table->softDeletes();
             $table->timestamps();
