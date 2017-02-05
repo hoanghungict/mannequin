@@ -146,6 +146,16 @@ class RepositoryBindServiceProvider extends ServiceProvider
             'App\Repositories\Eloquent\ExportPriceHistoryRepository'
         );
 
+        $this->app->singleton(
+            'App\Repositories\ImportRepositoryInterface',
+            'App\Repositories\Eloquent\ImportRepository'
+        );
+
+        $this->app->singleton(
+            'App\Repositories\ImportDetailRepositoryInterface',
+            'App\Repositories\Eloquent\ImportDetailRepository'
+        );
+
         /* NEW BINDING */
     }
 }
