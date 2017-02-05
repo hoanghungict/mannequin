@@ -43,6 +43,7 @@
         \Route::resource('products', 'Admin\ProductController');
         \Route::post('product-options', 'Admin\ProductOptionController@create');
 
+        \Route::resource('imports', 'Admin\ImportController');
         /* NEW ADMIN RESOURCE ROUTE */
     });
 });

@@ -49,6 +49,8 @@ return [
                 'select_category'    => 'Select Category',
                 'select_subcategory' => 'Select Subcategory',
                 'select_unit'        => 'Select Unit',
+                'select_employee'    => 'Select Employee',
+                'standard_option'    => 'Standard Option',
             ],
             'buttons' => [
                 'create'          => 'Create New',
@@ -227,6 +229,27 @@ return [
                 'record_id' => 'Record ID',
                 'query'     => 'Query',
             ],
+        ],
+        'imports'                  => [
+            'columns' => [
+                'code'         => 'Code',
+                'times'        => 'Times',
+                'notes'        => 'Notes',
+                'employee_id'  => 'Employees',
+                'creator_id'   => 'Creator',
+                'total_amount' => 'Total Amount',
+            ],
+            'modal'   => [
+                'title'          => 'Import Product',
+                'create_button'  => 'Add Product',
+                'product_name'   => 'Product',
+                'product_option' => 'Option',
+                'import_price'   => 'Import Price',
+                'quantity'       => 'Quantity',
+                'unit'           => 'Unit',
+                'select_product' => 'Select a Product',
+                'select_option'  => 'Select a Option'
+            ]
         ],
         /* NEW PAGE STRINGS */
     ],

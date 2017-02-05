@@ -26,4 +26,12 @@ interface ProductOptionServiceInterface extends BaseServiceInterface
      * @return  array   $options    List options
      * */
     public function getProductOptions($productId);
+
+    /**
+     * Get all options
+     *
+     * @param
+     * @return  array   $options    List options
+     * */
+    public function getAllOptionEnabled();
 }

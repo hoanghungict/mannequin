@@ -96,4 +96,26 @@ class ProductOptionService extends BaseService implements ProductOptionServiceIn
         }
         return $options;
     }
+
+    public function getAllOptionEnabled()
+    {
+        $options = $this->productOptionRepository->getBlankModel()->where('id', '<', '50')->get();
+//        $options = $this->productOptionRepository->allEnabled();
+
+        foreach( $options as $key => $option ) {
+            $properties = $option->properties;
+            if( !count($properties) ) {
+                $options[$key]['name'] = trans('admin.pages.common.label.standard_option');
+                continue;
+            } else {
+                $optionName = '';
+                foreach( $properties as $key2 => $propertyValue ) {
+                    $propertyValueName = $propertyValue->present()->getPropertyName;
+                    $optionName .= $key2 ? (' | ' . $propertyValueName) : $propertyValueName;
+                }
+                $options[$key]['name'] = $optionName;
+            }
+        }
+        return $options;
+    }
 }
