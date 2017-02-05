@@ -156,6 +156,11 @@ class RepositoryBindServiceProvider extends ServiceProvider
             'App\Repositories\Eloquent\ImportDetailRepository'
         );
 
+        $this->app->singleton(
+            'App\Repositories\ProductOptionPropertyRepositoryInterface',
+            'App\Repositories\Eloquent\ProductOptionPropertyRepository'
+        );
+
         /* NEW BINDING */
     }
 }

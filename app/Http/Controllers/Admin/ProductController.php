@@ -125,18 +125,19 @@ class ProductController extends Controller {
                 'code',
                 'name',
                 'descriptions',
-                'subcategory_id'
+                'subcategory_id',
             ]
         );
 
         $check = $this->productRepository->getByCode($input['code']);
-        if( $check ) {
+        if( count($check) ) {
             return redirect()
                 ->back()
                 ->withErrors( trans( 'admin.messages.errors.code_invalid' ) );
         }
 
-        $input[ 'is_enabled' ] = $request->get( 'is_enabled', 0 );
+        $input[ 'is_enabled' ]  = $request->get( 'is_enabled', 0 );
+        $input[ 'unit_id' ]     = $request->get( 'unit_id', 1 );
         $product = $this->productRepository->create( $input );
 
         if( empty( $product ) ) {
@@ -148,10 +149,9 @@ class ProductController extends Controller {
         $standardOption = $this->productOptionRepository->create(
             [
                 'product_id'        => $product->id,
-                'property_value_id' => '[]',
-                'import_price'      => $request->get( 'import_price', 0 ),
-                'export_price'      => $request->get( 'export_price', 0 ),
-                'quantity'          => $request->get( 'quantity', 0 ),
+                'import_price'      => intval($request->get( 'import_price', 0 )),
+                'export_price'      => intval($request->get( 'export_price', 0 )),
+                'quantity'          => intval($request->get( 'quantity', 0 )),
                 'unit_id'           => $request->get( 'unit_id', 1 ),
             ]
         );
@@ -190,7 +190,6 @@ class ProductController extends Controller {
             \App::abort( 404 );
         }
 
-        $options        = $this->productOptionService->getProductOptions($id);
         $categories     = $this->categoryRepository->all();
         $subcategories  = $this->subcategoryRepository->all();
         $units          = $this->unitRepository->all();
@@ -200,7 +199,6 @@ class ProductController extends Controller {
             [
                 'isNew'         => false,
                 'product'       => $product,
-                'options'       => $options,
                 'categories'    => $categories,
                 'subcategories' => $subcategories,
                 'units'         => $units
@@ -235,36 +233,30 @@ class ProductController extends Controller {
         }
         $input = $request->only(
             [
-                'code',
                 'name',
                 'descriptions',
                 'subcategory_id'
             ]
         );
 
-        $input[ 'is_enabled' ] = $request->get( 'is_enabled', 0 );
+        $input[ 'is_enabled' ]  = $request->get( 'is_enabled', 0 );
+        $input[ 'unit_id' ]     = $request->get( 'unit_id', 1 );
         $this->productRepository->update( $product, $input );
 
-        $standardOption = $this->productOptionRepository->getBlankModel()->where(
-            [
-                ['product_id', '=', $product->id],
-                ['property_value_id', '=', '[]'],
-            ]
-        )->first();
+        $standardOption = $product->present()->getStandardOption;
 
         $admin = $this->adminUserService->getUser();
         if( $request->get( 'import_price' ) && ($request->get( 'import_price' ) != $standardOption->import_price) ) {
             $this->productOptionRepository->update(
                 $standardOption,
                 [
-                    'import_price'      => $request->get( 'import_price' ),
-                    'unit_id'           => $request->get( 'unit_id', 1 ),
+                    'import_price'      => intval($request->get( 'import_price', 0 ))
                 ]
             );
             ImportPriceHistory::create(
                 [
                     'product_option_id' => $standardOption->id,
-                    'price'             => $request->get( 'import_price', 0 ),
+                    'price'             => intval($request->get( 'import_price', 0 )),
                     'creator_id'        => $admin->id,
                 ]
             );
@@ -273,14 +265,13 @@ class ProductController extends Controller {
             $this->productOptionRepository->update(
                 $standardOption,
                 [
-                    'export_price'      => $request->get( 'export_price' ),
-                    'unit_id'           => $request->get( 'unit_id', 1 ),
+                    'export_price'      => intval($request->get( 'export_price', 0 ))
                 ]
             );
             ExportPriceHistory::create(
                 [
                     'product_option_id' => $standardOption->id,
-                    'price'             => $request->get( 'export_price', 0 ),
+                    'price'             => intval($request->get( 'export_price', 0 )),
                     'creator_id'        => $admin->id,
                 ]
             );
