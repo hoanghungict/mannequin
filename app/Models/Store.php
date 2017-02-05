@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Property extends Base 
+class Store extends Base
 {
 
     use SoftDeletes;
@@ -12,7 +12,7 @@ class Property extends Base
      *
      * @var string
      */
-    protected $table = 'properties';
+    protected $table = 'stores';
 
     /**
      * The attributes that are mass assignable.
@@ -21,7 +21,8 @@ class Property extends Base
      */
     protected $fillable = [
         'name',
-        'slug',
+        'address',
+        'telephone',
     ];
 
     /**
@@ -33,25 +34,23 @@ class Property extends Base
 
     protected $dates = ['deleted_at'];
 
-    protected $presenter = \App\Presenters\PropertyPresenter::class;
+    protected $presenter = \App\Presenters\StorePresenter::class;
 
     // Relations
-    public function propertyValues() 
-    {
-        return $this->hasMany( 'App\Models\PropertyValue', 'property_id', 'id' );
-    }
+
 
     // Utility Functions
 
     /*
      * API Presentation
      */
-    public function toAPIArray() 
+    public function toAPIArray()
     {
         return [
-            'id'   => $this->id,
-            'name' => $this->name,
-            'slug' => $this->slug,
+            'id'        => $this->id,
+            'name'      => $this->name,
+            'address'   => $this->address,
+            'telephone' => $this->telephone,
         ];
     }
 
