@@ -47,12 +47,12 @@ class Product extends Base
 
     public function options()
     {
-        return $this->hasMany('App\Models\ProductOption', 'product_id', 'id');
+        return $this->hasMany(\App\Models\ProductOption::class, 'product_id', 'id');
     }
 
     public function images()
     {
-        return $this->belongsToMany('App\Models\Image', ProductImage::getTableName(), 'product_id', 'image_id');
+        return $this->belongsToMany(\App\Models\Image::class, ProductImage::getTableName(), 'product_id', 'image_id');
     }
   
     public function unit()
