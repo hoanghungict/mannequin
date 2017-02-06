@@ -54,6 +54,11 @@ class AuthenticatableService implements AuthenticatableServiceInterface
 
     public function signUp($input)
     {
+        $exist = $this->authenticatableRepository->findByEmail($input['email']);
+        if( !empty($exist) ) {
+            return null;
+        }
+
         /** @var \App\Models\AuthenticatableBase $user */
         $user = $this->authenticatableRepository->create($input);
         if (empty($user)) {
@@ -123,16 +128,16 @@ class AuthenticatableService implements AuthenticatableServiceInterface
         $mailService = \App::make('App\Services\MailServiceInterface');
 
         $mailService->sendMail($this->resetEmailTitle, config('mail.from'),
-            ['name' => '', 'address' => $user->email], $this->resetEmailTemplate, [
-                'token' => $token,
-            ]);
+                               ['name' => '', 'address' => $user->email], $this->resetEmailTemplate, [
+                                   'token' => $token,
+                               ]);
     }
 
     public function getUserByPasswordResetToken($token)
     {
         $email = $this->passwordResettableRepository->findEmailByToken($token);
         if (empty($email)) {
-            return;
+            return null;
         }
 
         return $this->authenticatableRepository->findByEmail($email);
@@ -166,7 +171,7 @@ class AuthenticatableService implements AuthenticatableServiceInterface
         /** @var \App\Models\AuthenticatableBase $user */
         $user = $this->signIn($input);
         if (empty($user)) {
-            return;
+            return null;
         }
 
         return $this->setAPIAccessToken($user);
@@ -177,7 +182,7 @@ class AuthenticatableService implements AuthenticatableServiceInterface
         /** @var \App\Models\AuthenticatableBase $user */
         $user = $this->signUp($input);
         if (empty($user)) {
-            return;
+            return null;
         }
 
         return $this->setAPIAccessToken($user);
@@ -194,7 +199,7 @@ class AuthenticatableService implements AuthenticatableServiceInterface
     /**
      * @return string
      */
-    protected function getGuardName()
+    public function getGuardName()
     {
         return '';
     }

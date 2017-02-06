@@ -13,6 +13,16 @@
     </script>
     <script src="{!! \URLHelper::asset('libs/plugins/jquery-filer/js/jquery.filer.min.js', 'admin') !!}"></script>
     <script src="{!! \URLHelper::asset('js/pages/products/edit.js', 'admin') !!}"></script>
+    <script>
+        $('#edit-import-price').on('click', function () {
+            $('#import-price').removeAttr('disabled');
+            $(this).remove()
+        });
+        $('#edit-export-price').on('click', function () {
+            $('#export-price').removeAttr('disabled');
+            $(this).remove()
+        });
+    </script>
 @stop
 
 @section('title')
@@ -60,7 +70,7 @@
                     <div class="col-sm-6">
                         <div class="form-group @if ($errors->has('code')) has-error @endif">
                             <label for="code">@lang('admin.pages.products.columns.code')</label>
-                            <input type="text" class="form-control" id="code" name="code" value="{{ old('code') ? old('code') : $product->code }}">
+                            <input type="text" class="form-control" id="code" name="code" @if(!$isNew) disabled @endif value="{{ old('code') ? old('code') : $product->code }}">
                         </div>
                     </div>
                     <div class="col-sm-6">
@@ -110,15 +120,17 @@
 
                 <div class="row">
                     <div class="col-sm-6">
-                        <div class="form-group @if ($errors->has('import_price')) has-error @endif">
+                        <div class="form-group @if ($errors->has('import_price')) has-error @endif" style="position:relative;">
                             <label for="import_price">@lang('admin.pages.products.columns.import_price')</label>
-                            <input type="number" class="form-control" id="import_price" name="import_price" required value="{{ old('import_price') ? old('import_price') : (isset($product->present()->getStandardOption->import_price) ? $product->present()->getStandardOption->import_price : 0) }}">
+                            <input type="number" class="form-control" id="import-price" name="import_price" @if( !$isNew ) disabled @endif required value="{{ old('import_price') ? old('import_price') : (isset($product->present()->getStandardOption->import_price) ? $product->present()->getStandardOption->import_price : 0) }}">
+                            <div id="edit-import-price" style="position: absolute; right: 20px; top: 32px; cursor: pointer; color: #005999;"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></div>
                         </div>
                     </div>
                     <div class="col-sm-6">
                         <div class="form-group @if ($errors->has('export_price')) has-error @endif">
                             <label for="export_price">@lang('admin.pages.products.columns.export_price')</label>
-                            <input type="number" class="form-control" id="export_price" name="export_price" required value="{{ old('export_price') ? old('export_price') : (isset($product->present()->getStandardOption->export_price) ? $product->present()->getStandardOption->export_price : 0) }}">
+                            <input type="number" class="form-control" id="export-price" name="export_price" @if( !$isNew ) disabled @endif required value="{{ old('export_price') ? old('export_price') : (isset($product->present()->getStandardOption->export_price) ? $product->present()->getStandardOption->export_price : 0) }}">
+                            <div id="edit-export-price" style="position: absolute; right: 20px; top: 32px; cursor: pointer; color: #005999;"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></div>
                         </div>
                     </div>
                 </div>
@@ -127,7 +139,7 @@
                     <div class="col-sm-6">
                         <div class="form-group @if ($errors->has('quantity')) has-error @endif">
                             <label for="quantity">@lang('admin.pages.products.columns.quantity')</label>
-                            <input type="number" @if( !$isNew ) disabled @endif class="form-control" id="quantity" name="quantity" required value="{{ old('quantity') ? old('quantity') : (isset($product->present()->getStandardOption->quantity) ? $product->present()->getStandardOption->quantity : 0) }}">
+                            <input type="number" @if( !$isNew ) disabled @endif class="form-control" id="quantity" name="quantity" value="{{ old('quantity') ? old('quantity') : (isset($product->present()->getStandardOption->quantity) ? $product->present()->getStandardOption->quantity : 0) }}">
                         </div>
                     </div>
                     <div class="col-sm-6">
@@ -135,7 +147,7 @@
                         <select class="form-control" name="unit_id" style="margin-bottom: 15px;">
                             <option value="">@lang('admin.pages.common.label.select_unit')</option>
                             @foreach( $units as $unit )
-                                <option value="{!! $unit->id !!}" @if( (old('unit_id') && old('unit_id') == $unit->id) || ( isset($product->present()->getStandardOption->unit_id) && ($product->present()->getStandardOption->unit_id == $unit->id) ) ) selected @endif >
+                                <option value="{!! $unit->id !!}" @if( (old('unit_id') && old('unit_id') == $unit->id) || ( isset($product->unit_id) && ($product->unit_id == $unit->id) ) ) selected @endif >
                                     {{ $unit->name }}
                                 </option>
                             @endforeach
@@ -186,12 +198,12 @@
                             <th>@lang('admin.pages.products.options.properties')</th>
                             <th width="100px">@lang('admin.pages.common.label.actions')</th>
                         </tr>
-                        @foreach( $options as $option )
+                        @foreach( $product->options as $option )
                             <tr>
                                 <td>{{ number_format($option['import_price'], '0', ',', ' ') }}</td>
                                 <td>{{ number_format($option['export_price'], '0', ',', ' ') }}</td>
                                 <td>{{ number_format($option['quantity'], '0', ',', ' ') }}</td>
-                                <td>{{ $option['properties'] }}</td>
+                                <td>{{ $option->present()->getProductOptionName}}</td>
                                 <td></td>
                             </tr>
                         @endforeach

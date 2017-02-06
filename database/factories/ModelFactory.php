@@ -208,6 +208,7 @@ $factory->define(
             'code'           => $faker->word,
             'name'           => $faker->name,
             'subcategory_id' => 1,
+            'unit_id'        => 1,
             'descriptions'   => $faker->sentences( 3, true ),
             'is_enabled'     => 1,
         ];
@@ -219,11 +220,9 @@ $factory->define(
     function( Faker\Generator $faker ) {
         return [
             'product_id'        => 1,
-            'property_value_id' => "[1]",
             'import_price'      => rand( 50000, 200000 ),
             'export_price'      => rand( 200000, 500000 ),
             'quantity'          => rand( 50, 250 ),
-            'unit_id'           => 1,
         ];
     }
 );
@@ -248,6 +247,77 @@ $factory->define(
             'product_id' => 0,
             'image_id'   => 0,
             'order'      => 0,
+        ]
+    }
+);
+
+$factory->define(
+    App\Models\ImportPriceHistory::class,
+    function( Faker\Generator $faker ) {
+        return [
+            'product_option_id' => 0,
+            'price'             => 0,
+            'creator_id'        => 0,
+            'notes'             => $faker->sentence,
+        ];
+    }
+);
+
+$factory->define(
+    App\Models\ExportPriceHistory::class,
+    function( Faker\Generator $faker ) {
+        return [
+            'product_option_id' => 0,
+            'price'             => 0,
+            'creator_id'        => 0,
+            'notes'             => $faker->sentence,
+        ];
+    }
+);
+
+$factory->define(
+    App\Models\Import::class,
+    function( Faker\Generator $faker ) {
+        return [
+            'code'     => $faker->word,
+            'store_id' => $faker->randomNumber(),
+            'times'    => $faker->time(),
+            'notes'    => $faker->sentences( 3 ),
+        ];
+    }
+);
+
+$factory->define(
+    App\Models\Store::class,
+    function( Faker\Generator $faker ) {
+        return [
+            'name'      => $faker->name,
+            'address'   => $faker->address,
+            'telephone' => $faker->phoneNumber,
+        ];
+    }
+);
+
+$factory->define(
+    App\Models\ImportDetail::class,
+    function( Faker\Generator $faker ) {
+        return [
+            'import_id'  => 0,
+            'product_id' => 0,
+            'option_id'  => 0,
+            'prices'     => 100000,
+            'quantity'   => 100,
+            'unit_id'    => 1,
+        ];
+    }
+);
+
+$factory->define(
+    App\Models\ProductOptionProperty::class,
+    function( Faker\Generator $faker ) {
+        return [
+            'product_option_id' => 0,
+            'property_value_id' => 0,
         ];
     }
 );

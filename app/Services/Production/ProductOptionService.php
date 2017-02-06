@@ -5,6 +5,7 @@ use App\Repositories\ProductOptionRepositoryInterface;
 use App\Services\PropertyServiceInterface;
 use App\Repositories\PropertyValueRepositoryInterface;
 use App\Services\PropertyValueServiceInterface;
+use App\Repositories\ProductOptionPropertyRepositoryInterface;
 
 class ProductOptionService extends BaseService implements ProductOptionServiceInterface
 {
@@ -17,28 +18,39 @@ class ProductOptionService extends BaseService implements ProductOptionServiceIn
     /** @var \App\Repositories\PropertyValueRepositoryInterface */
     protected $propertyValueRepository;
 
+    /** @var \App\Repositories\ProductOptionPropertyRepositoryInterface */
+    protected $productOptionPropertyRepository;
+
     /** @var \App\Services\PropertyValueServiceInterface */
     protected $propertyValueService;
 
     public function __construct(
-        ProductOptionRepositoryInterface    $productOptionRepository,
-        PropertyServiceInterface            $propertyService,
-        PropertyValueRepositoryInterface    $propertyValueRepository,
-        PropertyValueServiceInterface       $propertyValueService
+        ProductOptionRepositoryInterface            $productOptionRepository,
+        PropertyServiceInterface                    $propertyService,
+        PropertyValueRepositoryInterface            $propertyValueRepository,
+        PropertyValueServiceInterface               $propertyValueService,
+        ProductOptionPropertyRepositoryInterface    $productOptionPropertyRepository
     ) {
-        $this->productOptionRepository  = $productOptionRepository;
-        $this->propertyService          = $propertyService;
-        $this->propertyValueRepository  = $propertyValueRepository;
-        $this->propertyValueService     = $propertyValueService;
+        $this->productOptionRepository          = $productOptionRepository;
+        $this->propertyService                  = $propertyService;
+        $this->propertyValueRepository          = $propertyValueRepository;
+        $this->propertyValueService             = $propertyValueService;
+        $this->productOptionPropertyRepository  = $productOptionPropertyRepository;
     }
 
     public function createOptions($productId, $options) {
-        $standardOption = $this->getStandardOption($productId);
-
         foreach( $options as $option ) {
             $properties = isset($option['properties']) ? json_decode($option['properties'], true) : [];
-            $propertyValueIds = [];
             if( count($properties) ) {
+                $productOption = $this->productOptionRepository->create(
+                    [
+                        'product_id'        => $productId,
+                        'import_price'      => $option['import_price'],
+                        'export_price'      => $option['export_price'],
+                        'quantity'          => $option['quantity']
+                    ]
+                );
+
                 foreach( $properties as $propertyName => $value ) {
                     $property = $this->propertyService->create($propertyName);
                     $propertyValue = $this->propertyValueRepository->create(
@@ -47,35 +59,21 @@ class ProductOptionService extends BaseService implements ProductOptionServiceIn
                             'value'       => $value
                         ]
                     );
-                    array_push($propertyValueIds, $propertyValue->id);
+
+                    $this->productOptionPropertyRepository->create(
+                        [
+                            'product_option_id' => $productOption->id,
+                            'property_value_id' => $propertyValue->id
+                        ]
+                    );
                 }
             } else {
                 continue;
             }
-            $productOption = $this->productOptionRepository->create(
-                [
-                    'product_id'        => $productId,
-                    'property_value_id' => json_encode($propertyValueIds),
-                    'import_price'      => $option['import_price'],
-                    'export_price'      => $option['export_price'],
-                    'quantity'          => $option['quantity'],
-                    'unit_id'           => $standardOption['unit_id']
-                ]
-            );
+
         }
 
         return;
-    }
-
-    public function getStandardOption($productId) {
-        $option = $this->productOptionRepository->getBlankModel();
-        return $option->where(
-            [
-                'product_id' => $productId,
-                'property_value_id' => '[]'
-            ]
-        )
-            ->first();
     }
 
     public function getProductOptions($productId) {
@@ -92,6 +90,28 @@ class ProductOptionService extends BaseService implements ProductOptionServiceIn
                     $properties .= $key2 ? (' | ' . $propertyValueName) : $propertyValueName;
                 }
                 $options[$key]['properties'] = $properties;
+            }
+        }
+        return $options;
+    }
+
+    public function getAllOptionEnabled()
+    {
+        $options = $this->productOptionRepository->getBlankModel()->where('id', '<', '50')->get();
+//        $options = $this->productOptionRepository->allEnabled();
+
+        foreach( $options as $key => $option ) {
+            $properties = $option->properties;
+            if( !count($properties) ) {
+                $options[$key]['name'] = trans('admin.pages.common.label.standard_option');
+                continue;
+            } else {
+                $optionName = '';
+                foreach( $properties as $key2 => $propertyValue ) {
+                    $propertyValueName = $propertyValue->present()->getPropertyName;
+                    $optionName .= $key2 ? (' | ' . $propertyValueName) : $propertyValueName;
+                }
+                $options[$key]['name'] = $optionName;
             }
         }
         return $options;

@@ -23,6 +23,7 @@ class Product extends Base
         'code',
         'name',
         'subcategory_id',
+        'unit_id',
         'descriptions',
         'is_enabled',
     ];
@@ -53,6 +54,11 @@ class Product extends Base
     {
         return $this->belongsToMany('App\Models\Image', ProductImage::getTableName(), 'product_id', 'image_id');
     }
+  
+    public function unit()
+    {
+        return $this->belongsTo(\App\Models\Unit::class, 'unit_id', 'id');
+    }
 
     // Utility Functions
 
@@ -66,6 +72,7 @@ class Product extends Base
             'code'           => $this->code,
             'name'           => $this->name,
             'subcategory_id' => $this->subcategory_id,
+            'unit_id'        => $this->unit_id,
             'descriptions'   => $this->descriptions,
             'is_enabled'     => $this->is_enabled,
         ];

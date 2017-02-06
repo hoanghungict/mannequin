@@ -50,20 +50,20 @@
                 <th style="width: 40px">@lang('admin.pages.common.label.is_enabled')</th>
                 <th style="width: 40px">@lang('admin.pages.common.label.actions')</th>
             </tr>
-            @foreach( $models as $model )
+            @foreach( $%%class%%s as $%%class%% )
                 <tr>
-                    <td>{{ $model->id }}</td>
+                    <td>{{ $%%class%%->id }}</td>
 %%TABLE_CONTENT%%
                     <td>
-                        @if( $model->is_enabled )
+                        @if( $%%class%%->is_enabled )
                             <span class="badge bg-green">@lang('admin.pages.common.label.is_enabled_true')</span>
                         @else
                             <span class="badge bg-red">@lang('admin.pages.common.label.is_enabled_false')</span>
                         @endif
                     </td>
                     <td>
-                        <a href="{!! URL::action('Admin\%%CLASS%%Controller@show', $model->id) !!}" class="btn btn-block btn-primary btn-xs">@lang('admin.pages.common.buttons.edit')</a>
-                        <a href="#" class="btn btn-block btn-danger btn-xs delete-button" data-delete-url="{!! action('Admin\%%CLASS%%Controller@destroy', $model->id) !!}">@lang('admin.pages.common.buttons.delete')</a>
+                        <a href="{!! URL::action('Admin\%%CLASS%%Controller@show', $%%class%%->id) !!}" class="btn btn-block btn-primary btn-xs">@lang('admin.pages.common.buttons.edit')</a>
+                        <a href="#" class="btn btn-block btn-danger btn-xs delete-button" data-delete-url="{!! action('Admin\%%CLASS%%Controller@destroy', $%%class%%->id) !!}">@lang('admin.pages.common.buttons.delete')</a>
                     </td>
                 </tr>
             @endforeach

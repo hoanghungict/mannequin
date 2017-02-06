@@ -42,7 +42,9 @@
 
         \Route::resource('products', 'Admin\ProductController');
         \Route::post('product-options', 'Admin\ProductOptionController@create');
+        \Route::get('getOptionOfProduct/{id}', 'Admin\ProductController@getAllOptionOfProduct');
 
+        \Route::resource('imports', 'Admin\ImportController');
         /* NEW ADMIN RESOURCE ROUTE */
     });
 });

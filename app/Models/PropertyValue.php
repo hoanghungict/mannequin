@@ -2,7 +2,8 @@
 
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class PropertyValue extends Base {
+class PropertyValue extends Base 
+{
 
     use SoftDeletes;
 
@@ -32,21 +33,25 @@ class PropertyValue extends Base {
 
     protected $dates = ['deleted_at'];
 
-    //    protected $presenter = \App\Presenters\CustomerPresenter::class;
+    protected $presenter = \App\Presenters\PropertyValuePresenter::class;
 
     // Relations
-    public function property()
+    public function property() 
     {
-        return $this->belongsTo('App\Models\Property', 'property_id', 'id');
+        return $this->belongsTo( \App\Models\Property::class, 'property_id', 'id' );
     }
+
+
+    // Utility Functions
 
     /*
      * API Presentation
      */
-    public function toAPIArray() {
+    public function toAPIArray() 
+    {
         return [
             'id'          => $this->id,
-            'property_id' => $this->id,
+            'property_id' => $this->property_id,
             'value'       => $this->value,
         ];
     }

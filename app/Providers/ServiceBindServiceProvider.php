@@ -92,6 +92,11 @@ class ServiceBindServiceProvider extends ServiceProvider
             \App\Services\Production\PropertyValueService::class
         );
 
+        $this->app->singleton(
+            \App\Services\ImportServiceInterface::class,
+            \App\Services\Production\ImportService::class
+        );
+
         /* NEW BINDING */
     }
 }

@@ -135,10 +135,35 @@ class RepositoryBindServiceProvider extends ServiceProvider
             'App\Repositories\PropertyValueRepositoryInterface',
             'App\Repositories\Eloquent\PropertyValueRepository'
         );
-
-        $this->app->singleton(
+      
+      $this->app->singleton(
             'App\Repositories\ProductImageRepositoryInterface',
             'App\Repositories\Eloquent\ProductImageRepository'
+        );
+
+        $this->app->singleton(
+            'App\Repositories\ImportPriceHistoryRepositoryInterface',
+            'App\Repositories\Eloquent\ImportPriceHistoryRepository'
+        );
+
+        $this->app->singleton(
+            'App\Repositories\ExportPriceHistoryRepositoryInterface',
+            'App\Repositories\Eloquent\ExportPriceHistoryRepository'
+        );
+
+        $this->app->singleton(
+            'App\Repositories\ImportRepositoryInterface',
+            'App\Repositories\Eloquent\ImportRepository'
+        );
+
+        $this->app->singleton(
+            'App\Repositories\ImportDetailRepositoryInterface',
+            'App\Repositories\Eloquent\ImportDetailRepository'
+        );
+
+        $this->app->singleton(
+            'App\Repositories\ProductOptionPropertyRepositoryInterface',
+            'App\Repositories\Eloquent\ProductOptionPropertyRepository'
         );
 
         /* NEW BINDING */
