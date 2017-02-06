@@ -241,6 +241,17 @@ $factory->define(
 );
 
 $factory->define(
+    App\Models\ProductImage::class,
+    function( Faker\Generator $faker ) {
+        return [
+            'product_id' => 0,
+            'image_id'   => 0,
+            'order'      => 0,
+        ]
+    }
+);
+
+$factory->define(
     App\Models\ImportPriceHistory::class,
     function( Faker\Generator $faker ) {
         return [

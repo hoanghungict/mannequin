@@ -13,11 +13,15 @@ use App\Repositories\SubcategoryRepositoryInterface;
 use App\Repositories\UnitRepositoryInterface;
 use App\Repositories\ProductOptionRepositoryInterface;
 use App\Services\ProductOptionServiceInterface;
+use App\Services\ProductServiceInterface;
 use App\Services\AdminUserServiceInterface;
 
 class ProductController extends Controller {
     /** @var \App\Repositories\ProductRepositoryInterface */
     protected $productRepository;
+
+    /** @var \App\Services\ProductServiceInterface */
+    protected $productService;
 
     /** @var \App\Repositories\ProductOptionRepositoryInterface */
     protected $productOptionRepository;
@@ -39,6 +43,7 @@ class ProductController extends Controller {
 
     public function __construct(
         ProductRepositoryInterface              $productRepository,
+        ProductServiceInterface                 $productService,
         CategoryRepositoryInterface             $categoryRepository,
         SubcategoryRepositoryInterface          $subcategoryRepository,
         UnitRepositoryInterface                 $unitRepository,
@@ -47,6 +52,7 @@ class ProductController extends Controller {
         AdminUserServiceInterface               $adminUserService
     ) {
         $this->productRepository                = $productRepository;
+        $this->productService                   = $productService;
         $this->categoryRepository               = $categoryRepository;
         $this->subcategoryRepository            = $subcategoryRepository;
         $this->unitRepository                   = $unitRepository;
@@ -275,6 +281,11 @@ class ProductController extends Controller {
                     'creator_id'        => $admin->id,
                 ]
             );
+        }
+
+        $images = $request->file("images");
+        if( count($images) ) {
+            $this->productService->updateImages($product, $images);
         }
 
         return redirect()
