@@ -302,4 +302,51 @@ class ProductController extends Controller {
             ->with( 'message-success', trans( 'admin.messages.general.delete_success' ) );
     }
 
+    /**
+     * get all option of product
+     * using as api
+     *
+     * @param  int  $id
+     *
+     * @return array
+     */
+    public function getAllOptionOfProduct( $id )
+    {
+        $product = $this->productRepository->find( $id );
+        if( empty( $product ) ) {
+            return response()->json(
+                [
+                    'code'      => '900',
+                    'message'   => 'Error, Parameter is invalid !!!',
+                    'data'      => null
+                ]
+            );
+        }
+
+        $results = [];
+        $options = $product->options;
+        foreach($options as $key => $option) {
+            $properties = $option->properties;
+            if( !count($properties) ) {
+                $results[$key] = $option->toAPIArray();
+                $results[$key]['name'] = trans('admin.pages.common.label.standard_option');
+                continue;
+            } else {
+                $optionName = '';
+                foreach( $properties as $key2 => $propertyValue ) {
+                    $propertyValueName = $propertyValue->present()->getPropertyName;
+                    $optionName .= $key2 ? (' | ' . $propertyValueName) : $propertyValueName;
+                }
+                $results[$key] = $option->toAPIArray();
+                $results[$key]['name'] = $optionName;
+            }
+        }
+        return response()->json(
+            [
+                'code'      => '100',
+                'message'   => 'Successfully !!!',
+                'data'      => $results
+            ]
+        );
+    }
 }

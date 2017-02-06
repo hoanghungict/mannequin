@@ -188,7 +188,7 @@
                                     <select class="form-control" name="modal_product_name" id="modal-product-name" required>
                                         <option value="">@lang('admin.pages.imports.modal.select_product')</option>
                                         @foreach( $products as $product )
-                                            <option value="{!! $product->id !!}" @if( (old('modal_product_name') && old('modal_product_name') == $product->id) ) selected @endif >
+                                            <option value="{!! $product->id !!}" @if( (old('modal_product_name') && old('modal_product_name') == $product->id) ) selected @endif option-url="{!! action('Admin\ProductController@getAllOptionOfProduct', $product->id) !!}">
                                                 {{ $product->name }}
                                             </option>
                                         @endforeach

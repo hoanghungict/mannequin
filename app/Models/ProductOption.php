@@ -62,11 +62,10 @@ class ProductOption extends Base
         return [
             'id'                => $this->id,
             'product_id'        => $this->product_id,
-            'property_value_id' => $this->property_value_id,
             'import_price'      => $this->import_price,
             'export_price'      => $this->export_price,
             'quantity'          => $this->quantity,
-            'is_block'          => $this->is_block,
+            'is_enabled'        => $this->is_enabled,
         ];
     }
 

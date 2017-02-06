@@ -65,17 +65,32 @@ $(document).ready(function () {
 });
 
 function generateOptions() {
-    productId = $('#modal-product-name').val();
+    optionUrl = $('#modal-product-name option:selected').attr('option-url');
 
     $('select[name="modal_product_option"]').html('');
-    Boilerplate.options.forEach(function (option) {
-        if (option.product_id == productId) {
-            $('select[name="modal_product_option"]').append('<option value="' + option.id + '" p="' + option.import_price + '" q="' + option.quantity + '">' + option.name + '</option>');
+
+    $.ajax({
+        type: 'GET',
+        url: optionUrl,
+        data: {
+        },
+        success: function (response) {
+            if( response.code == 100 ) {
+                response.data.forEach(function (option, index) {
+                    $('select[name="modal_product_option"]').append('<option value="' + option.id + '" p="' + option.import_price + '" q="' + option.quantity + '">' + option.name + '</option>');
+                });
+
+                $('#modal-import-price').val($('#modal-product-option option:selected').attr('p'));
+                $('#modal-current-quantity').text($('#modal-product-option option:selected').attr('q') + ' +');
+            } else {
+                alert(response.message);
+            }
+        },
+        error: function () {
+
         }
     });
 
-    $('#modal-import-price').val($('#modal-product-option option:selected').attr('p'));
-    $('#modal-current-quantity').text($('#modal-product-option option:selected').attr('q') + ' +');
 }
 
 function generateUnit() {
