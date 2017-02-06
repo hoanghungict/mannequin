@@ -22,7 +22,7 @@ class CreateExportsTable extends Migration
             $table->date('times');
 
             $table->bigInteger('discount')->default(0);
-            $table->integer('discount_unit')->default(0);
+            $table->string('discount_unit')->default('%');
             $table->bigInteger('total_amount')->default(0);
 
             $table->text('notes')->nullable();
