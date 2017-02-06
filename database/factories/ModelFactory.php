@@ -247,7 +247,7 @@ $factory->define(
             'product_id' => 0,
             'image_id'   => 0,
             'order'      => 0,
-        ]
+        ];
     }
 );
 
