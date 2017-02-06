@@ -25,7 +25,6 @@ class ProductOption extends Base
         'import_price',
         'export_price',
         'quantity',
-        'unit_id',
         'is_block',
     ];
 
@@ -45,15 +44,10 @@ class ProductOption extends Base
     {
         return $this->belongsTo(\App\Models\Product::class, 'product_id', 'id');
     }
-
-    public function propertyValue()
+    
+    public function properties()
     {
-        return $this->belongsTo(\App\Models\PropertyValue::class, 'property_value_id', 'id');
-    }
-
-    public function unit()
-    {
-        return $this->belongsTo(\App\Models\Unit::class, 'unit_id', 'id');
+        return $this->belongsToMany(\App\Models\PropertyValue::class, ProductOptionProperty::getTableName(), 'product_option_id', 'property_value_id');
     }
 
 
@@ -66,14 +60,12 @@ class ProductOption extends Base
     public function toAPIArray()
     {
         return [
-            'id' => $this->id,
-            'product_id' => $this->product_id,
-            'property_value_id' => $this->property_value_id,
-            'import_price' => $this->import_price,
-            'export_price' => $this->export_price,
-            'quantity' => $this->quantity,
-            'unit_id' => $this->unit_id,
-            'is_block' => $this->is_block,
+            'id'                => $this->id,
+            'product_id'        => $this->product_id,
+            'import_price'      => $this->import_price,
+            'export_price'      => $this->export_price,
+            'quantity'          => $this->quantity,
+            'is_enabled'        => $this->is_enabled,
         ];
     }
 

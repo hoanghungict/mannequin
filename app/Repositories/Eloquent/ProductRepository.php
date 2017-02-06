@@ -14,7 +14,7 @@ class ProductRepository extends SingleKeyModelRepository implements ProductRepos
     public function rules()
     {
         return [
-            'code'           => 'string|required',
+//            'code'           => 'string|required',
             'name'           => 'string|required',
             'subcategory_id' => 'integer|required',
             'unit_id'        => 'integer|required',

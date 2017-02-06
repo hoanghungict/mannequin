@@ -62,7 +62,7 @@ class ProductPresenter extends BasePresenter
         if( count($options) ) {
             $standardOption = null;
             foreach( $options as $option ) {
-                if( $option['property_value_id'] == '[]' ) {
+                if( !count($option->properties) ) {
                     $standardOption = $option;
                 }
             }

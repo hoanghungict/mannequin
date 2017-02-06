@@ -16,11 +16,9 @@ class CreateProductOptionsTable extends Migration
         Schema::create('product_options', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->bigInteger('product_id');
-            $table->string('property_value_id');
             $table->bigInteger('import_price');
             $table->bigInteger('export_price');
             $table->integer('quantity');
-            $table->integer('unit_id');
             $table->integer('is_enabled')->default(1);
 
             $table->softDeletes();

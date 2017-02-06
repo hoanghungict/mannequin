@@ -68,7 +68,7 @@
                     <div class="col-sm-6">
                         <div class="form-group @if ($errors->has('code')) has-error @endif">
                             <label for="code">@lang('admin.pages.products.columns.code')</label>
-                            <input type="text" class="form-control" id="code" name="code" value="{{ old('code') ? old('code') : $product->code }}">
+                            <input type="text" class="form-control" id="code" name="code" @if(!$isNew) disabled @endif value="{{ old('code') ? old('code') : $product->code }}">
                         </div>
                     </div>
                     <div class="col-sm-6">
@@ -145,7 +145,7 @@
                         <select class="form-control" name="unit_id" style="margin-bottom: 15px;">
                             <option value="">@lang('admin.pages.common.label.select_unit')</option>
                             @foreach( $units as $unit )
-                                <option value="{!! $unit->id !!}" @if( (old('unit_id') && old('unit_id') == $unit->id) || ( isset($product->present()->getStandardOption->unit_id) && ($product->present()->getStandardOption->unit_id == $unit->id) ) ) selected @endif >
+                                <option value="{!! $unit->id !!}" @if( (old('unit_id') && old('unit_id') == $unit->id) || ( isset($product->unit_id) && ($product->unit_id == $unit->id) ) ) selected @endif >
                                     {{ $unit->name }}
                                 </option>
                             @endforeach
@@ -189,12 +189,12 @@
                             <th>@lang('admin.pages.products.options.properties')</th>
                             <th width="100px">@lang('admin.pages.common.label.actions')</th>
                         </tr>
-                        @foreach( $options as $option )
+                        @foreach( $product->options as $option )
                             <tr>
                                 <td>{{ number_format($option['import_price'], '0', ',', ' ') }}</td>
                                 <td>{{ number_format($option['export_price'], '0', ',', ' ') }}</td>
                                 <td>{{ number_format($option['quantity'], '0', ',', ' ') }}</td>
-                                <td>{{ $option['properties'] }}</td>
+                                <td>{{ $option->present()->getProductOptionName}}</td>
                                 <td></td>
                             </tr>
                         @endforeach

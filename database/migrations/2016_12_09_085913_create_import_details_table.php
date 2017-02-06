@@ -17,7 +17,7 @@ class CreateImportDetailsTable extends Migration
             $table->bigIncrements('id');
             $table->bigInteger('import_id');
             $table->bigInteger('product_id');
-            $table->string('property_value_id');
+            $table->bigInteger('option_id');
 
             $table->bigInteger('prices');
             $table->integer('quantity');
