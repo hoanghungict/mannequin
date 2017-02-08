@@ -24,7 +24,6 @@
     <script>
         Boilerplate.employeeId = @if( empty($import->employee_id) ) '[]' @else {!! $import->employee_id !!} @endif ;
         Boilerplate.products = {!! $products !!};
-        Boilerplate.options = {!! $options !!};
     </script>
     <script src="{{ \URLHelper::asset('libs/moment/moment.min.js', 'admin') }}"></script>
     <script src="{{ \URLHelper::asset('libs/datetimepicker/js/bootstrap-datetimepicker.min.js', 'admin') }}"></script>
@@ -81,20 +80,20 @@
 
                 <div class="row">
                     <div class="col-sm-6">
-                        <div class="form-group @if ($errors->has('code')) has-error @endif">
-                            <label for="code">@lang('admin.pages.imports.columns.code')</label>
-                            <input type="text" class="form-control" id="code" name="code"  @if(!$isNew) disabled @else required @endif value="{{ old('code') ? old('code') : $import->code }}">
-                        </div>
-                    </div>
-                    <div class="col-sm-6">
                         <div class="form-group">
                             <label for="times">@lang('admin.pages.imports.columns.times')</label>
-                            <div class="input-group date datetime-field">
-                                <input type="text" class="form-control" name="times" required value="{{ old('times') ? old('times') : $import->times }}">
+                            <div class="input-group @if( $isNew ) date datetime-field @endif">
+                                <input type="text" class="form-control" name="times" @if( $isNew ) required @else disabled @endif  value="{{ old('times') ? old('times') : $import->times }}">
                                 <span class="input-group-addon">
                                     <span class="glyphicon glyphicon-calendar"></span>
                                 </span>
                             </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="creator_id">@lang('admin.pages.imports.columns.creator_id')</label>
+                            <input type="text" class="form-control" id="creator_id" disabled value="@if( !empty($import->creator) ) {{ $import->creator->name }} @else {{ $authUser->name }} @endif">
                         </div>
                     </div>
                 </div>
@@ -123,41 +122,46 @@
                     </div>
                 </div>
 
-            </div>
-        </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <span class="btn btn-block btn-default btn-sm" data-toggle="modal" data-target="#ModalOptions" onclick="resetModalImport();"  style="width: 125px; margin-bottom: 10px;">@lang('admin.pages.imports.modal.create_button')</span>
 
-        <div class="box" style="border-top: none;">
-            <div class="box-header with-border">
-                <strong style="font-size: 18px;"></strong>
-                <h3 class="box-title">
-                    <span class="btn btn-block btn-default btn-sm" data-toggle="modal" data-target="#ModalOptions" onclick="resetModalImport();"  style="width: 125px;">@lang('admin.pages.imports.modal.create_button')</span>
-                </h3>
-            </div>
-
-            <div class="box-body">
-                <table class="table table-bordered import-products" id="import-products">
-                    <tr>
-                        <th>@lang('admin.pages.imports.modal.product_name')</th>
-                        <th>@lang('admin.pages.imports.modal.product_option')</th>
-                        <th>@lang('admin.pages.imports.modal.import_price')</th>
-                        <th>@lang('admin.pages.imports.modal.quantity')</th>
-                        <th>@lang('admin.pages.imports.modal.unit')</th>
-                        <th width="100px">@lang('admin.pages.common.label.actions')</th>
-                    </tr>
-
-                    @if( !empty($import->products) )
-                        @foreach( $import->products as $importDetail )
+                        <table class="table table-bordered import-products" id="import-products">
                             <tr>
-                                <td>{{ $importDetail->present()->product->name }}</td>
-                                <td>{{ $importDetail->productOption->present()->getProductOptionName }}</td>
-                                <td>{{ number_format($importDetail->prices, 0, ',', ' ') }} <span style="font-size: 11px;">VND</span></td>
-                                <td>{{ number_format($importDetail->quantity, 0, ',', ' ') }}</td>
-                                <td>{{ $importDetail->product->unit->name }}</td>
-                                <td></td>
+                                <th>@lang('admin.pages.imports.modal.product_name')</th>
+                                <th>@lang('admin.pages.imports.modal.product_option')</th>
+                                <th>@lang('admin.pages.imports.modal.import_price')</th>
+                                <th>@lang('admin.pages.imports.modal.quantity')</th>
+                                <th>@lang('admin.pages.imports.modal.unit')</th>
+                                <th>@lang('admin.pages.imports.columns.total_amount')</th>
+                                <th width="100px">@lang('admin.pages.common.label.actions')</th>
                             </tr>
-                        @endforeach
-                    @endif
-                </table>
+
+                            @if( !empty($import->products) )
+                                @foreach( $import->products as $importDetail )
+                                    <tr>
+                                        <td>{{ $importDetail->present()->product->name }}</td>
+                                        <td>{{ $importDetail->productOption->present()->getProductOptionName }}</td>
+                                        <td>{{ number_format($importDetail->prices, 0, ',', ' ') }} <span style="font-size: 11px;">VND</span></td>
+                                        <td>{{ number_format($importDetail->quantity, 0, ',', ' ') }}</td>
+                                        <td>{{ $importDetail->product->unit->name }}</td>
+                                        <td>{{ number_format(($importDetail->prices * $importDetail->quantity), 0, ',', ' ') }} <span style="font-size: 11px;">VND</span></td>
+                                        <td></td>
+                                    </tr>
+                                @endforeach
+                            @endif
+                        </table>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="total_amount">@lang('admin.pages.imports.columns.total_amount')</label>
+                            <input type="text" min="0" class="form-control" id="total_amount" disabled value="{{ (is_numeric($import->total_amount) && $import->total_amount) ? number_format($import->total_amount, 0, ',', ' ') : 0 }}">
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <div class="box-footer">
@@ -186,7 +190,7 @@
                                 <th style="width: 150px;">@lang('admin.pages.imports.modal.product_name')</th>
                                 <td>
                                     <select class="form-control" name="modal_product_name" id="modal-product-name" required>
-                                        <option value="">@lang('admin.pages.imports.modal.select_product')</option>
+                                        <option value="">@lang('admin.pages.common.label.select_product')</option>
                                         @foreach( $products as $product )
                                             <option value="{!! $product->id !!}" @if( (old('modal_product_name') && old('modal_product_name') == $product->id) ) selected @endif option-url="{!! action('Admin\ProductController@getAllOptionOfProduct', $product->id) !!}">
                                                 {{ $product->name }}
@@ -200,12 +204,7 @@
                                 <th style="">@lang('admin.pages.imports.modal.product_option')</th>
                                 <td>
                                     <select class="form-control" name="modal_product_option" id="modal-product-option" required>
-                                        <option value="">@lang('admin.pages.imports.modal.select_option')</option>
-                                        @foreach( $options as $option )
-                                            <option value="{!! $option->id !!}" @if( (old('modal_product_option') && old('modal_product_option') == $option->id) ) selected @endif >
-                                                {{ $option->name }}
-                                            </option>
-                                        @endforeach
+                                        <option value="">@lang('admin.pages.common.label.select_option')</option>
                                     </select>
                                 </td>
                             </tr>

@@ -279,7 +279,6 @@ $factory->define(
     App\Models\Import::class,
     function( Faker\Generator $faker ) {
         return [
-            'code'     => $faker->word,
             'store_id' => $faker->randomNumber(),
             'times'    => $faker->time(),
             'notes'    => $faker->sentences( 3, true ),
