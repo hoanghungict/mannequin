@@ -12,13 +12,14 @@ class DatabaseSeeder extends Seeder
     {
         Model::unguard();
 
-        $this->call('AdminUserTableSeeder');
-        $this->call('CategoryTableSeeder');
-        $this->call('SubcategoryTableSeeder');
-        $this->call('PropertyTableSeeder');
-        $this->call('ProvinceTableSeeder');
-        $this->call('DistrictTableSeeder');
-        $this->call('UnitTableSeeder');
+        $this->call(AdminUserTableSeeder::class);
+        $this->call(CategoryTableSeeder::class);
+        $this->call(SubcategoryTableSeeder::class);
+        $this->call(PropertyTableSeeder::class);
+        $this->call(ProvinceTableSeeder::class);
+        $this->call(DistrictTableSeeder::class);
+        $this->call(UnitTableSeeder::class);
+        $this->call(StoreTableSeeder::class);
 
         if (App::environment() === 'testing') {
             // Add More Seed For Testing
