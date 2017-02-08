@@ -87,8 +87,8 @@
                     <div class="col-md-6">
                         <div class="form-group @if ($errors->has('times')) has-error @endif">
                             <label for="times">@lang('admin.pages.exports.columns.times')</label>
-                            <div class="input-group date datetime-field">
-                                <input type="text" class="form-control" name="times" required value="{{ old('times') ? old('times') : $export->times }}">
+                            <div class="input-group @if( $isNew ) date datetime-field @endif">
+                                <input type="text" class="form-control" name="times" @if( $isNew ) required @else disabled @endif value="{{ old('times') ? old('times') : $export->times }}">
                                 <span class="input-group-addon">
                                     <span class="glyphicon glyphicon-calendar"></span>
                                 </span>

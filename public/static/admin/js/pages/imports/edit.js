@@ -51,6 +51,10 @@ $(document).ready(function () {
                         '<input type="hidden" name="products[' + index + '][unit_id]" value=' + "'" + unit + "'" + '>' +
                     '</td>' +
 
+                    '<td>' +
+                        quantity * price +
+                    '</td>' +
+
                     '<td style="text-align: center">' +
                         '<span onclick="deleteProduct(this);" style="cursor: pointer; color: #ca2424;"> Delete</span>' +
                     '</td>' +

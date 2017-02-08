@@ -207,12 +207,13 @@ class ExportController extends Controller
             \App::abort( 404 );
         }
 
-        $input = $request->only( ['times', 'discount', 'notes'] );
+        $input = $request->only( ['notes'] );
 
         $input['employee_id']   = is_array($request->get('employee_id')) ? json_encode($request->get('employee_id')) : '[]';
         $input['creator_id']    = \Auth::guard('admins')->user()->id;
         $input['store_id']      = $request->get('store_id', 0);
         $input['customer_id']   = $request->get('customer_id', 0);
+        $input['discount']      = $request->get('discount', 0);
 
         if( $request->get('discount_unit') == Export::TYPE_DISCOUNT_VND ) {
             $input['discount_unit'] = Export::TYPE_DISCOUNT_VND;
