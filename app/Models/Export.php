@@ -5,7 +5,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Export extends Base 
 {
     const TYPE_DISCOUNT_PERCENT = '%';
-    const TYPE_DISCOUNT_VND     = 'vnd';
+    const TYPE_DISCOUNT_VND     = 'VND';
 
     use SoftDeletes;
 
@@ -45,11 +45,11 @@ class Export extends Base
     protected $presenter = \App\Presenters\ExportPresenter::class;
 
     // Relations
-    public function employee() 
+    public function products()
     {
-        return $this->belongsTo( \App\Models\Employee::class, 'employee_id', 'id' );
+        return $this->hasMany( \App\Models\ExportDetail::class, 'export_id', 'id');
     }
-
+    
     public function customer() 
     {
         return $this->belongsTo( \App\Models\Customer::class, 'customer_id', 'id' );

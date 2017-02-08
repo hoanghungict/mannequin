@@ -36,7 +36,7 @@ return [
     ],
     'pages'    => [
         'common'                   => [
-            'label'   => [
+            'label' => [
                 'page'               => 'Page',
                 'actions'            => 'Actions',
                 'is_enabled'         => 'Status',
@@ -50,6 +50,10 @@ return [
                 'select_subcategory' => 'Select Subcategory',
                 'select_unit'        => 'Select Unit',
                 'select_employee'    => 'Select Employee',
+                'select_customer'    => 'Select Customer',
+                'select_store'       => 'Select Store',
+                'select_product'     => 'Select a Product',
+                'select_option'      => 'Select a Option',
                 'standard_option'    => 'Standard Option',
             ],
             'buttons' => [
@@ -246,9 +250,30 @@ return [
                 'product_option' => 'Option',
                 'import_price'   => 'Import Price',
                 'quantity'       => 'Quantity',
+                'unit'           => 'Unit'
+            ]
+        ],
+        'exports'                  => [
+            'columns' => [
+                'employee_id'    => 'Employees',
+                'customer_id'    => 'Customer',
+                'store_id'       => 'Store',
+                'times'          => 'Times',
+                'discount'       => 'Discount',
+                'discount_unit'  => 'Discount Unit',
+                'total_amount'   => 'Total Amount',
+                'amount_payable' => 'Amount Payable',
+                'notes'          => 'Notes',
+                'creator_id'     => 'Creator',
+            ],
+            'modal'   => [
+                'title'          => 'Export Product',
+                'create_button'  => 'Add Product',
+                'product_name'   => 'Product',
+                'product_option' => 'Option',
+                'export_price'   => 'Export Price',
+                'quantity'       => 'Quantity',
                 'unit'           => 'Unit',
-                'select_product' => 'Select a Product',
-                'select_option'  => 'Select a Option'
             ]
         ],
         /* NEW PAGE STRINGS */
