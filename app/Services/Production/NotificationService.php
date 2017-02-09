@@ -33,7 +33,7 @@ class NotificationService extends BaseService implements UserNotificationService
     {
         if ($userId == Notification::BROADCAST_USER_ID) {
             if (empty($locale)) {
-                return;
+                return '';
             }
         } else {
             $locale = '';

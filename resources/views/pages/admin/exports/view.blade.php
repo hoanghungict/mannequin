@@ -57,15 +57,15 @@
                         </tr>
                         <tr>
                             <th>@lang('admin.pages.exports.view.customer')</th>
-                            <td>{{ $export->customer->name }}</td>
+                            <td>@if( !empty($export->customer) ) {{ $export->customer->name }} @endif</td>
                         </tr>
                         <tr>
                             <th>@lang('admin.pages.exports.view.address')</th>
-                            <td>{{ $export->customer->address }}</td>
+                            <td>@if( !empty($export->customer) ) {{ $export->customer->address }} @endif</td>
                         </tr>
                         <tr>
                             <th>@lang('admin.pages.exports.view.telephone')</th>
-                            <td>{{ $export->customer->telephone }}</td>
+                            <td>@if( !empty($export->telephone) ) {{ $export->customer->telephone }} @endif</td>
                         </tr>
                     </table>
                 </div>
@@ -142,7 +142,7 @@
                     <div class="col-xs-6" style="float: right;">
                         <h4 class="text-center">@lang('admin.pages.exports.view.biller')</h4>
                         <h6 class="text-center">@lang('admin.pages.exports.view.sign_and_name')</h6>
-                        <h4 style="margin-top: 80px; text-align: center;">{{ $export->creator->name }}</h4>
+                        <h4 style="margin-top: 80px; text-align: center;">@if( !empty($export->creator) ) {{ $export->creator->name }} @endif</h4>
                     </div>
                 </div>
             </div>

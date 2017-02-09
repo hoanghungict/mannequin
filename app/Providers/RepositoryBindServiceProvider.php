@@ -11,7 +11,7 @@ class RepositoryBindServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+
     }
 
     /**
@@ -20,182 +20,187 @@ class RepositoryBindServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->singleton(
-            'App\Repositories\AdminUserRepositoryInterface',
-            'App\Repositories\Eloquent\AdminUserRepository'
+            \App\Repositories\AdminUserRepositoryInterface::class,
+            \App\Repositories\Eloquent\AdminUserRepository::class
         );
 
         $this->app->singleton(
-            'App\Repositories\AdminUserRoleRepositoryInterface',
-            'App\Repositories\Eloquent\AdminUserRoleRepository'
-        );
-
-        $this->app->singleton( 'App\Repositories\UserRepositoryInterface', 'App\Repositories\Eloquent\UserRepository' );
-
-        $this->app->singleton( 'App\Repositories\FileRepositoryInterface', 'App\Repositories\Eloquent\FileRepository' );
-
-        $this->app->singleton(
-            'App\Repositories\ImageRepositoryInterface',
-            'App\Repositories\Eloquent\ImageRepository'
+            \App\Repositories\AdminUserRoleRepositoryInterface::class,
+            \App\Repositories\Eloquent\AdminUserRoleRepository::class
         );
 
         $this->app->singleton(
-            'App\Repositories\SiteConfigurationRepositoryInterface',
-            'App\Repositories\Eloquent\SiteConfigurationRepository'
+            \App\Repositories\UserRepositoryInterface::class,
+            \App\Repositories\Eloquent\UserRepository::class
         );
 
         $this->app->singleton(
-            'App\Repositories\UserServiceAuthenticationRepositoryInterface',
-            'App\Repositories\Eloquent\UserServiceAuthenticationRepository'
+            \App\Repositories\FileRepositoryInterface::class,
+            \App\Repositories\Eloquent\FileRepository::class
         );
 
         $this->app->singleton(
-            'App\Repositories\PasswordResettableRepositoryInterface',
-            'App\Repositories\Eloquent\PasswordResettableRepository'
+            \App\Repositories\ImageRepositoryInterface::class,
+            \App\Repositories\Eloquent\ImageRepository::class
         );
 
         $this->app->singleton(
-            'App\Repositories\UserPasswordResetRepositoryInterface',
-            'App\Repositories\Eloquent\UserPasswordResetRepository'
+            \App\Repositories\SiteConfigurationRepositoryInterface::class,
+            \App\Repositories\Eloquent\SiteConfigurationRepository::class
         );
 
         $this->app->singleton(
-            'App\Repositories\AdminPasswordResetRepositoryInterface',
-            'App\Repositories\Eloquent\AdminPasswordResetRepository'
+            \App\Repositories\UserServiceAuthenticationRepositoryInterface::class,
+            \App\Repositories\Eloquent\UserServiceAuthenticationRepository::class
+        );
+        $this->app->singleton(
+            \App\Repositories\PasswordResettableRepositoryInterface::class,
+            \App\Repositories\Eloquent\PasswordResettableRepository::class
         );
 
         $this->app->singleton(
-            'App\Repositories\SiteConfigurationRepositoryInterface',
-            'App\Repositories\Eloquent\SiteConfigurationRepository'
+            \App\Repositories\UserPasswordResetRepositoryInterface::class,
+            \App\Repositories\Eloquent\UserPasswordResetRepository::class
         );
 
         $this->app->singleton(
-            'App\Repositories\SiteConfigurationRepositoryInterface',
-            'App\Repositories\Eloquent\SiteConfigurationRepository'
+            \App\Repositories\AdminPasswordResetRepositoryInterface::class,
+            \App\Repositories\Eloquent\AdminPasswordResetRepository::class
         );
 
         $this->app->singleton(
-            'App\Repositories\ArticleRepositoryInterface',
-            'App\Repositories\Eloquent\ArticleRepository'
+            \App\Repositories\SiteConfigurationRepositoryInterface::class,
+            \App\Repositories\Eloquent\SiteConfigurationRepository::class
         );
 
         $this->app->singleton(
-            'App\Repositories\NotificationRepositoryInterface',
-            'App\Repositories\Eloquent\NotificationRepository'
+            \App\Repositories\SiteConfigurationRepositoryInterface::class,
+            \App\Repositories\Eloquent\SiteConfigurationRepository::class
         );
 
         $this->app->singleton(
-            'App\Repositories\UserNotificationRepositoryInterface',
-            'App\Repositories\Eloquent\UserNotificationRepository'
+            \App\Repositories\ArticleRepositoryInterface::class,
+            \App\Repositories\Eloquent\ArticleRepository::class
         );
 
         $this->app->singleton(
-            'App\Repositories\AdminUserNotificationRepositoryInterface',
-            'App\Repositories\Eloquent\AdminUserNotificationRepository'
+            \App\Repositories\NotificationRepositoryInterface::class,
+            \App\Repositories\Eloquent\NotificationRepository::class
         );
 
         $this->app->singleton(
-            'App\Repositories\CustomerRepositoryInterface',
-            'App\Repositories\Eloquent\CustomerRepository'
+            \App\Repositories\UserNotificationRepositoryInterface::class,
+            \App\Repositories\Eloquent\UserNotificationRepository::class
+        );
+        
+        $this->app->singleton(
+            \App\Repositories\AdminUserNotificationRepositoryInterface::class,
+            \App\Repositories\Eloquent\AdminUserNotificationRepository::class
         );
 
         $this->app->singleton(
-            'App\Repositories\ProvinceRepositoryInterface',
-            'App\Repositories\Eloquent\ProvinceRepository'
+            \App\Repositories\CustomerRepositoryInterface::class,
+            \App\Repositories\Eloquent\CustomerRepository::class
         );
 
         $this->app->singleton(
-            'App\Repositories\DistrictRepositoryInterface',
-            'App\Repositories\Eloquent\DistrictRepository'
+            \App\Repositories\ProvinceRepositoryInterface::class,
+            \App\Repositories\Eloquent\ProvinceRepository::class
         );
 
         $this->app->singleton(
-            'App\Repositories\EmployeeRepositoryInterface',
-            'App\Repositories\Eloquent\EmployeeRepository'
+            \App\Repositories\DistrictRepositoryInterface::class,
+            \App\Repositories\Eloquent\DistrictRepository::class
         );
 
         $this->app->singleton(
-            'App\Repositories\ProductRepositoryInterface',
-            'App\Repositories\Eloquent\ProductRepository'
+            \App\Repositories\EmployeeRepositoryInterface::class,
+            \App\Repositories\Eloquent\EmployeeRepository::class
         );
 
         $this->app->singleton(
-            'App\Repositories\ProductOptionRepositoryInterface',
-            'App\Repositories\Eloquent\ProductOptionRepository'
+            \App\Repositories\ProductRepositoryInterface::class,
+            \App\Repositories\Eloquent\ProductRepository::class
         );
 
         $this->app->singleton(
-            'App\Repositories\CategoryRepositoryInterface',
-            'App\Repositories\Eloquent\CategoryRepository'
+            \App\Repositories\ProductOptionRepositoryInterface::class,
+            \App\Repositories\Eloquent\ProductOptionRepository::class
         );
 
         $this->app->singleton(
-            'App\Repositories\SubcategoryRepositoryInterface',
-            'App\Repositories\Eloquent\SubcategoryRepository'
+            \App\Repositories\CategoryRepositoryInterface::class,
+            \App\Repositories\Eloquent\CategoryRepository::class
         );
 
         $this->app->singleton(
-            'App\Repositories\UnitRepositoryInterface',
-            'App\Repositories\Eloquent\UnitRepository'
+            \App\Repositories\SubcategoryRepositoryInterface::class,
+            \App\Repositories\Eloquent\SubcategoryRepository::class
         );
 
         $this->app->singleton(
-            'App\Repositories\LogRepositoryInterface',
-            'App\Repositories\Eloquent\LogRepository'
+            \App\Repositories\UnitRepositoryInterface::class,
+            \App\Repositories\Eloquent\UnitRepository::class
         );
 
         $this->app->singleton(
-            'App\Repositories\PropertyRepositoryInterface',
-            'App\Repositories\Eloquent\PropertyRepository'
+            \App\Repositories\LogRepositoryInterface::class,
+            \App\Repositories\Eloquent\LogRepository::class
         );
 
         $this->app->singleton(
-            'App\Repositories\PropertyValueRepositoryInterface',
-            'App\Repositories\Eloquent\PropertyValueRepository'
+            \App\Repositories\PropertyRepositoryInterface::class,
+            \App\Repositories\Eloquent\PropertyRepository::class
         );
 
         $this->app->singleton(
-            'App\Repositories\ProductImageRepositoryInterface',
-            'App\Repositories\Eloquent\ProductImageRepository'
+            \App\Repositories\PropertyValueRepositoryInterface::class,
+            \App\Repositories\Eloquent\PropertyValueRepository::class
         );
 
         $this->app->singleton(
-            'App\Repositories\ImportPriceHistoryRepositoryInterface',
-            'App\Repositories\Eloquent\ImportPriceHistoryRepository'
+            \App\Repositories\ProductImageRepositoryInterface::class,
+            \App\Repositories\Eloquent\ProductImageRepository::class
         );
 
         $this->app->singleton(
-            'App\Repositories\ExportPriceHistoryRepositoryInterface',
-            'App\Repositories\Eloquent\ExportPriceHistoryRepository'
+            \App\Repositories\ImportPriceHistoryRepositoryInterface::class,
+            \App\Repositories\Eloquent\ImportPriceHistoryRepository::class
         );
 
         $this->app->singleton(
-            'App\Repositories\ImportRepositoryInterface',
-            'App\Repositories\Eloquent\ImportRepository'
+            \App\Repositories\ExportPriceHistoryRepositoryInterface::class,
+            \App\Repositories\Eloquent\ExportPriceHistoryRepository::class
         );
 
         $this->app->singleton(
-            'App\Repositories\ImportDetailRepositoryInterface',
-            'App\Repositories\Eloquent\ImportDetailRepository'
+            \App\Repositories\ImportRepositoryInterface::class,
+            \App\Repositories\Eloquent\ImportRepository::class
         );
 
         $this->app->singleton(
-            'App\Repositories\ProductOptionPropertyRepositoryInterface',
-            'App\Repositories\Eloquent\ProductOptionPropertyRepository'
+            \App\Repositories\ImportDetailRepositoryInterface::class,
+            \App\Repositories\Eloquent\ImportDetailRepository::class
         );
 
         $this->app->singleton(
-            'App\Repositories\ExportRepositoryInterface',
-            'App\Repositories\Eloquent\ExportRepository'
+            \App\Repositories\ProductOptionPropertyRepositoryInterface::class,
+            \App\Repositories\Eloquent\ProductOptionPropertyRepository::class
         );
 
         $this->app->singleton(
-            'App\Repositories\ExportDetailRepositoryInterface',
-            'App\Repositories\Eloquent\ExportDetailRepository'
+            \App\Repositories\ExportRepositoryInterface::class,
+            \App\Repositories\Eloquent\ExportRepository::class
         );
 
         $this->app->singleton(
-            'App\Repositories\StoreRepositoryInterface',
-            'App\Repositories\Eloquent\StoreRepository'
+            \App\Repositories\ExportDetailRepositoryInterface::class,
+            \App\Repositories\Eloquent\ExportDetailRepository::class
+        );
+
+        $this->app->singleton(
+            \App\Repositories\StoreRepositoryInterface::class,
+            \App\Repositories\Eloquent\StoreRepository::class
         );
 
         /* NEW BINDING */

@@ -58,7 +58,7 @@ class ImportControllerTest extends TestCase
         $name = $faker->name;
         $id = $import->id;
 
-        $import->name = $name;
+        $import->notes = $name;
 
         $this->action('PUT', 'Admin\ImportController@update', [$id], [
                 '_token' => csrf_token(),
@@ -66,7 +66,7 @@ class ImportControllerTest extends TestCase
         $this->assertResponseStatus(302);
 
         $newImport = \App\Models\Import::find($id);
-        $this->assertEquals($name, $newImport->name);
+        $this->assertEquals($name, $newImport->notes);
     }
 
     public function testDeleteModel()

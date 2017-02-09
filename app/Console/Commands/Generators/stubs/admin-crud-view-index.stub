@@ -29,7 +29,7 @@
             <div class="col-sm-6">
                 <h3 class="box-title">
                     <p class="text-right">
-                        <a href="{!! URL::action('Admin\%%CLASS%%Controller@create') !!}" class="btn btn-block btn-primary btn-sm" style="width: 125px;">@lang('admin.pages.common.buttons.create')</a>
+                        <a href="{!! action('Admin\%%CLASS%%Controller@create') !!}" class="btn btn-block btn-primary btn-sm" style="width: 125px;">@lang('admin.pages.common.buttons.create')</a>
                     </p>
                 </h3>
                 <br>
@@ -45,9 +45,9 @@
     <div class="box-body" style=" overflow-x: scroll; ">
         <table class="table table-bordered">
             <tr>
-                <th style="width: 10px">ID</th>
+                <th style="width: 10px">{!! \PaginationHelper::sort('id', 'ID') !!}</th>
 %%TABLE_HEADER%%
-                <th style="width: 40px">@lang('admin.pages.common.label.is_enabled')</th>
+                <th style="width: 40px">{!! \PaginationHelper::sort('is_enabled', trans('admin.pages.common.label.is_enabled')) !!}</th>
                 <th style="width: 40px">@lang('admin.pages.common.label.actions')</th>
             </tr>
             @foreach( $%%class%%s as $%%class%% )
@@ -62,7 +62,7 @@
                         @endif
                     </td>
                     <td>
-                        <a href="{!! URL::action('Admin\%%CLASS%%Controller@show', $%%class%%->id) !!}" class="btn btn-block btn-primary btn-xs">@lang('admin.pages.common.buttons.edit')</a>
+                        <a href="{!! action('Admin\%%CLASS%%Controller@show', $%%class%%->id) !!}" class="btn btn-block btn-primary btn-xs">@lang('admin.pages.common.buttons.edit')</a>
                         <a href="#" class="btn btn-block btn-danger btn-xs delete-button" data-delete-url="{!! action('Admin\%%CLASS%%Controller@destroy', $%%class%%->id) !!}">@lang('admin.pages.common.buttons.delete')</a>
                     </td>
                 </tr>

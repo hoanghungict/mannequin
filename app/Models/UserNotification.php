@@ -41,10 +41,52 @@ class UserNotification extends Notification
      */
     protected $table = 'user_notifications';
 
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'user_id',
+        'category_type',
+        'type',
+        'data',
+        'content',
+        'locale',
+        'read',
+        'sent_at',
+    ];
+
+    /**
+     * The attributes excluded from the model's JSON form.
+     *
+     * @var array
+     */
+    protected $hidden = [];
+
+    protected $dates = ['sent_at'];
+
     protected $presenter = \App\Presenters\UserNotificationPresenter::class;
 
     public function user()
     {
         return $this->belongsTo('App\Models\User', 'user_id', 'id');
+    }
+
+    /*
+     * API Presentation
+     */
+    public function toAPIArray() {
+        return [
+            'id'            => $this->id,
+            'user_id'       => $this->user_id,
+            'category_type' => $this->category_type,
+            'type'          => $this->type,
+            'data'          => $this->data,
+            'content'       => $this->content,
+            'locale'        => $this->locale,
+            'read'          => $this->read,
+            'sent_at'       => $this->sent_at,
+        ];
     }
 }

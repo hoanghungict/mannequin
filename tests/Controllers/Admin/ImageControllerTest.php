@@ -58,15 +58,15 @@ class ImageControllerTest extends TestCase
         $name = $faker->name;
         $id = $image->id;
 
-        $image->name = $name;
+        $image->title = $name;
 
         $this->action('PUT', 'Admin\ImageController@update', [$id], [
                 '_token' => csrf_token(),
-            ] + $image->toArray());
+            ] + $image->toFillableArray());
         $this->assertResponseStatus(302);
 
         $newImage = \App\Models\Image::find($id);
-        $this->assertEquals($name, $newImage->name);
+        $this->assertEquals($name, $newImage->title);
     }
 
     public function testDeleteModel()

@@ -54,8 +54,8 @@ class AuthenticatableService implements AuthenticatableServiceInterface
 
     public function signUp($input)
     {
-        $exist = $this->authenticatableRepository->findByEmail($input['email']);
-        if( !empty($exist) ) {
+        $existingUser = $this->authenticatableRepository->findByEmail(array_get($input, 'email'));
+        if ( !empty($existingUser) ) {
             return null;
         }
 
@@ -128,9 +128,9 @@ class AuthenticatableService implements AuthenticatableServiceInterface
         $mailService = \App::make('App\Services\MailServiceInterface');
 
         $mailService->sendMail($this->resetEmailTitle, config('mail.from'),
-                               ['name' => '', 'address' => $user->email], $this->resetEmailTemplate, [
-                                   'token' => $token,
-                               ]);
+            ['name' => '', 'address' => $user->email], $this->resetEmailTemplate, [
+                'token' => $token,
+            ]);
     }
 
     public function getUserByPasswordResetToken($token)

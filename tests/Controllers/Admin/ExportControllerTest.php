@@ -58,7 +58,7 @@ class ExportControllerTest extends TestCase
         $name = $faker->name;
         $id = $export->id;
 
-        $export->name = $name;
+        $export->notes = $name;
 
         $this->action('PUT', 'Admin\ExportController@update', [$id], [
                 '_token' => csrf_token(),
@@ -66,22 +66,6 @@ class ExportControllerTest extends TestCase
         $this->assertResponseStatus(302);
 
         $newExport = \App\Models\Export::find($id);
-        $this->assertEquals($name, $newExport->name);
+        $this->assertEquals($name, $newExport->notes);
     }
-
-    public function testDeleteModel()
-    {
-        $export = factory(\App\Models\Export::class)->create();
-
-        $id = $export->id;
-
-        $this->action('DELETE', 'Admin\ExportController@destroy', [$id], [
-                '_token' => csrf_token(),
-            ]);
-        $this->assertResponseStatus(302);
-
-        $checkExport = \App\Models\Export::find($id);
-        $this->assertNull($checkExport);
-    }
-
 }
