@@ -15,10 +15,14 @@ $factory->define(
     App\Models\User::class,
     function( Faker\Generator $faker ) {
         return [
-            'name'           => $faker->name,
-            'email'          => $faker->email,
-            'password'       => bcrypt( str_random( 10 ) ),
-            'remember_token' => str_random( 10 ),
+            'name'                 => $faker->name,
+            'email'                => $faker->email,
+            'password'             => bcrypt( str_random( 10 ) ),
+            'remember_token'       => str_random( 10 ),
+            'locale'               => $faker->languageCode,
+            'last_notification_id' => 0,
+            'api_access_token'     => '',
+            'profile_image_id'     => 0,
         ];
     }
 );
@@ -27,10 +31,14 @@ $factory->define(
     App\Models\AdminUser::class,
     function( Faker\Generator $faker ) {
         return [
-            'name'           => $faker->name,
-            'email'          => $faker->email,
-            'password'       => bcrypt( str_random( 10 ) ),
-            'remember_token' => str_random( 10 ),
+            'name'                 => $faker->name,
+            'email'                => $faker->email,
+            'password'             => bcrypt( str_random( 10 ) ),
+            'remember_token'       => str_random( 10 ),
+            'locale'               => $faker->languageCode,
+            'last_notification_id' => 0,
+            'api_access_token'     => '',
+            'profile_image_id'     => 0,
         ];
     }
 );
@@ -109,10 +117,11 @@ $factory->define(
             'user_id'       => \App\Models\UserNotification::BROADCAST_USER_ID,
             'category_type' => \App\Models\UserNotification::CATEGORY_TYPE_SYSTEM_MESSAGE,
             'type'          => \App\Models\UserNotification::TYPE_GENERAL_MESSAGE,
-            'data'          => [],
+            'data'          => '',
             'locale'        => 'en',
             'content'       => 'TEST',
             'read'          => false,
+            'sent_at'       => $faker->dateTime,
         ];
     }
 );
@@ -124,10 +133,11 @@ $factory->define(
             'user_id'       => \App\Models\AdminUserNotification::BROADCAST_USER_ID,
             'category_type' => \App\Models\AdminUserNotification::CATEGORY_TYPE_SYSTEM_MESSAGE,
             'type'          => \App\Models\AdminUserNotification::TYPE_GENERAL_MESSAGE,
-            'data'          => [],
+            'data'          => '',
             'locale'        => 'en',
             'content'       => 'TEST',
             'read'          => false,
+            'sent_at'       => $faker->dateTime,
         ];
     }
 );
@@ -255,6 +265,7 @@ $factory->define(
     App\Models\ImportPriceHistory::class,
     function( Faker\Generator $faker ) {
         return [
+            'product_id'        => 0,
             'product_option_id' => 0,
             'price'             => 0,
             'creator_id'        => 0,
@@ -267,6 +278,7 @@ $factory->define(
     App\Models\ExportPriceHistory::class,
     function( Faker\Generator $faker ) {
         return [
+            'product_id'        => 0,
             'product_option_id' => 0,
             'price'             => 0,
             'creator_id'        => 0,
@@ -279,9 +291,9 @@ $factory->define(
     App\Models\Import::class,
     function( Faker\Generator $faker ) {
         return [
-            'store_id' => $faker->randomNumber(),
-            'times'    => $faker->time(),
-            'notes'    => $faker->sentences( 3, true ),
+            'times'      => $faker->time(),
+            'notes'      => $faker->sentences( 3, true ),
+            'creator_id' => $faker->randomNumber(),
         ];
     }
 );
@@ -348,6 +360,15 @@ $factory->define(
             'prices'     => $faker->numberBetween( 100000, 2000000 ),
             'quantity'   => $faker->numberBetween( 100, 1000 ),
             'unit_id'    => 1,
+        ];
+    }
+);
+
+$factory->define(
+    App\Models\Unit::class,
+    function( Faker\Generator $faker ) {
+        return [
+            'name' => $faker->name
         ];
     }
 );
