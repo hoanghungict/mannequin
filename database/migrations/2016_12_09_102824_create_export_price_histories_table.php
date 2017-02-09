@@ -15,6 +15,7 @@ class CreateExportPriceHistoriesTable extends Migration
     {
         Schema::create('export_price_histories', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->bigInteger('product_id');
             $table->bigInteger('product_option_id');
             $table->bigInteger('price');
             $table->bigInteger('creator_id');

@@ -39,6 +39,7 @@
             <li @if( $menu=='employees') class="active" @endif ><a href="{!! \URL::action('Admin\EmployeeController@index') !!}"><i class="fa fa-user-o"></i> <span>Employees</span></a></li>
             <li @if( $menu=='products') class="active" @endif ><a href="{!! \URL::action('Admin\ProductController@index') !!}"><i class="fa fa-product-hunt"></i> <span>Products</span></a></li>
             <li @if( $menu=='imports') class="active" @endif ><a href="{!! \URL::action('Admin\ImportController@index') !!}"><i class="fa fa-download"></i> <span>Imports</span></a></li>
+            <li @if( $menu=='exports') class="active" @endif ><a href="{!! \URL::action('Admin\ExportController@index') !!}"><i class="fa fa-upload"></i> <span>Exports</span></a></li>
             <!-- %%SIDEMENU%% -->
         </ul>
     </section>

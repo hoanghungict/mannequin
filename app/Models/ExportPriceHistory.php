@@ -2,7 +2,8 @@
 
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class ExportPriceHistory extends Base {
+class ExportPriceHistory extends Base
+{
 
     use SoftDeletes;
 
@@ -19,6 +20,7 @@ class ExportPriceHistory extends Base {
      * @var array
      */
     protected $fillable = [
+        'product_id',
         'product_option_id',
         'price',
         'creator_id',
@@ -37,11 +39,18 @@ class ExportPriceHistory extends Base {
     protected $presenter = \App\Presenters\ExportPriceHistoryPresenter::class;
 
     // Relations
-    public function productOption() {
+    public function product()
+    {
+        return $this->belongsTo( \App\Models\Product::class, 'product_id', 'id' );
+    }
+
+    public function productOption()
+    {
         return $this->belongsTo( \App\Models\ProductOption::class, 'product_option_id', 'id' );
     }
 
-    public function creator() {
+    public function creator()
+    {
         return $this->belongsTo( \App\Models\AdminUser::class, 'creator_id', 'id' );
     }
 
@@ -52,9 +61,11 @@ class ExportPriceHistory extends Base {
     /*
      * API Presentation
      */
-    public function toAPIArray() {
+    public function toAPIArray()
+    {
         return [
             'id'                => $this->id,
+            'product_id'        => $this->product_id,
             'product_option_id' => $this->product_option_id,
             'price'             => $this->price,
             'creator_id'        => $this->creator_id,

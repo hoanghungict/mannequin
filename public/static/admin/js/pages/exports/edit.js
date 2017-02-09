@@ -1,4 +1,10 @@
+$('.datetime-field').datetimepicker({'format': 'YYYY-MM-DD', 'defaultDate': new Date()});
+
 $(document).ready(function () {
+    $('#avatar-image').change(function (event) {
+        $('#avatar-image-preview').attr('src', URL.createObjectURL(event.target.files[0]));
+    });
+
     $(".employee-id").select2({
         placeholder: "Select Employee",
         allowClear: true
@@ -10,19 +16,20 @@ $(document).ready(function () {
     });
 
     $('select[name="modal_product_option"]').on('change', function () {
-        $('#modal-import-price').val($('#modal-product-option option:selected').attr('p'));
+        $('#modal-export-price').val($('#modal-product-option option:selected').attr('p'));
         $('#modal-current-quantity').text($('#modal-product-option option:selected').attr('q') + ' +');
+        $('#modal-current-quantity').attr('value', $('#modal-product-option option:selected').attr('q'));
     });
 
     var index = 0;
     $('#modal-save').on('click', function () {
-        productId   = $('#modal-product-name').val();
-        option      = $('#modal-product-option').val();
-        price       = $('#modal-import-price').val();
-        quantity    = $('#modal-quantity').val();
-        unit        = $('#modal-unit').attr('uid');
-
-        if( productId && option && quantity > 0 ) {
+        productId           = $('#modal-product-name').val();
+        option              = $('#modal-product-option').val();
+        price               = $('#modal-export-price').val();
+        quantity            = $('#modal-quantity').val();
+        currentQuantity     = parseInt($('#modal-current-quantity').attr('value'));
+        unit                = $('#modal-unit').attr('uid');
+        if( productId && option && quantity > 0 && (currentQuantity >= quantity) ) {
             var content = '';
             content += '' +
                 '<tr>' +
@@ -37,8 +44,8 @@ $(document).ready(function () {
                     '</td>' +
 
                     '<td>' +
-                        $('#modal-import-price').val() +
-                        '<input type="hidden" name="products[' + index + '][import_price]" value=' + "'" + price + "'" + '>' +
+                        $('#modal-export-price').val() +
+                        '<input type="hidden" name="products[' + index + '][export_price]" value=' + "'" + price + "'" + '>' +
                     '</td>' +
 
                     '<td>' +
@@ -59,13 +66,14 @@ $(document).ready(function () {
                         '<span onclick="deleteProduct(this);" style="cursor: pointer; color: #ca2424;"> Delete</span>' +
                     '</td>' +
                 '</tr>';
-            $('#import-products').append(content);
+            $('#export-products').append(content);
+        } else {
+            alert('Error, Parameter is invalid !!!');
         }
 
         index++;
         $('.close').click();
     });
-
 });
 
 function generateOptions() {
@@ -81,11 +89,12 @@ function generateOptions() {
         success: function (response) {
             if( response.code == 100 ) {
                 response.data.forEach(function (option, index) {
-                    $('select[name="modal_product_option"]').append('<option value="' + option.id + '" p="' + option.import_price + '" q="' + option.quantity + '">' + option.name + '</option>');
+                    $('select[name="modal_product_option"]').append('<option value="' + option.id + '" p="' + option.export_price + '" q="' + option.quantity + '">' + option.name + '</option>');
                 });
 
-                $('#modal-import-price').val($('#modal-product-option option:selected').attr('p'));
+                $('#modal-export-price').val($('#modal-product-option option:selected').attr('p'));
                 $('#modal-current-quantity').text($('#modal-product-option option:selected').attr('q') + ' +');
+                $('#modal-current-quantity').attr('value', $('#modal-product-option option:selected').attr('q'));
             } else {
                 alert(response.message);
             }
@@ -108,11 +117,11 @@ function generateUnit() {
     });
 }
 
-function resetModalImport() {
+function resetModalExport() {
     $('#modal-product-name').val('');
     $('#modal-product-option').html('');
     $('#modal-product-option').append('<option value="">Select a Option</option>');
-    $('#modal-import-price').val(0);
+    $('#modal-export-price').val(0);
     $('#modal-quantity').val(0);
     $('#modal-current-quantity').text('0 +');
 }
@@ -122,4 +131,3 @@ function deleteProduct(span) {
         $(span).parent().parent().remove();
     }
 }
-

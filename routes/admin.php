@@ -45,6 +45,7 @@
         \Route::get('getOptionOfProduct/{id}', 'Admin\ProductController@getAllOptionOfProduct');
 
         \Route::resource('imports', 'Admin\ImportController');
+        \Route::resource('exports', 'Admin\ExportController');
         /* NEW ADMIN RESOURCE ROUTE */
     });
 });

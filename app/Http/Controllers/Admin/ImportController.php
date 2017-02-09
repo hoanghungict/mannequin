@@ -88,8 +88,7 @@ class ImportController extends Controller
                 'isNew'     => true,
                 'import'    => $this->importRepository->getBlankModel(),
                 'employees' => $this->employeeRepository->all(),
-                'products'  => $this->productRepository->allEnabled('name', 'asc'),
-                'options'   => $this->productOptionService->getAllOptionEnabled(),
+                'products'  => $this->productRepository->allEnabled('name', 'asc')
             ]
         );
     }
@@ -103,15 +102,9 @@ class ImportController extends Controller
      */
     public function store( ImportRequest $request )
     {
-        $input = $request->only( ['code', 'times', 'notes'] );
+        $input = $request->only( ['times', 'notes'] );
         $input['employee_id']   = is_array($request->get('employee_id')) ? json_encode($request->get('employee_id')) : '[]';
         $input['creator_id']    = \Auth::guard('admins')->user()->id;
-
-        if( $input['code'] == '' || !empty($this->importRepository->findByCode($input['code'])) ) {
-            return redirect()
-                ->back()
-                ->withErrors( trans( 'admin.messages.errors.code_invalid' ) );
-        }
 
         if( !$request->get('products') || !is_array($request->get('products')) ) {
             return redirect()
@@ -154,8 +147,7 @@ class ImportController extends Controller
                 'isNew'     => false,
                 'import'    => $import,
                 'employees' => $this->employeeRepository->all(),
-                'products'  => $this->productRepository->allEnabled('name', 'asc'),
-                'options'   => $this->productOptionService->getAllOptionEnabled()
+                'products'  => $this->productRepository->allEnabled('name', 'asc')
             ]
         );
     }
@@ -187,7 +179,7 @@ class ImportController extends Controller
         if( empty( $import ) ) {
             \App::abort( 404 );
         }
-        $input = $request->only( ['times', 'notes'] );
+        $input = $request->only( ['notes'] );
         $input[ 'employee_id' ] = json_encode( $request->get( 'employee_id' ) );
 
         $this->importRepository->update( $import, $input );

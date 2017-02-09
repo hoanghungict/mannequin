@@ -15,7 +15,6 @@ class CreateImportsTable extends Migration
     {
         Schema::create('imports', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('code')->default('');
 
             $table->date('times');
             $table->bigInteger('total_amount')->default(0);

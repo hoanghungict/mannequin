@@ -165,6 +165,7 @@ class ProductController extends Controller {
         $admin = $this->adminUserService->getUser();
         ImportPriceHistory::create(
             [
+                'product_id'        => $product->id,
                 'product_option_id' => $standardOption->id,
                 'price'             => $standardOption->import_price,
                 'creator_id'        => $admin->id,
@@ -172,6 +173,7 @@ class ProductController extends Controller {
         );
         ExportPriceHistory::create(
             [
+                'product_id'        => $product->id,
                 'product_option_id' => $standardOption->id,
                 'price'             => $standardOption->export_price,
                 'creator_id'        => $admin->id,
@@ -261,6 +263,7 @@ class ProductController extends Controller {
             );
             ImportPriceHistory::create(
                 [
+                    'product_id'        => $product->id,
                     'product_option_id' => $standardOption->id,
                     'price'             => intval($request->get( 'import_price', 0 )),
                     'creator_id'        => $admin->id,
@@ -276,6 +279,7 @@ class ProductController extends Controller {
             );
             ExportPriceHistory::create(
                 [
+                    'product_id'        => $product->id,
                     'product_option_id' => $standardOption->id,
                     'price'             => intval($request->get( 'export_price', 0 )),
                     'creator_id'        => $admin->id,
