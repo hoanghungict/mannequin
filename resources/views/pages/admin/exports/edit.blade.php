@@ -198,8 +198,8 @@
                                 <th width="100px">@lang('admin.pages.common.label.actions')</th>
                             </tr>
 
-                            @if( !empty($export->products) )
-                                @foreach( $export->products as $exportDetail )
+                            @if( !empty($export->details) )
+                                @foreach( $export->details as $exportDetail )
                                     <tr>
                                         <td>{{ $exportDetail->present()->product->name }}</td>
                                         <td>{{ $exportDetail->productOption->present()->getProductOptionName }}</td>

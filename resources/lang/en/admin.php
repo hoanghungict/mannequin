@@ -36,7 +36,7 @@ return [
     ],
     'pages'    => [
         'common'                   => [
-            'label' => [
+            'label'   => [
                 'page'               => 'Page',
                 'actions'            => 'Actions',
                 'is_enabled'         => 'Status',
@@ -65,7 +65,9 @@ return [
                 'back'            => 'Back',
                 'close'           => 'Close',
                 'add'             => 'Add',
+                'view'            => 'View',
                 'preview'         => 'Preview',
+                'print'           => 'Print',
                 'forgot_password' => 'Send Me Email!',
                 'reset_password'  => 'Reset Password',
             ],
@@ -262,7 +264,7 @@ return [
                 'discount'       => 'Discount',
                 'discount_unit'  => 'Discount Unit',
                 'total_amount'   => 'Total Amount',
-                'amount_payable' => 'Amount Payable',
+                'amount_payable' => 'Payable Amount',
                 'notes'          => 'Notes',
                 'creator_id'     => 'Creator',
             ],
@@ -274,6 +276,27 @@ return [
                 'export_price'   => 'Export Price',
                 'quantity'       => 'Quantity',
                 'unit'           => 'Unit',
+            ],
+            'view'    => [
+                'delivery_bill'  => 'Delivery Bill',
+                'code'           => 'Code',
+                'customer'       => 'Customer',
+                'address'        => 'Address',
+                'telephone'      => 'Telephone',
+                'stt'            => 'No.',
+                'products'       => 'Products',
+                'options'        => 'Options',
+                'unit'           => 'Unit',
+                'quantity'       => 'Quantity',
+                'price'          => 'Price',
+                'total'          => 'Total',
+                'total_amount'   => 'Total Amount',
+                'discount'       => 'Discount',
+                'payable_amount' => 'Payable Amount',
+                'notes'          => 'Notes',
+                'biller'         => 'Biller',
+                'receiver'       => 'Receiver',
+                'sign_and_name'  => '(Sign & Full name)',
             ]
         ],
         /* NEW PAGE STRINGS */

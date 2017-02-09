@@ -137,8 +137,8 @@
                                 <th width="100px">@lang('admin.pages.common.label.actions')</th>
                             </tr>
 
-                            @if( !empty($import->products) )
-                                @foreach( $import->products as $importDetail )
+                            @if( !empty($import->details) )
+                                @foreach( $import->details as $importDetail )
                                     <tr>
                                         <td>{{ $importDetail->present()->product->name }}</td>
                                         <td>{{ $importDetail->productOption->present()->getProductOptionName }}</td>

@@ -167,14 +167,9 @@ class ExportController extends Controller
         }
 
         return view(
-            'pages.admin.exports.edit',
+            'pages.admin.exports.view',
             [
-                'isNew'     => false,
-                'export'    => $export,
-                'customers' => $this->customerRepository->all(),
-                'employees' => $this->employeeRepository->all(),
-                'stores'    => $this->storeRepository->all(),
-                'products'  => $this->productRepository->allEnabled('name', 'asc'),
+                'export'    => $export
             ]
         );
     }
@@ -188,7 +183,22 @@ class ExportController extends Controller
      */
     public function edit( $id )
     {
-        //
+        $export = $this->exportRepository->find( $id );
+        if( empty( $export ) ) {
+            \App::abort( 404 );
+        }
+
+        return view(
+            'pages.admin.exports.edit',
+            [
+                'isNew'     => false,
+                'export'    => $export,
+                'customers' => $this->customerRepository->all(),
+                'employees' => $this->employeeRepository->all(),
+                'stores'    => $this->storeRepository->all(),
+                'products'  => $this->productRepository->allEnabled('name', 'asc'),
+            ]
+        );
     }
 
     /**
@@ -227,29 +237,8 @@ class ExportController extends Controller
         }
 
         return redirect()
-            ->action( 'Admin\ExportController@show', [$id] )
+            ->action( 'Admin\ExportController@edit', [$id] )
             ->with( 'message-success', trans( 'admin.messages.general.update_success' ) );
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int $id
-     *
-     * @return \Response
-     */
-    public function destroy( $id )
-    {
-        /** @var \App\Models\Export $export */
-        $export = $this->exportRepository->find( $id );
-        if( empty( $export ) ) {
-            \App::abort( 404 );
-        }
-        $this->exportRepository->delete( $export );
-
-        return redirect()
-            ->action( 'Admin\ExportController@index' )
-            ->with( 'message-success', trans( 'admin.messages.general.delete_success' ) );
     }
 
 }

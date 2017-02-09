@@ -45,7 +45,7 @@ class Export extends Base
     protected $presenter = \App\Presenters\ExportPresenter::class;
 
     // Relations
-    public function products()
+    public function details()
     {
         return $this->hasMany( \App\Models\ExportDetail::class, 'export_id', 'id');
     }

@@ -538,6 +538,36 @@ input.cmn-toggle-round-flat:checked + label:after {
 .export-products tr td:nth-child(6) {
     text-align: center;
 }
-/* End: Exports */
 
+#print-export-detail {
+    margin-left: 20px;
+}
+#print-export-detail tr {
+    height: 30px;
+}
+#print-export-detail tr th {
+    width: 170px;
+}
+#print-export-products {
+    margin-top: 25px;
+    margin-bottom: 0;
+}
+#print-export-products th {
+    text-align: center;
+}
+#print-export-products tr td:nth-child(1), #print-export-products tr td:nth-child(4) {
+    text-align: center;
+}
+#print-export-products tr td:nth-child(7), #print-export-products tr td:nth-child(5), #print-export-products tr td:nth-child(6) {
+    text-align: right;
+}
+
+@media print
+{
+    .no-print, .no-print *
+    {
+        display: none !important;
+    }
+}
+/* End: Export  */
 /*-----------------------------------------------------------------------------------*/

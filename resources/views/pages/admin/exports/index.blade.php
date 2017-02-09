@@ -75,8 +75,8 @@
                         <td>@if( !empty($export->creator) ) {{ $export->creator->name }} @else Unknown @endif</td>
 
                         <td>
-                            <a href="{!! URL::action('Admin\ExportController@show', $export->id) !!}" class="btn btn-block btn-primary btn-xs">@lang('admin.pages.common.buttons.edit')</a>
-                            <a href="#" class="btn btn-block btn-danger btn-xs delete-button" data-delete-url="{!! action('Admin\ExportController@destroy', $export->id) !!}">@lang('admin.pages.common.buttons.delete')</a>
+                            <a href="{!! URL::action('Admin\ExportController@show', $export->id) !!}" class="btn btn-block btn-default btn-xs">@lang('admin.pages.common.buttons.view')</a>
+                            <a href="{!! URL::action('Admin\ExportController@edit', $export->id) !!}" class="btn btn-block btn-primary btn-xs">@lang('admin.pages.common.buttons.edit')</a>
                         </td>
                     </tr>
                 @endforeach

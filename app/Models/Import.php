@@ -44,7 +44,7 @@ class Import extends Base
         return $this->belongsTo( \App\Models\AdminUser::class, 'creator_id', 'id' );
     }
 
-    public function products()
+    public function details()
     {
         return $this->hasMany( \App\Models\ImportDetail::class, 'import_id', 'id');
     }

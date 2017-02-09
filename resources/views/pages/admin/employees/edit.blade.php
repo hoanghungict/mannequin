@@ -153,7 +153,6 @@
                                 </td>
                             </tr>
 
-                            {{ $employee->district->present()->fullName }}
                             <tr class="@if ($errors->has('address')) has-error @endif">
                                 <td>
                                     <label for="address">@lang('admin.pages.employees.columns.address')</label>
