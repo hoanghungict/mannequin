@@ -48,6 +48,7 @@
             <table class="table table-bordered">
                 <tr>
                     <th style="width: 10px">{!! \PaginationHelper::sort('id', 'ID') !!}</th>
+                    <th style="width: 10px">{!! \PaginationHelper::sort('locale', trans('admin.pages.user-notifications.columns.locale')) !!}</th>
                     <th style="width: 10px">{!! \PaginationHelper::sort('read', trans('admin.pages.user-notifications.columns.read')) !!}</th>
                     <th>{!! \PaginationHelper::sort('category_type', trans('admin.pages.user-notifications.columns.category_type')) !!}</th>
                     <th>{!! \PaginationHelper::sort('type', trans('admin.pages.user-notifications.columns.type')) !!}</th>

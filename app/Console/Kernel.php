@@ -19,7 +19,10 @@ class Kernel extends ConsoleKernel
         \App\Console\Commands\Generators\HelperMakeCommand::class,
         \App\Console\Commands\Generators\AdminCRUDMakeCommand::class,
         \App\Console\Commands\Generators\CreateTableMigrationMakeCommand::class,
+        \App\Console\Commands\Generators\AddRelationCommand::class,
         \App\Console\Commands\UpdateAssetHash::class,
+        \App\Console\Commands\Testing\SetUpStubDatabase::class,
+        \App\Console\Commands\Testing\Execute::class,
     ];
 
     /**
@@ -27,7 +30,7 @@ class Kernel extends ConsoleKernel
      *
      * @param \Illuminate\Console\Scheduling\Schedule $schedule
      */
-    protected function schedule(Schedule $schedule)
+    protected function schedule( Schedule $schedule )
     {
     }
 }

@@ -2,6 +2,8 @@
 
 namespace App\Console\Commands\Generators;
 
+use Doctrine\Instantiator\Exception\InvalidArgumentException;
+
 class CreateTableMigrationMakeCommand extends GeneratorCommandBase
 {
     /**

@@ -1,39 +1,9 @@
-<?php
+<?php namespace App\Models;
 
-namespace App\Models;
 
-/**
- * App\Models\AdminUserNotification.
- *
- * @property int $id
- * @property int $user_id
- * @property string $category_type
- * @property string $type
- * @property string $data
- * @property string $content
- * @property string $locale
- * @property bool $read
- * @property \Carbon\Carbon $sent_at
- * @property \Carbon\Carbon $created_at
- * @property \Carbon\Carbon $updated_at
- *
- * @method static \Illuminate\Database\Query\Builder|\App\Models\AdminUserNotification whereId($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Models\AdminUserNotification whereUserId($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Models\AdminUserNotification whereCategoryType($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Models\AdminUserNotification whereType($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Models\AdminUserNotification whereData($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Models\AdminUserNotification whereContent($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Models\AdminUserNotification whereLocale($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Models\AdminUserNotification whereRead($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Models\AdminUserNotification whereSentAt($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Models\AdminUserNotification whereCreatedAt($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Models\AdminUserNotification whereUpdatedAt($value)
- * @mixin \Eloquent
- *
- * @property-read \App\Models\AdminUser $adminUser
- */
-class AdminUserNotification extends Notification
-{
+class AdminUserNotification extends Notification {
+
+
     /**
      * The database table used by the model.
      *
@@ -41,10 +11,57 @@ class AdminUserNotification extends Notification
      */
     protected $table = 'admin_user_notifications';
 
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'user_id',
+        'category_type',
+        'type',
+        'data',
+        'content',
+        'locale',
+        'read',
+        'sent_at',
+    ];
+
+    /**
+     * The attributes excluded from the model's JSON form.
+     *
+     * @var array
+     */
+    protected $hidden = [];
+
+    protected $dates = ['sent_at'];
+
     protected $presenter = \App\Presenters\AdminUserNotificationPresenter::class;
 
-    public function adminUser()
-    {
-        return $this->belongsTo('App\Models\AdminUser', 'user_id', 'id');
+    // Relations
+    public function adminUser() {
+        return $this->belongsTo( \App\Models\AdminUser::class, 'user_id', 'id' );
     }
+
+
+
+    // Utility Functions
+
+    /*
+     * API Presentation
+     */
+    public function toAPIArray() {
+        return [
+            'id'            => $this->id,
+            'user_id'       => $this->user_id,
+            'category_type' => $this->category_type,
+            'type'          => $this->type,
+            'data'          => $this->data,
+            'content'       => $this->content,
+            'locale'        => $this->locale,
+            'read'          => $this->read,
+            'sent_at'       => $this->sent_at,
+        ];
+    }
+
 }
