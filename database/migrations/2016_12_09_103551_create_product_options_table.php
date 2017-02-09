@@ -1,8 +1,7 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Database\Migrations\Migration;
+use \App\Database\Migration;
 
 class CreateProductOptionsTable extends Migration
 {
@@ -24,12 +23,10 @@ class CreateProductOptionsTable extends Migration
             $table->softDeletes();
             $table->timestamps();
 
-            $table->index('id', 'product_id');
+            $table->index(['id', 'product_id']);
         });
 
-        DB::statement('ALTER TABLE product_options MODIFY created_at '.'TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP');
-
-        DB::statement('ALTER TABLE product_options MODIFY updated_at '.'TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP');
+        $this->updateTimestampDefaultValue('users', ['updated_at'], ['created_at']);
     }
 
     /**
