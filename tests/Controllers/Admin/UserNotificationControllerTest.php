@@ -55,18 +55,18 @@ class UserNotificationControllerTest extends TestCase
 
         $userNotification = factory(\App\Models\UserNotification::class)->create();
 
-        $name = $faker->name;
+        $content = $faker->sentence();
         $id = $userNotification->id;
 
-        $userNotification->name = $name;
+        $userNotification->content = $content;
 
         $this->action('PUT', 'Admin\UserNotificationController@update', [$id], [
                 '_token' => csrf_token(),
-            ] + $userNotification->toArray());
+            ] + $userNotification->toFillableArray());
         $this->assertResponseStatus(302);
 
         $newUserNotification = \App\Models\UserNotification::find($id);
-        $this->assertEquals($name, $newUserNotification->name);
+        $this->assertEquals($content, $newUserNotification->content);
     }
 
     public function testDeleteModel()

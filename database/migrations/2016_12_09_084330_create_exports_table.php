@@ -1,8 +1,7 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Database\Migrations\Migration;
+use \App\Database\Migration;
 
 class CreateExportsTable extends Migration
 {
@@ -22,7 +21,7 @@ class CreateExportsTable extends Migration
             $table->date('times');
 
             $table->bigInteger('discount')->default(0);
-            $table->integer('discount_unit')->default(0);
+            $table->string('discount_unit')->default('%');
             $table->bigInteger('total_amount')->default(0);
 
             $table->text('notes')->nullable();
@@ -35,9 +34,7 @@ class CreateExportsTable extends Migration
             $table->index('id');
         });
 
-        DB::statement('ALTER TABLE exports MODIFY created_at '.'TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP');
-
-        DB::statement('ALTER TABLE exports MODIFY updated_at '.'TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP');
+        $this->updateTimestampDefaultValue('users', ['updated_at'], ['created_at']);
     }
 
     /**

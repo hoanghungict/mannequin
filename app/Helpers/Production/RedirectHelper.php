@@ -16,40 +16,40 @@ class RedirectHelper implements RedirectHelperInterface
     /**
      * Create a new Redirector instance.
      *
-     * @param  \Illuminate\Routing\UrlGenerator $generator
+     * @param \Illuminate\Routing\UrlGenerator $generator
      */
-    public function __construct( UrlGenerator $generator )
+    public function __construct(UrlGenerator $generator)
     {
         $this->generator = $generator;
     }
 
-    public function guest( $path, $guardName = '', $status = 302, $headers = [], $secure = null )
+    public function guest($path, $guardName = '', $status = 302, $headers = [], $secure = null)
     {
-        \Session::put( $this->getSessionKey( $guardName ), $this->generator->full() );
+        \Session::put($this->getSessionKey($guardName), $this->generator->full());
 
         /** @var \Illuminate\Routing\Redirector $redirector */
-        $redirector = app( 'redirect' );
+        $redirector = app('redirect');
 
-        return $redirector->to( $path, $status, $headers, $secure );
+        return $redirector->to($path, $status, $headers, $secure);
     }
 
-    public function intended( $default = '/', $guardName = '', $status = 302, $headers = [], $secure = null )
+    public function intended($default = '/', $guardName = '', $status = 302, $headers = [], $secure = null)
     {
-        $path = \Session::pull( $this->getSessionKey( $guardName ), $default );
+        $path = \Session::pull($this->getSessionKey($guardName), $default);
 
         /** @var \Illuminate\Routing\Redirector $redirector */
-        $redirector = app( 'redirect' );
+        $redirector = app('redirect');
 
-        return $redirector->to( $path, $status, $headers, $secure );
+        return $redirector->to($path, $status, $headers, $secure);
     }
 
-    private function getSessionKey( $guardName )
+    private function getSessionKey($guardName)
     {
-        if( empty( $guardName ) ) {
+        if (empty($guardName)) {
             return 'url.intended';
         }
 
-        return 'url.intended.' . strtolower( $guardName );
+        return 'url.intended.'.strtolower($guardName);
     }
 
 }

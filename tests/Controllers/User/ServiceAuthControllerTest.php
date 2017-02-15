@@ -14,12 +14,12 @@ class ServiceAuthControllerTest extends TestCase
 
     public function testPostSignUpSuccess()
     {
-        $this->post(action('User\AuthController@postSignUp'), [
-            'email' => 'test_email@example.com',
-            'password' => '123456',
-        ])->assertRedirectedToAction('User\IndexController@index');
-
-        $this->assertEquals(1, User::count());
+        $user = factory(\App\Models\User::class)->make();
+        $this->action('POST', 'User\AuthController@postSignUp', [
+                                '_token' => csrf_token(),
+                            ] + $user->toArray());
+        
+        $this->assertResponseStatus(302);
     }
 
     public function testPostSignUpWithExistUser()
@@ -30,7 +30,7 @@ class ServiceAuthControllerTest extends TestCase
         $this->post(action('User\AuthController@postSignUp'), [
             'email' => 'test_email@example.com',
             'password' => '123456',
-        ])->assertRedirectedToAction("User\AuthController@getSignUp");
+        ])->assertRedirectedToAction('User\AuthController@getSignUp');
 
         $this->assertEquals(1, User::count());
     }

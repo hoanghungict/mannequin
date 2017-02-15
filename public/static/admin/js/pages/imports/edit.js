@@ -51,6 +51,10 @@ $(document).ready(function () {
                         '<input type="hidden" name="products[' + index + '][unit_id]" value=' + "'" + unit + "'" + '>' +
                     '</td>' +
 
+                    '<td>' +
+                        quantity * price +
+                    '</td>' +
+
                     '<td style="text-align: center">' +
                         '<span onclick="deleteProduct(this);" style="cursor: pointer; color: #ca2424;"> Delete</span>' +
                     '</td>' +
@@ -110,6 +114,7 @@ function resetModalImport() {
     $('#modal-product-option').append('<option value="">Select a Option</option>');
     $('#modal-import-price').val(0);
     $('#modal-quantity').val(0);
+    $('#modal-current-quantity').text('0 +');
 }
 
 function deleteProduct(span) {

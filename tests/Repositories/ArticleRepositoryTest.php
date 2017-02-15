@@ -85,23 +85,23 @@ class ArticleRepositoryTest extends TestCase
 
     public function testGetByColumnList()
     {
-        foreach (['ja', 'ja', 'en', 'en', 'en', 'th'] as $locle) {
+        foreach (['l1', 'l1', 'l2', 'l2', 'l2', 'l3'] as $locale) {
             factory(Article::class)->create([
-                'locale' => $locle,
+                'locale' => $locale,
             ]);
         }
 
         $repository = \App::make(\App\Repositories\ArticleRepositoryInterface::class);
-        $articles = $repository->allByLocale('ja');
+        $articles = $repository->allByLocale('l1');
         $this->assertEquals(2, count($articles));
 
-        $count = $repository->countByLocale('en');
+        $count = $repository->countByLocale('l2');
         $this->assertEquals(3, $count);
 
-        $articles = $repository->getByLocale('en', 'id', 'asc', 0, 2);
+        $articles = $repository->getByLocale('l2', 'id', 'asc', 0, 2);
         $this->assertEquals(2, count($articles));
 
-        $article = $repository->findByLocale('th');
-        $this->assertEquals('th', $article->locale);
+        $article = $repository->findByLocale('l3');
+        $this->assertEquals('l3', $article->locale);
     }
 }

@@ -1,8 +1,7 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Database\Migrations\Migration;
+use \App\Database\Migration;
 
 class CreateImportsTable extends Migration
 {
@@ -15,7 +14,6 @@ class CreateImportsTable extends Migration
     {
         Schema::create('imports', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('code')->default('');
 
             $table->date('times');
             $table->bigInteger('total_amount')->default(0);
@@ -30,9 +28,7 @@ class CreateImportsTable extends Migration
             $table->index('id');
         });
 
-        DB::statement('ALTER TABLE imports MODIFY created_at '.'TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP');
-
-        DB::statement('ALTER TABLE imports MODIFY updated_at '.'TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP');
+        $this->updateTimestampDefaultValue('users', ['updated_at'], ['created_at']);
     }
 
     /**

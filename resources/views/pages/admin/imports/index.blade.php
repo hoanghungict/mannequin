@@ -29,9 +29,7 @@
                 <div class="col-sm-6">
                     <h3 class="box-title">
                         <p class="text-right">
-                            <a href="{!! URL::action('Admin\ImportController@create') !!}"
-                               class="btn btn-block btn-primary btn-sm"
-                               style="width: 125px;">@lang('admin.pages.common.buttons.create')</a>
+                            <a href="{!! URL::action('Admin\ImportController@create') !!}" class="btn btn-block btn-primary btn-sm" style="width: 125px;">@lang('admin.pages.common.buttons.create')</a>
                         </p>
                     </h3>
                     <br>
@@ -48,9 +46,8 @@
             <table class="table table-bordered imports-index">
                 <tr>
                     <th style="width: 10px">ID</th>
-                    <th>@lang('admin.pages.imports.columns.code')</th>
-                    <th>@lang('admin.pages.imports.columns.times')</th>
                     <th style="width: 150px;">@lang('admin.pages.imports.columns.total_amount')</th>
+                    <th>@lang('admin.pages.imports.columns.times')</th>
                     <th style="width: 150px;">@lang('admin.pages.imports.columns.creator_id')</th>
 
                     <th style="width: 40px">@lang('admin.pages.common.label.actions')</th>
@@ -58,9 +55,8 @@
                 @foreach( $imports as $import )
                     <tr>
                         <td>{{ $import->id }}</td>
-                        <td>{{ $import->code }}</td>
-                        <td>{{ $import->times }}</td>
                         <td>{{ number_format($import->total_amount, 0, '.', ' ') }} <span style="font-size: 11px;">VND</span></td>
+                        <td>{{ $import->times }}</td>
                         <td>@if( !empty($import->creator->name) ) {{ $import->creator->name }} @else Unknown @endif</td>
 
                         <td>

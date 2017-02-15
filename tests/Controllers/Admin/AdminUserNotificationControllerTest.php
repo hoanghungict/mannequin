@@ -55,18 +55,18 @@ class AdminUserNotificationControllerTest extends TestCase
 
         $adminUserNotification = factory(\App\Models\AdminUserNotification::class)->create();
 
-        $name = $faker->name;
+        $content = $faker->sentence();
         $id = $adminUserNotification->id;
 
-        $adminUserNotification->name = $name;
+        $adminUserNotification->content = $content;
 
         $this->action('PUT', 'Admin\AdminUserNotificationController@update', [$id], [
                 '_token' => csrf_token(),
-            ] + $adminUserNotification->toArray());
+            ] + $adminUserNotification->toFillableArray());
         $this->assertResponseStatus(302);
 
         $newAdminUserNotification = \App\Models\AdminUserNotification::find($id);
-        $this->assertEquals($name, $newAdminUserNotification->name);
+        $this->assertEquals($content, $newAdminUserNotification->content);
     }
 
     public function testDeleteModel()

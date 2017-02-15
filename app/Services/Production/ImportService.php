@@ -29,7 +29,7 @@ class ImportService extends BaseService implements ImportServiceInterface
 
     public function saveImportDetails( $import, $products )
     {
-        $totalAmount = 0;
+        $totalAmount = $import->total_amount;
 
         foreach( $products as $product ) {
             $importDetail = $this->importDetailRepository->create(

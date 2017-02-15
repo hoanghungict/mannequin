@@ -15,10 +15,14 @@ $factory->define(
     App\Models\User::class,
     function( Faker\Generator $faker ) {
         return [
-            'name'           => $faker->name,
-            'email'          => $faker->email,
-            'password'       => bcrypt( str_random( 10 ) ),
-            'remember_token' => str_random( 10 ),
+            'name'                 => $faker->name,
+            'email'                => $faker->email,
+            'password'             => bcrypt( str_random( 10 ) ),
+            'remember_token'       => str_random( 10 ),
+            'locale'               => $faker->languageCode,
+            'last_notification_id' => 0,
+            'api_access_token'     => '',
+            'profile_image_id'     => 0,
         ];
     }
 );
@@ -27,10 +31,14 @@ $factory->define(
     App\Models\AdminUser::class,
     function( Faker\Generator $faker ) {
         return [
-            'name'           => $faker->name,
-            'email'          => $faker->email,
-            'password'       => bcrypt( str_random( 10 ) ),
-            'remember_token' => str_random( 10 ),
+            'name'                 => $faker->name,
+            'email'                => $faker->email,
+            'password'             => bcrypt( str_random( 10 ) ),
+            'remember_token'       => str_random( 10 ),
+            'locale'               => $faker->languageCode,
+            'last_notification_id' => 0,
+            'api_access_token'     => '',
+            'profile_image_id'     => 0,
         ];
     }
 );
@@ -109,10 +117,11 @@ $factory->define(
             'user_id'       => \App\Models\UserNotification::BROADCAST_USER_ID,
             'category_type' => \App\Models\UserNotification::CATEGORY_TYPE_SYSTEM_MESSAGE,
             'type'          => \App\Models\UserNotification::TYPE_GENERAL_MESSAGE,
-            'data'          => [],
+            'data'          => '',
             'locale'        => 'en',
             'content'       => 'TEST',
             'read'          => false,
+            'sent_at'       => $faker->dateTime,
         ];
     }
 );
@@ -124,10 +133,11 @@ $factory->define(
             'user_id'       => \App\Models\AdminUserNotification::BROADCAST_USER_ID,
             'category_type' => \App\Models\AdminUserNotification::CATEGORY_TYPE_SYSTEM_MESSAGE,
             'type'          => \App\Models\AdminUserNotification::TYPE_GENERAL_MESSAGE,
-            'data'          => [],
+            'data'          => '',
             'locale'        => 'en',
             'content'       => 'TEST',
             'read'          => false,
+            'sent_at'       => $faker->dateTime,
         ];
     }
 );
@@ -219,10 +229,10 @@ $factory->define(
     App\Models\ProductOption::class,
     function( Faker\Generator $faker ) {
         return [
-            'product_id'        => 1,
-            'import_price'      => rand( 50000, 200000 ),
-            'export_price'      => rand( 200000, 500000 ),
-            'quantity'          => rand( 50, 250 ),
+            'product_id'   => 1,
+            'import_price' => rand( 50000, 200000 ),
+            'export_price' => rand( 200000, 500000 ),
+            'quantity'     => rand( 50, 250 ),
         ];
     }
 );
@@ -255,6 +265,7 @@ $factory->define(
     App\Models\ImportPriceHistory::class,
     function( Faker\Generator $faker ) {
         return [
+            'product_id'        => 0,
             'product_option_id' => 0,
             'price'             => 0,
             'creator_id'        => 0,
@@ -267,6 +278,7 @@ $factory->define(
     App\Models\ExportPriceHistory::class,
     function( Faker\Generator $faker ) {
         return [
+            'product_id'        => 0,
             'product_option_id' => 0,
             'price'             => 0,
             'creator_id'        => 0,
@@ -279,10 +291,9 @@ $factory->define(
     App\Models\Import::class,
     function( Faker\Generator $faker ) {
         return [
-            'code'     => $faker->word,
-            'store_id' => $faker->randomNumber(),
-            'times'    => $faker->time(),
-            'notes'    => $faker->sentences( 3 ),
+            'times'      => $faker->time(),
+            'notes'      => $faker->sentences( 3, true ),
+            'creator_id' => $faker->randomNumber(),
         ];
     }
 );
@@ -318,6 +329,46 @@ $factory->define(
         return [
             'product_option_id' => 0,
             'property_value_id' => 0,
+        ];
+    }
+);
+
+$factory->define(
+    App\Models\Export::class,
+    function( Faker\Generator $faker ) {
+        return [
+            'employee_id'   => 0,
+            'customer_id'   => 0,
+            'store_id'      => 0,
+            'times'         => $faker->date( 'Y-m-d' ),
+            'discount'      => $faker->numberBetween( 0, 10 ),
+            'discount_unit' => '%',
+            'total_amount'  => 0,
+            'notes'         => $faker->sentences( 4, true ),
+            'creator_id'    => 0,
+        ];
+    }
+);
+
+$factory->define(
+    App\Models\ExportDetail::class,
+    function( Faker\Generator $faker ) {
+        return [
+            'export_id'  => 0,
+            'product_id' => 0,
+            'option_id'  => 0,
+            'prices'     => $faker->numberBetween( 100000, 2000000 ),
+            'quantity'   => $faker->numberBetween( 100, 1000 ),
+            'unit_id'    => 1,
+        ];
+    }
+);
+
+$factory->define(
+    App\Models\Unit::class,
+    function( Faker\Generator $faker ) {
+        return [
+            'name' => $faker->name
         ];
     }
 );

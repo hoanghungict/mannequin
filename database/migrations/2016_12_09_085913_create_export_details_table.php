@@ -1,8 +1,7 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Database\Migrations\Migration;
+use \App\Database\Migration;
 
 class CreateExportDetailsTable extends Migration
 {
@@ -17,7 +16,7 @@ class CreateExportDetailsTable extends Migration
             $table->bigIncrements('id');
             $table->bigInteger('export_id');
             $table->bigInteger('product_id');
-            $table->string('property_value_id');
+            $table->bigInteger('option_id');
 
             $table->bigInteger('prices');
             $table->integer('quantity');
@@ -26,12 +25,10 @@ class CreateExportDetailsTable extends Migration
             $table->softDeletes();
             $table->timestamps();
 
-            $table->index('id', 'export_id');
+            $table->index(['id', 'export_id']);
         });
 
-        DB::statement('ALTER TABLE export_details MODIFY created_at '.'TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP');
-
-        DB::statement('ALTER TABLE export_details MODIFY updated_at '.'TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP');
+        $this->updateTimestampDefaultValue('users', ['updated_at'], ['created_at']);
 
     }
 
