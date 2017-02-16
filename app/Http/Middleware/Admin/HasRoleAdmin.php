@@ -6,7 +6,7 @@ use Closure;
 use App\Services\AdminUserServiceInterface;
 use App\Models\AdminUserRole;
 
-class HasRoleSuperUser
+class HasRoleAdmin
 {
     /** @var AdminUserServiceInterface */
     protected $adminUserService;
@@ -33,7 +33,7 @@ class HasRoleSuperUser
     {
         /** @var \App\Models\AdminUser $adminUser */
         $adminUser = $this->adminUserService->getUser();
-        if ($adminUser && $adminUser->hasRole(AdminUserRole::ROLE_SUPER_USER)) {
+        if ($adminUser && $adminUser->hasRole(AdminUserRole::ROLE_ADMIN)) {
             return $next($request);
         }
         abort(403);
