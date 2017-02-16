@@ -4,11 +4,17 @@
 @stop
 
 @section('styles')
+    <style>
+        .button-checkbox button {
+            padding: 3px 20px;
+        }
+    </style>
 @stop
 
 @section('scripts')
     <script src="{{ \URLHelper::asset('libs/moment/moment.min.js', 'admin') }}"></script>
     <script src="{{ \URLHelper::asset('libs/datetimepicker/js/bootstrap-datetimepicker.min.js', 'admin') }}"></script>
+    <script src="{{ \URLHelper::asset('js/jquery_checkbox_btn.js', 'admin') }}"></script>
     <script>
         $('.datetime-field').datetimepicker({'format': 'YYYY-MM-DD HH:mm:ss'});
 
@@ -56,9 +62,7 @@
         <div class="box box-primary">
             <div class="box-header with-border">
                 <h3 class="box-title">
-                    <a href="{!! URL::action('Admin\AdminUserController@index') !!}"
-                       class="btn btn-block btn-default btn-sm"
-                       style="width: 125px;">@lang('admin.pages.common.buttons.back')</a>
+                    <a href="{!! URL::action('Admin\AdminUserController@index') !!}" class="btn btn-block btn-default btn-sm" style="width: 125px;">@lang('admin.pages.common.buttons.back')</a>
                 </h3>
             </div>
             <div class="box-body">
@@ -66,17 +70,15 @@
                     <div class="col-lg-5">
                         <div class="form-group text-center">
                             @if( !empty($adminUser->profileImage) )
-                                <img id="profile-image-preview" style="max-width: 500px; width: 100%;"
-                                     src="{!! $adminUser->profileImage->getThumbnailUrl(480, 300) !!}" alt="" class="margin"/>
+                                <img id="profile-image-preview" style="max-width: 500px; width: 100%;" src="{!! $adminUser->profileImage->getThumbnailUrl(480, 300) !!}" alt="" class="margin"/>
                             @else
-                                <img id="profile-image-preview" style="max-width: 500px; width: 100%;"
-                                     src="{!! \URLHelper::asset('img/no_image.jpg', 'common') !!}" alt="" class="margin"/>
+                                <img id="profile-image-preview" style="max-width: 500px; width: 100%;" src="{!! \URLHelper::asset('img/no_image.jpg', 'common') !!}" alt="" class="margin"/>
                             @endif
+
                             <input type="file" style="display: none;" id="profile-image" name="profile_image">
                             <p class="help-block" style="font-weight: bolder;">
                                 @lang('admin.pages.admin-users.columns.profile_image_id')
-                                <label for="profile-image"
-                                       style="font-weight: 100; color: #549cca; margin-left: 10px; cursor: pointer;">@lang('admin.pages.common.buttons.edit')</label>
+                                <label for="profile-image" style="font-weight: 100; color: #549cca; margin-left: 10px; cursor: pointer;">@lang('admin.pages.common.buttons.edit')</label>
                             </p>
                         </div>
                     </div>
@@ -87,7 +89,7 @@
                                     <label for="name">@lang('admin.pages.admin-users.columns.name')</label>
                                 </td>
                                 <td>
-                                    <input type="text" class="form-control" id="name" name="name" value="{{ old('name') ? old('name') : $adminUser->name }}">
+                                    <input type="text" class="form-control" id="name" name="name" required value="{{ old('name') ? old('name') : $adminUser->name }}">
                                 </td>
                             </tr>
 
@@ -96,18 +98,29 @@
                                     <label for="email">@lang('admin.pages.admin-users.columns.email')</label>
                                 </td>
                                 <td>
-                                    <input type="text" class="form-control" id="email" name="email" value="{{ old('email') ? old('email') : $adminUser->email }}">
+                                    <input type="email" class="form-control" id="email" name="email" required value="{{ old('email') ? old('email') : $adminUser->email }}">
                                 </td>
                             </tr>
 
                             <tr class="@if ($errors->has('password')) has-error @endif">
                                 <td>
-                                    <label for="password">@lang('admin.pages.users.columns.password')</label>
+                                    <label for="password">@lang('admin.pages.admin-users.columns.password')</label>
                                 </td>
                                 <td>
-                                    <input type="text" class="form-control" id="password" name="password" @if(!$isNew) disabled @endif value="{{ old('password') ? old('password') : $adminUser->password }}">
+                                    <input type="password" class="form-control" id="password" name="password" required @if(!$isNew) disabled @endif value="{{ old('password') ? old('password') : $adminUser->password }}">
                                 </td>
                             </tr>
+
+                            @if($isNew)
+                                <tr class="@if ($errors->has('re_password')) has-error @endif">
+                                    <td>
+                                        <label for="re_password">@lang('admin.pages.admin-users.columns.re_password')</label>
+                                    </td>
+                                    <td>
+                                        <input type="password" class="form-control" id="re_password" name="re_password" required value="{{ old('password') ? old('password') : '' }}">
+                                    </td>
+                                </tr>
+                            @endif
 
                             <tr class="@if ($errors->has('locale')) has-error @endif">
                                 <td>
@@ -118,14 +131,41 @@
                                 </td>
                             </tr>
 
+                            <tr>
+                                <td>
+                                    <label for="locale">@lang('admin.pages.admin-users.columns.permissions')</label>
+                                </td>
+                                <td>
+                                    @if( $authUser->hasRole(\App\Models\AdminUserRole::ROLE_SUPER_USER) )
+                                        <span class="button-checkbox">
+                                            <button type="button" class="btn btn-xs" data-color="primary">@lang('admin.roles.super_user')</button>
+                                        <input type="checkbox" name="role[]" value="{{ \App\Models\AdminUserRole::ROLE_SUPER_USER }}" class="hidden" @if( $adminUser->hasRole(\App\Models\AdminUserRole::ROLE_SUPER_USER, false) ) checked @endif />
+                                        </span>
+                                    @endif
+
+                                    @if( $authUser->hasRole(\App\Models\AdminUserRole::ROLE_ADMIN) )
+                                        <span class="button-checkbox" style="margin: 0 10px;">
+                                            <button type="button" class="btn btn-xs" data-color="info">@lang('admin.roles.admin')</button>
+                                            <input type="checkbox" name="role[]" value="{{ \App\Models\AdminUserRole::ROLE_ADMIN }}" class="hidden" @if( $adminUser->hasRole(\App\Models\AdminUserRole::ROLE_ADMIN, false) ) checked @endif/>
+                                        </span>
+                                    @endif
+
+                                    @if( $authUser->hasRole(\App\Models\AdminUserRole::ROLE_EMPLOYEE) )
+                                        <span class="button-checkbox">
+                                            <button type="button" class="btn btn-xs" data-color="default">@lang('admin.roles.employee')</button>
+                                            <input type="checkbox" name="role[]" value="{{ \App\Models\AdminUserRole::ROLE_EMPLOYEE }}" class="hidden" @if( $adminUser->hasRole(\App\Models\AdminUserRole::ROLE_EMPLOYEE, false) ) checked @endif/>
+                                        </span>
+                                    @endif
+                                </td>
+                            </tr>
+
                         </table>
                     </div>
                 </div>
             </div>
 
             <div class="box-footer">
-                <button type="submit" class="btn btn-primary btn-sm"
-                        style="width: 125px;">@lang('admin.pages.common.buttons.save')</button>
+                <button type="submit" class="btn btn-primary btn-sm" style="width: 125px;">@lang('admin.pages.common.buttons.save')</button>
             </div>
         </div>
     </form>

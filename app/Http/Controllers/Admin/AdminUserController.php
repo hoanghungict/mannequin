@@ -8,11 +8,16 @@ use App\Http\Requests\Admin\AdminUserRequest;
 use App\Http\Requests\PaginationRequest;
 use App\Services\FileUploadServiceInterface;
 use App\Repositories\ImageRepositoryInterface;
+use App\Repositories\AdminUserRoleRepositoryInterface;
 
-class AdminUserController extends Controller {
+class AdminUserController extends Controller
+{
 
     /** @var \App\Repositories\AdminUserRepositoryInterface */
     protected $adminUserRepository;
+
+    /** @var \App\Repositories\AdminUserRoleRepositoryInterface */
+    protected $adminUserRoleRepository;
 
     /** @var FileUploadServiceInterface $fileUploadService */
     protected $fileUploadService;
@@ -21,13 +26,16 @@ class AdminUserController extends Controller {
     protected $imageRepository;
 
     public function __construct(
-        AdminUserRepositoryInterface $adminUserRepository,
-        FileUploadServiceInterface      $fileUploadService,
-        ImageRepositoryInterface        $imageRepository
-    ) {
-        $this->adminUserRepository      = $adminUserRepository;
-        $this->fileUploadService        = $fileUploadService;
-        $this->imageRepository          = $imageRepository;
+        AdminUserRepositoryInterface        $adminUserRepository,
+        FileUploadServiceInterface          $fileUploadService,
+        ImageRepositoryInterface            $imageRepository,
+        AdminUserRoleRepositoryInterface    $adminUserRoleRepository
+    )
+    {
+        $this->adminUserRepository          = $adminUserRepository;
+        $this->fileUploadService            = $fileUploadService;
+        $this->imageRepository              = $imageRepository;
+        $this->adminUserRoleRepository      = $adminUserRoleRepository;
     }
 
     /**
@@ -37,15 +45,16 @@ class AdminUserController extends Controller {
      *
      * @return \Response
      */
-    public function index( PaginationRequest $request ) {
-        $paginate[ 'offset' ] = $request->offset();
-        $paginate[ 'limit' ] = $request->limit();
-        $paginate[ 'order' ] = $request->order();
-        $paginate[ 'direction' ] = $request->direction();
-        $paginate[ 'baseUrl' ] = action( 'Admin\AdminUserController@index' );
+    public function index( PaginationRequest $request )
+    {
+        $paginate[ 'offset' ]       = $request->offset();
+        $paginate[ 'limit' ]        = $request->limit();
+        $paginate[ 'order' ]        = $request->order();
+        $paginate[ 'direction' ]    = $request->direction();
+        $paginate[ 'baseUrl' ]      = action( 'Admin\AdminUserController@index' );
 
         $count = $this->adminUserRepository->count();
-        $models = $this->adminUserRepository->get(
+        $adminUsers = $this->adminUserRepository->get(
             $paginate[ 'order' ],
             $paginate[ 'direction' ],
             $paginate[ 'offset' ],
@@ -55,9 +64,9 @@ class AdminUserController extends Controller {
         return view(
             'pages.admin.admin-users.index',
             [
-                'models'   => $models,
-                'count'    => $count,
-                'paginate' => $paginate,
+                'adminUsers' => $adminUsers,
+                'count'      => $count,
+                'paginate'   => $paginate,
             ]
         );
     }
@@ -67,7 +76,8 @@ class AdminUserController extends Controller {
      *
      * @return \Response
      */
-    public function create() {
+    public function create()
+    {
         return view(
             'pages.admin.admin-users.edit',
             [
@@ -84,36 +94,58 @@ class AdminUserController extends Controller {
      *
      * @return \Response
      */
-    public function store( AdminUserRequest $request ) {
+    public function store( AdminUserRequest $request )
+    {
         $input = $request->only(
             [
                 'name',
                 'email',
                 'password',
+                're_password',
                 'locale',
             ]
         );
+        $exist = $this->adminUserRepository->findByEmail( $input[ 'email' ] );
+        if( !empty( $exist ) ) {
+            return redirect()
+                ->back()
+                ->withErrors( ['error' => 'This Email Is Already In Use'] )
+                ->withInput();
+        }
+        if( $input[ 'password' ] == '' || $input[ 'password' ] != $input[ 're_password' ] ) {
+            return redirect()
+                ->back()
+                ->withErrors( ['error' => 'Error, Confirm password is invalid !!!'] )
+                ->withInput();
+        }
 
-        $model = $this->adminUserRepository->create( $input );
+        $adminUser = $this->adminUserRepository->create( $input );
 
-        if( empty( $model ) ) {
+        if( empty( $adminUser ) ) {
             return redirect()
                 ->back()
                 ->withErrors( trans( 'admin.errors.general.save_failed' ) );
         }
 
-        if ($request->hasFile('profile_image')) {
-            $file       = $request->file('profile_image');
-            $mediaType  = $file->getClientMimeType();
-            $path       = $file->getPathname();
-            $image      = $this->fileUploadService->upload('user-profile-image', $path, $mediaType, [
-                'entityType' => 'user-profile-image',
-                'entityId'   => $model->id,
-                'title'      => $request->input('name', ''),
-            ]);
+        $this->adminUserRoleRepository->setAdminUserRoles($adminUser->id, $request->input('role', []));
 
-            if (!empty($image)) {
-                $this->adminUserRepository->update($model, ['profile_image_id' => $image->id]);
+        if( $request->hasFile( 'profile_image' ) ) {
+            $file = $request->file( 'profile_image' );
+            $mediaType = $file->getClientMimeType();
+            $path = $file->getPathname();
+            $image = $this->fileUploadService->upload(
+                'user-profile-image',
+                $path,
+                $mediaType,
+                [
+                    'entityType' => 'user-profile-image',
+                    'entityId'   => $adminUser->id,
+                    'title'      => $request->input( 'name', '' ),
+                ]
+            );
+
+            if( !empty( $image ) ) {
+                $this->adminUserRepository->update( $model, ['profile_image_id' => $image->id] );
             }
         }
 
@@ -129,7 +161,8 @@ class AdminUserController extends Controller {
      *
      * @return \Response
      */
-    public function show( $id ) {
+    public function show( $id )
+    {
         $model = $this->adminUserRepository->find( $id );
         if( empty( $model ) ) {
             \App::abort( 404 );
@@ -151,7 +184,8 @@ class AdminUserController extends Controller {
      *
      * @return \Response
      */
-    public function edit( $id ) {
+    public function edit( $id )
+    {
         //
     }
 
@@ -163,7 +197,8 @@ class AdminUserController extends Controller {
      *
      * @return \Response
      */
-    public function update( $id, AdminUserRequest $request ) {
+    public function update( $id, AdminUserRequest $request )
+    {
         /** @var \App\Models\AdminUser $model */
         $model = $this->adminUserRepository->find( $id );
         if( empty( $model ) ) {
@@ -178,25 +213,31 @@ class AdminUserController extends Controller {
         );
 
         $this->adminUserRepository->update( $model, $input );
+        $this->adminUserRoleRepository->setAdminUserRoles($id, $request->input('role', []));
 
-        if ($request->hasFile('profile_image')) {
-            $file       = $request->file('profile_image');
-            $mediaType  = $file->getClientMimeType();
-            $path       = $file->getPathname();
-            $image      = $this->fileUploadService->upload('user-profile-image', $path, $mediaType, [
-                'entityType' => 'user-profile-image',
-                'entityId'   => $model->id,
-                'title'      => $request->input('name', ''),
-            ]);
+        if( $request->hasFile( 'profile_image' ) ) {
+            $file = $request->file( 'profile_image' );
+            $mediaType = $file->getClientMimeType();
+            $path = $file->getPathname();
+            $image = $this->fileUploadService->upload(
+                'user-profile-image',
+                $path,
+                $mediaType,
+                [
+                    'entityType' => 'user-profile-image',
+                    'entityId'   => $model->id,
+                    'title'      => $request->input( 'name', '' ),
+                ]
+            );
 
-            if (!empty($image)) {
+            if( !empty( $image ) ) {
                 $oldImage = $model->coverImage;
-                if (!empty($oldImage)) {
-                    $this->fileUploadService->delete($oldImage);
-                    $this->imageRepository->delete($oldImage);
+                if( !empty( $oldImage ) ) {
+                    $this->fileUploadService->delete( $oldImage );
+                    $this->imageRepository->delete( $oldImage );
                 }
 
-                $this->adminUserRepository->update($model, [ 'profile_image_id' => $image->id ]);
+                $this->adminUserRepository->update( $model, ['profile_image_id' => $image->id] );
             }
         }
 
@@ -212,7 +253,8 @@ class AdminUserController extends Controller {
      *
      * @return \Response
      */
-    public function destroy( $id ) {
+    public function destroy( $id )
+    {
         /** @var \App\Models\AdminUser $model */
         $model = $this->adminUserRepository->find( $id );
         if( empty( $model ) ) {
