@@ -1,3 +1,7 @@
+<style>
+    #loadding {color:red; font-size: 20px; font-weight: bold; text-align: center}
+    .hidden {display: none}
+</style>
 <header class="main-header">
     <!-- Logo -->
     <a href="index2.html" class="logo">
@@ -19,134 +23,46 @@
                 <li class="dropdown messages-menu">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                         <i class="fa fa-bell-o"></i>
-                        <span class="label label-warning">10</span>
+                        <span class="label label-warning">{{$unreadNotificationCount}}</span>
                     </a>
                     <ul class="dropdown-menu" style="width: 500px;">
-                        <li class="header">You have 4 messages</li>
+                        <li class="header">{{'You have '.$unreadNotificationCount.' messages'}}</li>
                         <li>
                             <!-- inner menu: contains the actual data -->
                             <ul class="menu" style="max-height: 400px;">
-                                <li><!-- start message -->
-                                    <a href="#">
+                                @foreach($notifications as $notification)
+                                 @if($notification->read ==0)
+                                <li style="background-color: #edf2fa"><!-- start message -->
+                                @else
+                                <li>
+                                @endif
+                                    <a href="{{route('view-admin-user-notifications',$notification->id)}}">
                                         <div class="pull-left">
                                             <img src="{!! \URLHelper::asset('libs/adminlte/img/user2-160x160.jpg','admin') !!}" class="img-circle"
                                                  alt="User Image">
                                         </div>
                                         <h4>
-                                            Support Team
-                                            <small><i class="fa fa-clock-o"></i> 5 mins</small>
+                                            {{$notification->category_type}}
+                                            <small><i class="fa fa-clock-o"></i>
+                                                <?php
+                                                $date = new DateTime($notification->created_at);
+                                                $now = new DateTime();
+
+                                                echo $date->diff($now)->format("%d days, %h hours and %i minutes ago");
+                                                ?>
+                                            </small>
                                         </h4>
-                                        <p>Why not buy a new awesome theme?</p>
+                                        <p>{{$notification->content}}</p>
                                     </a>
                                 </li>
+                                @endforeach
                                 <!-- end message -->
-                                <li>
-                                    <a href="#">
-                                        <div class="pull-left">
-                                            <img src="{!! \URLHelper::asset('libs/adminlte/img/user3-128x128.jpg','admin') !!}" class="img-circle"
-                                                 alt="User Image">
-                                        </div>
-                                        <h4>
-                                            AdminLTE Design Team
-                                            <small><i class="fa fa-clock-o"></i> 2 hours</small>
-                                        </h4>
-                                        <p>Why not buy a new awesome theme?</p>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#">
-                                        <div class="pull-left">
-                                            <img src="{!! \URLHelper::asset('libs/adminlte/img/user4-128x128.jpg','admin') !!}" class="img-circle"
-                                                 alt="User Image">
-                                        </div>
-                                        <h4>
-                                            Developers
-                                            <small><i class="fa fa-clock-o"></i> Today</small>
-                                        </h4>
-                                        <p>Why not buy a new awesome theme?</p>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#">
-                                        <div class="pull-left">
-                                            <img src="{!! \URLHelper::asset('libs/adminlte/img/user3-128x128.jpg','admin') !!}" class="img-circle"
-                                                 alt="User Image">
-                                        </div>
-                                        <h4>
-                                            Sales Department
-                                            <small><i class="fa fa-clock-o"></i> Yesterday</small>
-                                        </h4>
-                                        <p>Why not buy a new awesome theme?</p>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#">
-                                        <div class="pull-left">
-                                            <img src="{!! \URLHelper::asset('libs/adminlte/img/user4-128x128.jpg','admin') !!}" class="img-circle"
-                                                 alt="User Image">
-                                        </div>
-                                        <h4>
-                                            Reviewers
-                                            <small><i class="fa fa-clock-o"></i> 2 days</small>
-                                        </h4>
-                                        <p>Why not buy a new awesome theme?</p>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#">
-                                        <div class="pull-left">
-                                            <img src="{!! \URLHelper::asset('libs/adminlte/img/user3-128x128.jpg','admin') !!}" class="img-circle"
-                                                 alt="User Image">
-                                        </div>
-                                        <h4>
-                                            AdminLTE Design Team
-                                            <small><i class="fa fa-clock-o"></i> 2 hours</small>
-                                        </h4>
-                                        <p>Why not buy a new awesome theme?</p>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#">
-                                        <div class="pull-left">
-                                            <img src="{!! \URLHelper::asset('libs/adminlte/img/user4-128x128.jpg','admin') !!}" class="img-circle"
-                                                 alt="User Image">
-                                        </div>
-                                        <h4>
-                                            Developers
-                                            <small><i class="fa fa-clock-o"></i> Today</small>
-                                        </h4>
-                                        <p>Why not buy a new awesome theme?</p>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#">
-                                        <div class="pull-left">
-                                            <img src="{!! \URLHelper::asset('libs/adminlte/img/user3-128x128.jpg','admin') !!}" class="img-circle"
-                                                 alt="User Image">
-                                        </div>
-                                        <h4>
-                                            Sales Department
-                                            <small><i class="fa fa-clock-o"></i> Yesterday</small>
-                                        </h4>
-                                        <p>Why not buy a new awesome theme?</p>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#">
-                                        <div class="pull-left">
-                                            <img src="{!! \URLHelper::asset('libs/adminlte/img/user4-128x128.jpg','admin') !!}" class="img-circle"
-                                                 alt="User Image">
-                                        </div>
-                                        <h4>
-                                            Reviewers
-                                            <small><i class="fa fa-clock-o"></i> 2 days</small>
-                                        </h4>
-                                        <p>Why not buy a new awesome theme?</p>
-                                    </a>
-                                </li>
                             </ul>
                         </li>
-                        {{--<li class="footer"><a href="#">See All Messages</a></li>--}}
+                        <li id="loadding" class="hidden">
+                            Loadding ...
+                        </li>
+                        <li class="footer"><a href="#">See All Messages</a></li>
                     </ul>
                 </li>
 
@@ -197,3 +113,45 @@
         </div>
     </nav>
 </header>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script>
+    var APP_URL = {!! json_encode(url('/')) !!};
+    var x =10;
+    $('.menu').scroll(function() {
+        if($(this).scrollTop() + $(this).innerHeight() > this.scrollHeight) {
+            $( "#loadding" ).removeClass( "hidden" );
+            $.ajax({
+
+                type:"GET",
+                url:APP_URL+"/admin/load-notification/"+x,
+                success:function(data){
+                    $.each(data, function(key,val) {
+                        $(".menu").append(""+
+                                "<li style='background-color: #edf2fa'>"+
+                                "<li>"+
+                                "<a href=''>"+
+                                "<div class='pull-left'>"+
+                                "<img src='' class='img-circle' alt='User Image'>"+
+                                "</div>"+
+                                "<h4>"+val.category_type+"<small><i class='fa fa-clock-o'></i>"+
+                                "</small>"+
+                                "</h4>"+
+                                "<p>"+val.content+"</p>"+
+                                "</a>"+
+                                "</li>"+
+                                "</ul>"+
+                                "</li>"
+                        );
+                    });
+                }
+
+            })
+                    .always(function()
+                    {
+                        $( "#loadding" ).addClass('hidden');
+                    });
+            x += 10;
+        }
+
+    });
+</script>
