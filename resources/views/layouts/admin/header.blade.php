@@ -1,7 +1,3 @@
-<style>
-    #loadding {color:red; font-size: 20px; font-weight: bold; text-align: center}
-    .hidden {display: none}
-</style>
 <header class="main-header">
     <!-- Logo -->
     <a href="index2.html" class="logo">
@@ -36,7 +32,7 @@
                                 @else
                                 <li>
                                 @endif
-                                    <a href="{{route('view-admin-user-notifications',$notification->id)}}">
+                                    <a href="{!! URL::action('Admin\AdminUserNotificationController@view', $notification->id) !!}">
                                         <div class="pull-left">
                                             <img src="{!! \URLHelper::asset('libs/adminlte/img/user2-160x160.jpg','admin') !!}" class="img-circle"
                                                  alt="User Image">
@@ -113,45 +109,3 @@
         </div>
     </nav>
 </header>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-<script>
-    var APP_URL = {!! json_encode(url('/')) !!};
-    var x =10;
-    $('.menu').scroll(function() {
-        if($(this).scrollTop() + $(this).innerHeight() > this.scrollHeight) {
-            $( "#loadding" ).removeClass( "hidden" );
-            $.ajax({
-
-                type:"GET",
-                url:APP_URL+"/admin/load-notification/"+x,
-                success:function(data){
-                    $.each(data, function(key,val) {
-                        $(".menu").append(""+
-                                "<li style='background-color: #edf2fa'>"+
-                                "<li>"+
-                                "<a href=''>"+
-                                "<div class='pull-left'>"+
-                                "<img src='' class='img-circle' alt='User Image'>"+
-                                "</div>"+
-                                "<h4>"+val.category_type+"<small><i class='fa fa-clock-o'></i>"+
-                                "</small>"+
-                                "</h4>"+
-                                "<p>"+val.content+"</p>"+
-                                "</a>"+
-                                "</li>"+
-                                "</ul>"+
-                                "</li>"
-                        );
-                    });
-                }
-
-            })
-                    .always(function()
-                    {
-                        $( "#loadding" ).addClass('hidden');
-                    });
-            x += 10;
-        }
-
-    });
-</script>
