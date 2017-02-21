@@ -15,18 +15,20 @@ class AdminUserNotificationController extends Controller {
     /** @var \App\Repositories\AdminUserNotificationRepositoryInterface */
     protected $adminUserNotificationRepository;
     protected $adminUserNotificationService;
+    protected $adminUserService;
+    protected $adminUserRepository;
 
 
     public function __construct(
         AdminUserNotificationRepositoryInterface $adminUserNotificationRepository,
         AdminUserServiceInterface                $adminUserService,
         AdminUserRepositoryInterface             $adminUserRepository,
-        AdminUserNotificationServiceInterface $adminUserNotificationService
+        AdminUserNotificationServiceInterface    $adminUserNotificationService
     ) {
         $this->adminUserNotificationRepository = $adminUserNotificationRepository;
         $this->adminUserService                = $adminUserService;
         $this->adminUserRepository             = $adminUserRepository;
-        $this->adminUserNotificationService = $adminUserNotificationService;
+        $this->adminUserNotificationService    = $adminUserNotificationService;
     }
 
     /**
@@ -201,23 +203,23 @@ class AdminUserNotificationController extends Controller {
 
     public function view($id)
     {
-        $user = $this->adminUserService->getUser();
-        $model = $this->adminUserNotificationRepository->find( $id );
-        if( empty( $model ) ) {
+        $adminUser = $this->adminUserService->getUser();
+        $adminUserNotification = $this->adminUserNotificationRepository->find( $id );
+        if( empty( $adminUserNotification ) ) {
             \App::abort( 404 );
         }
 
         $input[ 'read' ] = 1;
 
-        $this->adminUserNotificationRepository->update( $model, $input );
+        $this->adminUserNotificationRepository->update( $adminUserNotification, $input );
 
-        $model = $this->adminUserRepository->find($user['id']);
-        if( empty( $model ) ) {
+        $adminUser = $this->adminUserRepository->find($adminUser['id']);
+        if( empty( $adminUser ) ) {
             \App::abort( 404 );
         }
         $input['last_notification_id'] = $id;
 
-        $this->adminUserRepository->update( $model, $input );
+        $this->adminUserRepository->update( $adminUser, $input );
         return redirect()
             ->action( 'Admin\AdminUserNotificationController@index' );
     }
