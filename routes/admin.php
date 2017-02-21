@@ -48,7 +48,7 @@
         \Route::resource('exports', 'Admin\ExportController');
         /* NEW ADMIN RESOURCE ROUTE */
 
-        \Route::get('admin-user-notifications/view/{id}',['as'=>'view-admin-user-notifications','uses'=> 'Admin\AdminUserNotificationController@view']);
+        \Route::get('admin-user-notifications/view/{id}','Admin\AdminUserNotificationController@view');
         \Route::get('load-notification/{offset}',['as'=>'load-notification','uses'=> 'Admin\AdminUserNotificationController@loadNotification']);
     });
 });
