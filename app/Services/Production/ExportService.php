@@ -1,5 +1,6 @@
 <?php namespace App\Services\Production;
 
+use App\Models\Notification;
 use \App\Services\ExportServiceInterface;
 use App\Repositories\ExportRepositoryInterface;
 use App\Repositories\ExportDetailRepositoryInterface;
@@ -64,15 +65,15 @@ class ExportService extends BaseService implements ExportServiceInterface
 
                 $quantity       = $productOption->quantity - $product['quantity'];
                 $this->productOptionRepository->update( $productOption, ['quantity' => $quantity] );
-                $admin_users = $this->adminUserRepository->all();
-                foreach($admin_users as $admin_user)
+                $adminUsers = $this->adminUserRepository->all();
+                foreach($adminUsers as $adminUser)
                 {
-                    if($quantity < 10){
+                    if($quantity < config('notification.warning')){
                         $this->adminUserNotificationRepository->create(
                             [
-                                'user_id'        => $admin_user->id,
-                                'category_type'  => 'cảnh báo sản phẩm ',
-                                'type'           => 'cảnh báo',
+                                'user_id'        => $adminUser->id,
+                                'category_type'  => Notification::CATEGORY_TYPE_SYSTEM_MESSAGE,
+                                'type'           => Notification::TYPE_GENERAL_MESSAGE,
                                 'data'           => '',
                                 'content'        => 'Sản phẩm '.$productName.' sắp hết',
                                 'locale'         => '',
