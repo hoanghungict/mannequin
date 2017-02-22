@@ -1,7 +1,9 @@
 
 var x =10;
+var ready = true;
 $('.menu').scroll(function() {
-    if($(this).scrollTop() + $(this).innerHeight() > this.scrollHeight) {
+    if(ready && $(this).scrollTop() + $(this).innerHeight() > this.scrollHeight) {
+        ready = false;
         $( "#loadding" ).removeClass( "hidden" );
         $.ajax({
 
@@ -31,6 +33,7 @@ $('.menu').scroll(function() {
         })
             .always(function()
             {
+                ready = true;
                 $( "#loadding" ).addClass('hidden');
             });
         x += 10;
