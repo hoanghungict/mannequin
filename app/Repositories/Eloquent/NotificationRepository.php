@@ -31,9 +31,9 @@ class NotificationRepository extends SingleKeyModelRepository implements Notific
     {
         $model = $this->getBlankModel();
 
-        return $model->where('user_id', '=', $userId)->orWhere('user_id', '=', Notification::BROADCAST_USER_ID)
-            ->orWhere('locale', '=', \App::getLocale())
-            ->orderBy($order, $direction)->offset($offset)->limit($limit)->get();
+        return $model->where('user_id', '=', $userId)->orWhere(function ($query) {
+            $query->where('user_id', '=', Notification::BROADCAST_USER_ID)->where('locale', '=', \App::getLocale());
+        })->orderBy($order, $direction)->offset($offset)->limit($limit)->get();
     }
 
     public function countByUserId($userId)

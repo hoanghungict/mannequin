@@ -70,7 +70,7 @@ class ExportService extends BaseService implements ExportServiceInterface
                             'type'           => Notification::TYPE_GENERAL_MESSAGE,
                             'data'           => '',
                             'content'        => $productName.trans( 'notification.content' ),
-                            'locale'         => '',
+                            'locale'         => 'en',
                             'sent_at'        => time(),
                             'read'           => 0,
                         ]
