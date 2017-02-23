@@ -7,7 +7,6 @@ use App\Repositories\ExportDetailRepositoryInterface;
 use App\Repositories\ProductOptionRepositoryInterface;
 use App\Repositories\AdminUserNotificationRepositoryInterface;
 use App\Repositories\ProductRepositoryInterface;
-use App\Repositories\AdminUserRepositoryInterface;
 
 class ExportService extends BaseService implements ExportServiceInterface
 { 
@@ -29,15 +28,13 @@ class ExportService extends BaseService implements ExportServiceInterface
         ExportDetailRepositoryInterface          $exportDetailRepository,
         ProductOptionRepositoryInterface         $productOptionRepository,
         AdminUserNotificationRepositoryInterface $adminUserNotificationRepository,
-        ProductRepositoryInterface               $productRepository,
-        AdminUserRepositoryInterface             $adminUserRepository
+        ProductRepositoryInterface               $productRepository
     ) {
         $this->exportRepository                = $exportRepository;
         $this->exportDetailRepository          = $exportDetailRepository;
         $this->productOptionRepository         = $productOptionRepository;
         $this->adminUserNotificationRepository = $adminUserNotificationRepository;
         $this->productRepository               = $productRepository;
-        $this->adminUserRepository             = $adminUserRepository;
     }
     
     public function saveExportDetails( $export, $products )
@@ -65,24 +62,21 @@ class ExportService extends BaseService implements ExportServiceInterface
 
                 $quantity       = $productOption->quantity - $product['quantity'];
                 $this->productOptionRepository->update( $productOption, ['quantity' => $quantity] );
-                $adminUsers = $this->adminUserRepository->all();
-                foreach($adminUsers as $adminUser)
-                {
-                    if($quantity < config('notification.warning')){
-                        $this->adminUserNotificationRepository->create(
-                            [
-                                'user_id'        => $adminUser->id,
-                                'category_type'  => Notification::CATEGORY_TYPE_SYSTEM_MESSAGE,
-                                'type'           => Notification::TYPE_GENERAL_MESSAGE,
-                                'data'           => '',
-                                'content'        => 'Sản phẩm '.$productName.' sắp hết',
-                                'locale'         => '',
-                                'sent_at'        => time(),
-                                'read'           => 0,
-                            ]
-                        );
-                    }
+                if($quantity < config('notification.warning')){
+                    $this->adminUserNotificationRepository->create(
+                        [
+                            'user_id'        => Notification::BROADCAST_USER_ID,
+                            'category_type'  => Notification::CATEGORY_TYPE_SYSTEM_MESSAGE,
+                            'type'           => Notification::TYPE_GENERAL_MESSAGE,
+                            'data'           => '',
+                            'content'        => $productName.trans( 'notification.content' ),
+                            'locale'         => '',
+                            'sent_at'        => time(),
+                            'read'           => 0,
+                        ]
+                    );
                 }
+
             }
         }
 
