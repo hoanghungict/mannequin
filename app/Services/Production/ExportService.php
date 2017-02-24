@@ -9,7 +9,7 @@ use App\Repositories\AdminUserNotificationRepositoryInterface;
 use App\Repositories\ProductRepositoryInterface;
 
 class ExportService extends BaseService implements ExportServiceInterface
-{ 
+{
     /** @var \App\Repositories\ExportRepositoryInterface */
     protected $exportRepository;
 
@@ -36,23 +36,22 @@ class ExportService extends BaseService implements ExportServiceInterface
         $this->adminUserNotificationRepository = $adminUserNotificationRepository;
         $this->productRepository               = $productRepository;
     }
-    
+
     public function saveExportDetails( $export, $products )
     {
         $totalAmount = $export->total_amount;
 
         foreach( $products as $product ) {
             $productOption  = $this->productOptionRepository->find($product['option_id']);
-            $productName = $this->productRepository->find($product['id'])['name'];
             if( $productOption->quantity >= $product['quantity'] ) {
                 $exportDetail = $this->exportDetailRepository->create(
                     [
-                        'export_id'         => $export->id,
-                        'product_id'        => $product['id'],
-                        'option_id'         => $product['option_id'],
-                        'prices'            => $product['export_price'],
-                        'quantity'          => $product['quantity'],
-                        'unit_id'           => $product['unit_id'],
+                        'export_id'  => $export->id,
+                        'product_id' => $product[ 'id' ],
+                        'option_id'  => $product[ 'option_id' ],
+                        'prices'     => $product[ 'export_price' ],
+                        'quantity'   => $product[ 'quantity' ],
+                        'unit_id'    => $product[ 'unit_id' ],
                     ]
                 );
 
@@ -62,21 +61,27 @@ class ExportService extends BaseService implements ExportServiceInterface
 
                 $quantity       = $productOption->quantity - $product['quantity'];
                 $this->productOptionRepository->update( $productOption, ['quantity' => $quantity] );
-                if($quantity < config('notification.warning')){
+                if( $quantity < config( 'notification.system.general_alert.products.number_limit_notice' ) ) {
+                    $productName = $this->productRepository->find( $product[ 'id' ] )[ 'name' ];
                     $this->adminUserNotificationRepository->create(
                         [
-                            'user_id'        => Notification::BROADCAST_USER_ID,
-                            'category_type'  => Notification::CATEGORY_TYPE_SYSTEM_MESSAGE,
-                            'type'           => Notification::TYPE_GENERAL_MESSAGE,
-                            'data'           => '',
-                            'content'        => $productName.trans( 'notification.content' ),
-                            'locale'         => 'en',
-                            'sent_at'        => time(),
-                            'read'           => 0,
+                            'user_id'       => Notification::BROADCAST_USER_ID,
+                            'category_type' => Notification::CATEGORY_TYPE_SYSTEM_MESSAGE,
+                            'type'          => Notification::TYPE_GENERAL_ALERT,
+                            'data'          => '',
+                            'content'       => trans(
+                                config('notification.system.general_alert.products.message'),
+                                [
+                                    'product_name' => $productName,
+                                    'option_name'  => $productOption->present()->getProductOptionName
+                                ]
+                            ),
+                            'locale'        => 'en',
+                            'sent_at'       => time(),
+                            'read'          => 0,
                         ]
                     );
                 }
-
             }
         }
 
