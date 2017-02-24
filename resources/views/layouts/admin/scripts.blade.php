@@ -8,6 +8,7 @@
 <script src="{!! \URLHelper::asset('libs/adminlte/js/app.min.js', 'admin') !!}"></script>
 <script src="{!! \URLHelper::asset('libs/plugins/toastr/toastr.min.js', 'admin') !!}"></script>
 <script src="{!! \URLHelper::asset('js/script.js', 'admin') !!}"></script>
+<script src="{!! \URLHelper::asset('js/header.js', 'admin') !!}"></script>
 
 <script type="text/javascript">
     var Boilerplate = {
