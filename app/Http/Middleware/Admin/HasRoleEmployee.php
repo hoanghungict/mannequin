@@ -6,7 +6,7 @@ use Closure;
 use App\Services\AdminUserServiceInterface;
 use App\Models\AdminUserRole;
 
-class HasRoleSiteAdmin
+class HasRoleEmployee
 {
     /** @var AdminUserServiceInterface */
     protected $adminUserService;
@@ -33,9 +33,9 @@ class HasRoleSiteAdmin
     {
         /** @var \App\Models\AdminUser $adminUser */
         $adminUser = $this->adminUserService->getUser();
-        if ($adminUser && $adminUser->hasRole(AdminUserRole::ROLE_SITE_ADMIN)) {
+        if ($adminUser && $adminUser->hasRole(AdminUserRole::ROLE_EMPLOYEE)) {
             return $next($request);
         }
-        \App::abort(403);
+        abort(403);
     }
 }

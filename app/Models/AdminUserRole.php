@@ -5,26 +5,25 @@ namespace App\Models;
 /**
  * App\Models\AdminUserRole.
  *
- * @property int $id
- * @property int $admin_user_id
- * @property string $role
- * @property \Carbon\Carbon $created_at
- * @property \Carbon\Carbon $updated_at
+ * @property int                        $id
+ * @property int                        $admin_user_id
+ * @property string                     $role
+ * @property \Carbon\Carbon             $created_at
+ * @property \Carbon\Carbon             $updated_at
  * @property-read \App\Models\AdminUser $adminUser
  *
- * @method static \Illuminate\Database\Query\Builder|\App\Models\AdminUserRole whereId($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Models\AdminUserRole whereAdminUserId($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Models\AdminUserRole whereRole($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Models\AdminUserRole whereCreatedAt($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Models\AdminUserRole whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\AdminUserRole whereId( $value )
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\AdminUserRole whereAdminUserId( $value )
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\AdminUserRole whereRole( $value )
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\AdminUserRole whereCreatedAt( $value )
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\AdminUserRole whereUpdatedAt( $value )
  * @mixin \Eloquent
  */
 class AdminUserRole extends Base
 {
-    const ROLE_SUPER_USER = 'super_user';
-    const ROLE_CHIEF_EDITOR = 'chief_editor';
-    const ROLE_EDITOR = 'editor';
-    const ROLE_SITE_ADMIN = 'site_admin';
+    const ROLE_SUPER_USER   = 'super_user';
+    const ROLE_ADMIN        = 'admin';
+    const ROLE_EMPLOYEE     = 'employee';
 
     /**
      * The database table used by the model.
@@ -65,11 +64,11 @@ class AdminUserRole extends Base
 
     public function adminUser()
     {
-        return $this->belongsTo('App\Models\AdminUser', 'id', 'admin_user_id');
+        return $this->belongsTo( 'App\Models\AdminUser', 'id', 'admin_user_id' );
     }
 
     public function getRoleName()
     {
-        return trans(config('admin_user.roles.'.$this->role.'.name'));
+        return trans( config( 'admin_user.roles.' . $this->role . '.name' ) );
     }
 }

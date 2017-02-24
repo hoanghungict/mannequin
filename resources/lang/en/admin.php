@@ -171,8 +171,11 @@ return [
             'columns' => [
                 'name'             => 'Name',
                 'email'            => 'Email',
+                'password'         => 'Password',
+                're_password'      => 'Confirm Password',
                 'locale'           => 'Locale',
                 'profile_image_id' => 'Avatar',
+                'permissions'      => 'Permissions',
             ],
         ],
         'users'                    => [
@@ -303,6 +306,7 @@ return [
     ],
     'roles'    => [
         'super_user' => 'Super User',
-        'site_admin' => 'Site Administrator',
+        'admin'      => 'Administrator',
+        'employee'   => 'Employee'
     ],
 ];

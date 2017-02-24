@@ -3,12 +3,16 @@
 return [
     'roles' => [
         'super_user' => [
-            'name' => 'admin.roles.super_user',
-            'sub_roles' => ['site_admin', 'editor'],
+            'name'      => 'admin.roles.super_user',
+            'sub_roles' => ['admin', 'employee'],
         ],
-        'site_admin' => [
-            'name' => 'admin.roles.site_admin',
-            'sub_roles' => ['editor'],
+        'admin'      => [
+            'name'      => 'admin.roles.admin',
+            'sub_roles' => ['employee'],
         ],
+        'employee'   => [
+            'name'      => 'admin.roles.employee',
+            'sub_roles' => [],
+        ]
     ],
 ];
