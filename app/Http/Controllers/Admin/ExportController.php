@@ -136,7 +136,7 @@ class ExportController extends Controller
                 ->back()
                 ->with( 'message-failed', trans( 'admin.messages.errors.params_invalid' ) );
         }
-        
+
         $export = $this->exportRepository->create( $input );
 
         if( empty( $export ) ) {
