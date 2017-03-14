@@ -25,14 +25,15 @@
 @stop
 
 @section('header')
-    UserNotifications
+    @lang('admin.breadcrumb.user_notifications')
 @stop
 
 @section('breadcrumb')
-    <li><a href="{!! action('Admin\UserNotificationController@index') !!}"><i class="fa fa-files-o"></i>
-            UserNotifications</a></li>
+    <li>
+        <a href="{!! action('Admin\UserNotificationController@index') !!}"><i class="fa fa-files-o"></i> @lang('admin.breadcrumb.user_notifications')</a>
+    </li>
     @if( $isNew )
-        <li class="active">New</li>
+        <li class="active">@lang('admin.breadcrumb.create_new')</li>
     @else
         <li class="active">{{ $userNotification->id }}</li>
     @endif

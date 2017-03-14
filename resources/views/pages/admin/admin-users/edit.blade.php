@@ -30,13 +30,13 @@
 @stop
 
 @section('header')
-    AdminUsers
+    @lang('admin.breadcrumb.admin_users')
 @stop
 
 @section('breadcrumb')
-    <li><a href="{!! action('Admin\AdminUserController@index') !!}"><i class="fa fa-files-o"></i> AdminUsers</a></li>
+    <li><a href="{!! action('Admin\AdminUserController@index') !!}"><i class="fa fa-files-o"></i> @lang('admin.breadcrumb.admin_users')</a></li>
     @if( $isNew )
-        <li class="active">New</li>
+        <li class="active">@lang('admin.breadcrumb.create_new')</li>
     @else
         <li class="active">{{ $adminUser->id }}</li>
     @endif

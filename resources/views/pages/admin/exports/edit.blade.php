@@ -31,13 +31,13 @@
 @stop
 
 @section('header')
-    Exports
+    @lang('admin.breadcrumb.exports')
 @stop
 
 @section('breadcrumb')
-    <li><a href="{!! action('Admin\ExportController@index') !!}"><i class="fa fa-files-o"></i> Exports</a></li>
+    <li><a href="{!! action('Admin\ExportController@index') !!}"><i class="fa fa-files-o"></i> @lang('admin.breadcrumb.exports')</a></li>
     @if( $isNew )
-        <li class="active">New</li>
+        <li class="active">@lang('admin.breadcrumb.create_new')</li>
     @else
         <li class="active">{{ $export->id }}</li>
     @endif

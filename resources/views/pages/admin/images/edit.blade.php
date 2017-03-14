@@ -24,13 +24,13 @@
 @stop
 
 @section('header')
-    Images
+    @lang('admin.breadcrumb.images')
 @stop
 
 @section('breadcrumb')
-    <li><a href="{!! action('Admin\ImageController@index') !!}"><i class="fa fa-files-o"></i> Images</a></li>
+    <li><a href="{!! action('Admin\ImageController@index') !!}"><i class="fa fa-files-o"></i> @lang('admin.breadcrumb.images')</a></li>
     @if( $isNew )
-        <li class="active">New</li>
+        <li class="active">@lang('admin.breadcrumb.create_new')</li>
     @else
         <li class="active">{{ $image->id }}</li>
     @endif

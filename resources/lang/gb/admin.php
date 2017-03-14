@@ -1,13 +1,40 @@
 <?php
 
 return [
-    'menu'     => [
-        'dashboard'          => 'Dashboard',
-        'admin_users'        => 'Admin Users',
-        'users'              => 'Users',
-        'site-configuration' => 'Site Configuration',
+    'menu'       => [
+        'dashboard'                => 'Dashboard',
+        'admin_users'              => 'Admin Users',
+        'users'                    => 'Users',
+        'admin_user_notifications' => 'AdminUserNotifications',
+        'user_notifications'       => 'UserNotifications',
+        'site_configuration'       => 'Site Configuration',
+        'log_system'               => 'Logs System',
+        'images'                   => 'Images',
+        'articles'                 => 'Articles',
+        'customers'                => 'Customers',
+        'employees'                => 'Employees',
+        'products'                 => 'Products',
+        'imports'                  => 'Imports',
+        'exports'                  => 'Exports',
     ],
-    'messages' => [
+    'breadcrumb' => [
+        'dashboard'                => 'Dashboard',
+        'admin_users'              => 'Admin Users',
+        'users'                    => 'Users',
+        'admin_user_notifications' => 'AdminUserNotifications',
+        'user_notifications'       => 'UserNotifications',
+        'site_configuration'       => 'Site Configuration',
+        'log_system'               => 'Logs',
+        'images'                   => 'Images',
+        'articles'                 => 'Articles',
+        'customers'                => 'Customers',
+        'employees'                => 'Employees',
+        'products'                 => 'Products',
+        'imports'                  => 'Imports',
+        'exports'                  => 'Exports',
+        'create_new'               => 'Create New',
+    ],
+    'messages'   => [
         'general' => [
             'update_success' => 'Successfully updated.',
             'create_success' => 'Successfully created.',
@@ -18,7 +45,7 @@ return [
             'code_invalid'   => 'This code has been used !!!'
         ],
     ],
-    'errors'   => [
+    'errors'     => [
         'general'  => [
             'save_failed' => 'Failed To Save. Please contact with developers',
         ],
@@ -34,7 +61,7 @@ return [
             ],
         ],
     ],
-    'pages'    => [
+    'pages'      => [
         'common'                   => [
             'label'   => [
                 'page'               => 'Page',
@@ -304,7 +331,7 @@ return [
         ],
         /* NEW PAGE STRINGS */
     ],
-    'roles'    => [
+    'roles'      => [
         'super_user' => 'Super User',
         'admin'      => 'Administrator',
         'employee'   => 'Employee'

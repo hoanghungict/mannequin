@@ -28,14 +28,15 @@
 @stop
 
 @section('header')
-    SiteConfigurations
+    @lang('admin.breadcrumb.site_configuration')
 @stop
 
 @section('breadcrumb')
-    <li><a href="{!! action('Admin\SiteConfigurationController@index') !!}"><i class="fa fa-files-o"></i>
-            SiteConfigurations</a></li>
+    <li>
+        <a href="{!! action('Admin\SiteConfigurationController@index') !!}"><i class="fa fa-files-o"></i> @lang('admin.breadcrumb.site_configuration')</a>
+    </li>
     @if( $isNew )
-        <li class="active">New</li>
+        <li class="active">@lang('admin.breadcrumb.create_new')</li>
     @else
         <li class="active">{{ $siteConfiguration->id }}</li>
     @endif

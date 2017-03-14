@@ -33,7 +33,7 @@
                     @yield('header', 'Dashboard')
                 </h1>
                 <ul class="breadcrumb">
-                    <li><a href="{!! action('Admin\IndexController@index') !!}"><i class="fa fa-dashboard"></i> Home</a></li>
+                    <li><a href="{!! action('Admin\IndexController@index') !!}"><i class="fa fa-dashboard"></i> @lang('admin.breadcrumb.dashboard')</a></li>
                     @yield('breadcrumb')
                 </ul>
             </section>

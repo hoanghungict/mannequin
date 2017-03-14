@@ -41,13 +41,13 @@
 @stop
 
 @section('header')
-    Articles
+    @lang('admin.breadcrumb.articles')
 @stop
 
 @section('breadcrumb')
-    <li><a href="{!! action('Admin\ArticleController@index') !!}"><i class="fa fa-files-o"></i> Articles</a></li>
+    <li><a href="{!! action('Admin\ArticleController@index') !!}"><i class="fa fa-files-o"></i> @lang('admin.breadcrumb.articles')</a></li>
     @if( $isNew )
-        <li class="active">New</li>
+        <li class="active">@lang('admin.breadcrumb.create_new')</li>
     @else
         <li class="active">{{ $article->id }}</li>
     @endif

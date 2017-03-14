@@ -19,11 +19,11 @@
 @stop
 
 @section('header')
-    Logs
+    @lang('admin.breadcrumb.log_system')
 @stop
 
 @section('breadcrumb')
-    <li class="active">Logs</li>
+    <li class="active">@lang('admin.breadcrumb.log_system')</li>
 @stop
 
 @section('content')

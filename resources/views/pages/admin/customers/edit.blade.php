@@ -46,13 +46,13 @@
 @stop
 
 @section('header')
-    Customers
+    @lang('admin.breadcrumb.customers')
 @stop
 
 @section('breadcrumb')
-    <li><a href="{!! action('Admin\CustomerController@index') !!}"><i class="fa fa-files-o"></i> Customers</a></li>
+    <li><a href="{!! action('Admin\CustomerController@index') !!}"><i class="fa fa-files-o"></i> @lang('admin.breadcrumb.customers')</a></li>
     @if( $isNew )
-        <li class="active">New</li>
+        <li class="active">@lang('admin.breadcrumb.create_new')</li>
     @else
         <li class="active">{{ $customer->id }}</li>
     @endif

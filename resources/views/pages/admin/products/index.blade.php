@@ -31,11 +31,11 @@
 @stop
 
 @section('header')
-    Products
+    @lang('admin.breadcrumb.products')
 @stop
 
 @section('breadcrumb')
-    <li class="active">Products</li>
+    <li class="active">@lang('admin.breadcrumb.products')</li>
 @stop
 
 @section('content')

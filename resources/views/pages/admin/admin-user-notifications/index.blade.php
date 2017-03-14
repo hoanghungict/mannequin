@@ -14,11 +14,11 @@
 @stop
 
 @section('header')
-    AdminUserNotifications
+    @lang('admin.breadcrumb.admin_user_notifications')
 @stop
 
 @section('breadcrumb')
-    <li class="active">AdminUserNotifications</li>
+    <li class="active">@lang('admin.breadcrumb.admin_user_notifications')</li>
 @stop
 
 @section('content')

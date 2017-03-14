@@ -7,6 +7,7 @@
 <script src="{!! \URLHelper::asset('libs/bootstrap/js/bootstrap.min.js', 'admin') !!}"></script>
 <script src="{!! \URLHelper::asset('libs/adminlte/js/app.min.js', 'admin') !!}"></script>
 <script src="{!! \URLHelper::asset('libs/plugins/toastr/toastr.min.js', 'admin') !!}"></script>
+<script src="{!! \URLHelper::asset('libs/plugins/flagstrap/dist/js/jquery.flagstrap.min.js', 'admin') !!}"></script>
 <script src="{!! \URLHelper::asset('js/script.js', 'admin') !!}"></script>
 <script src="{!! \URLHelper::asset('js/header.js', 'admin') !!}"></script>
 
@@ -14,6 +15,25 @@
     var Boilerplate = {
         'csrfToken': "{!! csrf_token() !!}"
     };
+
+    $('#language-switcher').flagStrap({
+        countries: {
+            "VN": "Tiếng Việt",
+            "GB": "English"
+        },
+        buttonSize: "btn-sm",
+        buttonType: "btn-primary",
+        labelMargin: "10px",
+        scrollable: false,
+        placeholder: false,
+        scrollableHeight: "350px",
+        onSelect: function (value, element) {
+            url = window.location.href.split('?')[0] + '?locale=' + value.toLowerCase();
+            console.log(value);
+            console.log(url);
+            window.location.href = url;
+        }
+    });
 
     @if(Session::has('message-success'))
         toastr["success"]("{{ Session::get('message-success') }}", "Successfully !!!");
