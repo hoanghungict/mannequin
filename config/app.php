@@ -74,7 +74,7 @@ return [
 
     'timezone' => 'UTC',
 
-    'default_presentation_timezone' => 'Asia/Hanoi',
+    'default_presentation_timezone' => 'Asia/Ho_Chi_Minh',
 
     /*
     |--------------------------------------------------------------------------
