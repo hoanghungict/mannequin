@@ -29,13 +29,13 @@
 @stop
 
 @section('header')
-    Products
+    @lang('admin.breadcrumb.products')
 @stop
 
 @section('breadcrumb')
-    <li><a href="{!! action('Admin\ProductController@index') !!}"><i class="fa fa-files-o"></i> Products</a></li>
+    <li><a href="{!! action('Admin\ProductController@index') !!}"><i class="fa fa-files-o"></i> @lang('admin.breadcrumb.products')</a></li>
     @if( $isNew )
-        <li class="active">New</li>
+        <li class="active">@lang('admin.breadcrumb.create_new')</li>
     @else
         <li class="active">{{ $product->id }}</li>
     @endif

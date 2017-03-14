@@ -5,5 +5,6 @@
 <link rel="stylesheet" href="{!! \URLHelper::asset('libs/adminlte/css/skins/_all-skins.min.css', 'admin') !!}">
 <link rel="stylesheet" href="{!! \URLHelper::asset('libs/plugins/iCheck/minimal/_all.css', 'admin') !!}">
 <link rel="stylesheet" href="{!! \URLHelper::asset('libs/plugins/toastr/toastr.min.css', 'admin') !!}">
+<link rel="stylesheet" href="{!! \URLHelper::asset('libs/plugins/flagstrap/dist/css/flags.css', 'admin') !!}">
 
 <link rel="stylesheet" href="{!! \URLHelper::asset('css/style.css', 'admin') !!}">

@@ -14,11 +14,11 @@
 @stop
 
 @section('header')
-    SiteConfigurations
+    @lang('admin.breadcrumb.site_configuration')
 @stop
 
 @section('breadcrumb')
-    <li class="active">SiteConfigurations</li>
+    <li class="active">@lang('admin.breadcrumb.site_configuration')</li>
 @stop
 
 @section('content')

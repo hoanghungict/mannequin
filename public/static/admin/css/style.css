@@ -574,8 +574,18 @@ input.cmn-toggle-round-flat:checked + label:after {
 /*-----------------------------------------------------------------------------------*/
 
 /* Begin: Notification */
-#loadding {color:red; font-size: 20px; font-weight: bold; text-align: center}
-.hidden {display: none}
+#loadding {
+    color:red;
+    font-size: 20px;
+    font-weight: bold;
+    text-align: center
+}
+.hidden {
+    display: none
+}
+#language-switcher .flagstrap-icon {
+    vertical-align: middle;
+}
 /* End: Notification  */
 
 /*-----------------------------------------------------------------------------------*/

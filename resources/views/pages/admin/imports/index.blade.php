@@ -14,11 +14,11 @@
 @stop
 
 @section('header')
-    Imports
+    @lang('admin.breadcrumb.imports')
 @stop
 
 @section('breadcrumb')
-    <li class="active">Imports</li>
+    <li class="active">@lang('admin.breadcrumb.imports')</li>
 @stop
 
 @section('content')

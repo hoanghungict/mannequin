@@ -2,12 +2,12 @@
 
 return [
     'languages' => [
-        'ja' => [
-            'name' => 'config.locale.languages.ja.name',
+        'vn' => [
+            'name' => 'config.locale.languages.vn.name',
         ],
-        'en' => [
-            'name' => 'config.locale.languages.en.name',
+        'gb' => [
+            'name' => 'config.locale.languages.gb.name',
         ],
     ],
-    'default' => 'en',
+    'default' => 'vn',
 ];

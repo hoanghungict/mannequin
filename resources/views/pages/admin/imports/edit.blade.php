@@ -40,13 +40,13 @@
 @stop
 
 @section('header')
-    Imports
+    @lang('admin.breadcrumb.imports')
 @stop
 
 @section('breadcrumb')
-    <li><a href="{!! action('Admin\ImportController@index') !!}"><i class="fa fa-files-o"></i> Imports</a></li>
+    <li><a href="{!! action('Admin\ImportController@index') !!}"><i class="fa fa-files-o"></i> @lang('admin.breadcrumb.imports')</a></li>
     @if( $isNew )
-        <li class="active">New</li>
+        <li class="active">@lang('admin.breadcrumb.create_new')</li>
     @else
         <li class="active">{{ $import->id }}</li>
     @endif

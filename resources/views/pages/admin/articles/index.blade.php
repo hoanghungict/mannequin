@@ -14,11 +14,11 @@
 @stop
 
 @section('header')
-    Articles
+    @lang('admin.breadcrumb.articles')
 @stop
 
 @section('breadcrumb')
-    <li class="active">Articles</li>
+    <li class="active">@lang('admin.breadcrumb.articles')</li>
 @stop
 
 @section('content')

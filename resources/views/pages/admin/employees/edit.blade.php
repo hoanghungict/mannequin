@@ -46,13 +46,13 @@
 @stop
 
 @section('header')
-    Employees
+    @lang('admin.breadcrumb.employees')
 @stop
 
 @section('breadcrumb')
-    <li><a href="{!! action('Admin\EmployeeController@index') !!}"><i class="fa fa-files-o"></i> Employees</a></li>
+    <li><a href="{!! action('Admin\EmployeeController@index') !!}"><i class="fa fa-files-o"></i> @lang('admin.breadcrumb.employees')</a></li>
     @if( $isNew )
-        <li class="active">New</li>
+        <li class="active">@lang('admin.breadcrumb.create_new')</li>
     @else
         <li class="active">{{ $employee->id }}</li>
     @endif
