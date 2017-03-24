@@ -65,8 +65,7 @@
         </div>
     @endif
 
-    <form action="@if($isNew) {!! action('Admin\ArticleController@store') !!} @else {!! action('Admin\ArticleController@update', [$article->id]) !!} @endif"
-          method="POST" enctype="multipart/form-data">
+    <form action="@if($isNew) {!! action('Admin\ArticleController@store') !!} @else {!! action('Admin\ArticleController@update', [$article->id]) !!} @endif" method="POST" enctype="multipart/form-data">
         @if( !$isNew ) <input type="hidden" name="_method" value="PUT"> @endif
         {!! csrf_field() !!}
 
@@ -81,9 +80,9 @@
                 <div class="row">
                     <div class="col-lg-5">
                         <div class="form-group text-center">
-                            @if( !empty($article->coverImage) )
+                            @if( !empty($article->present()->coverImage()) )
                                 <img id="cover-image-preview" style="max-width: 500px; width: 100%;"
-                                     src="{!! $article->coverImage->getThumbnailUrl(480, 300) !!}" alt="" class="margin"/>
+                                     src="{!! $article->present()->coverImage()->getThumbnailUrl(480, 300) !!}" alt="" class="margin"/>
                             @else
                                 <img id="cover-image-preview" style="max-width: 500px; width: 100%;"
                                      src="{!! \URLHelper::asset('img/no_image.jpg', 'common') !!}" alt="" class="margin"/>

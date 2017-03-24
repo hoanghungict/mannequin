@@ -29,8 +29,6 @@
         scrollableHeight: "350px",
         onSelect: function (value, element) {
             url = window.location.href.split('?')[0] + '?locale=' + value.toLowerCase();
-            console.log(value);
-            console.log(url);
             window.location.href = url;
         }
     });

@@ -12,18 +12,19 @@
     });
 
     \Route::group(['middleware' => ['admin.auth']], function () {
+
         \Route::group(['middleware' => ['admin.has_role.super_user']], function () {
             \Route::resource('users', 'Admin\UserController');
             \Route::resource('user-notifications', 'Admin\UserNotificationController');
 
             \Route::resource('site-configurations', 'Admin\SiteConfigurationController');
 
+            \Route::resource('articles', 'Admin\ArticleController');
             \Route::post('articles/preview', 'Admin\ArticleController@preview');
             \Route::get('articles/images', 'Admin\ArticleController@getImages');
             \Route::post('articles/images', 'Admin\ArticleController@postImage');
             \Route::delete('articles/images', 'Admin\ArticleController@deleteImage');
 
-            \Route::resource('articles', 'Admin\ArticleController');
             \Route::delete('images/delete', 'Admin\ImageController@deleteByUrl');
             \Route::resource('images', 'Admin\ImageController');
 
@@ -35,16 +36,19 @@
             \Route::resource('admin-users', 'Admin\AdminUserController');
             \Route::resource('admin-user-notifications', 'Admin\AdminUserNotificationController');
 
+            \Route::get('admin-user-notifications/view/{id}','Admin\AdminUserNotificationController@view');
+            \Route::get('load-notification/{offset}',['as'=>'load-notification','uses'=> 'Admin\AdminUserNotificationController@loadNotification']);
+
             \Route::resource('customers', 'Admin\CustomerController');
             \Route::resource('employees', 'Admin\EmployeeController');
-
-            \Route::resource('products', 'Admin\ProductController');
-            \Route::post('product-options', 'Admin\ProductOptionController@create');
-            \Route::get('getOptionOfProduct/{id}', 'Admin\ProductController@getAllOptionOfProduct');
-
-            \Route::resource('imports', 'Admin\ImportController');
-            \Route::resource('exports', 'Admin\ExportController');
         });
+
+        \Route::resource('products', 'Admin\ProductController');
+        \Route::post('product-options', 'Admin\ProductOptionController@create');
+        \Route::get('getOptionOfProduct/{id}', 'Admin\ProductController@getAllOptionOfProduct');
+
+        \Route::resource('imports', 'Admin\ImportController');
+        \Route::resource('exports', 'Admin\ExportController');
         
         \Route::get('/', 'Admin\IndexController@index');
         \Route::get('/me', 'Admin\MeController@index');
@@ -53,8 +57,5 @@
 
         \Route::post('signout', 'Admin\AuthController@postSignOut');
         /* NEW ADMIN RESOURCE ROUTE */
-
-        \Route::get('admin-user-notifications/view/{id}','Admin\AdminUserNotificationController@view');
-        \Route::get('load-notification/{offset}',['as'=>'load-notification','uses'=> 'Admin\AdminUserNotificationController@loadNotification']);
     });
 });

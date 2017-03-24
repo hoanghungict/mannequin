@@ -5,17 +5,17 @@ namespace App\Models;
 /**
  * App\Models\UserNotification.
  *
- * @property int $id
- * @property int $user_id
- * @property string $category_type
- * @property string $type
- * @property string $data
- * @property string $content
- * @property string $locale
- * @property bool $read
- * @property \Carbon\Carbon $sent_at
- * @property \Carbon\Carbon $created_at
- * @property \Carbon\Carbon $updated_at
+ * @property int                   $id
+ * @property int                   $user_id
+ * @property string                $category_type
+ * @property string                $type
+ * @property string                $data
+ * @property string                $content
+ * @property string                $locale
+ * @property bool                  $read
+ * @property \Carbon\Carbon        $sent_at
+ * @property \Carbon\Carbon        $created_at
+ * @property \Carbon\Carbon        $updated_at
  *
  * @method static \Illuminate\Database\Query\Builder|\App\Models\UserNotification whereId($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Models\UserNotification whereUserId($value)
@@ -68,6 +68,12 @@ class UserNotification extends Notification
 
     protected $presenter = \App\Presenters\UserNotificationPresenter::class;
 
+    public static function boot()
+    {
+        parent::boot();
+        parent::observe(new \App\Observers\UserNotificationObserver);
+    }
+
     public function user()
     {
         return $this->belongsTo('App\Models\User', 'user_id', 'id');
@@ -76,7 +82,8 @@ class UserNotification extends Notification
     /*
      * API Presentation
      */
-    public function toAPIArray() {
+    public function toAPIArray()
+    {
         return [
             'id'            => $this->id,
             'user_id'       => $this->user_id,

@@ -18,9 +18,9 @@ return [
         'article-cover-image' => [
             'name'       => 'article-cover-image',
             'type'       => 'image',
-            'region'     => env( 'AWS_IMAGE_REGION' ),
+            'region'     => env('AWS_IMAGE_REGION'),
             'buckets'    => [
-                env( 'AWS_IMAGE_BUCKET' ),
+                env('AWS_IMAGE_BUCKET'),
             ],
             'size'       => [1440, 0],
             'thumbnails' => [
@@ -33,74 +33,60 @@ return [
                 [1440, 900],
             ],
             'seedPrefix' => 'article-cover',
-            'format'     => 'jpeg',
+            'format'     => 'png',
         ],
         'user-profile-image'  => [
             'name'       => 'user-profile-image',
             'type'       => 'image',
-            'region'     => env( 'AWS_IMAGE_REGION' ),
+            'region'     => env('AWS_IMAGE_REGION'),
             'buckets'    => [
-                env( 'AWS_IMAGE_BUCKET' ),
+                env('AWS_IMAGE_BUCKET'),
             ],
             'size'       => [328, 328],
             'thumbnails' => [
             ],
             'seedPrefix' => 'user-profile',
-            'format'     => 'jpeg',
+            'format'     => 'png',
         ],
         'article-image'       => [
             'name'       => 'article-image',
             'type'       => 'image',
-            'region'     => env( 'AWS_IMAGE_REGION' ),
+            'region'     => env('AWS_IMAGE_REGION'),
             'buckets'    => [
-                env( 'AWS_IMAGE_BUCKET' ),
+                env('AWS_IMAGE_BUCKET'),
             ],
             'size'       => [1440, 0],
             'thumbnails' => [
                 [400, 300],
             ],
             'seedPrefix' => 'article',
-            'format'     => 'jpeg',
+            'format'     => 'png',
         ],
         'ogp-image'           => [
             'name'       => 'ogp-image',
             'type'       => 'image',
-            'region'     => env( 'AWS_IMAGE_REGION' ),
+            'region'     => env('AWS_IMAGE_REGION'),
             'buckets'    => [
-                env( 'AWS_IMAGE_BUCKET' ),
+                env('AWS_IMAGE_BUCKET'),
             ],
             'size'       => [1280, 628],
             'thumbnails' => [
             ],
             'seedPrefix' => 'ogp',
-            'format'     => 'jpeg',
+            'format'     => 'png',
         ],
         'twitter-card-image'  => [
             'name'       => 'twitter-card-image',
             'type'       => 'image',
-            'region'     => env( 'AWS_IMAGE_REGION' ),
+            'region'     => env('AWS_IMAGE_REGION'),
             'buckets'    => [
-                env( 'AWS_IMAGE_BUCKET' ),
+                env('AWS_IMAGE_BUCKET'),
             ],
             'size'       => [1024, 512],
             'thumbnails' => [
             ],
             'seedPrefix' => 'twitter-card',
-            'format'     => 'jpeg',
-        ],
-        'product-image'       => [
-            'name'       => 'product-image',
-            'type'       => 'image',
-            'region'     => env( 'AWS_IMAGE_REGION' ),
-            'buckets'    => [
-                env( 'AWS_IMAGE_BUCKET' ),
-            ],
-            'size'       => [1440, 0],
-            'thumbnails' => [
-                [400, 300],
-            ],
-            'seedPrefix' => 'product',
-            'format'     => 'jpeg',
+            'format'     => 'png',
         ],
     ],
 ];

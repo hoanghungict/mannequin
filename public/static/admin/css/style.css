@@ -62,6 +62,23 @@ body {
     text-align: center;
 }
 
+/* Begin: Notification */
+#loadding {
+    color: red;
+    font-size: 20px;
+    font-weight: bold;
+    text-align: center
+}
+
+.hidden {
+    display: none
+}
+/* End: Notification  */
+
+#language-switcher .flagstrap-icon {
+    vertical-align: middle;
+}
+
 /*----------------------------------------------------------------*/
 
 /* Begin: Switch button */

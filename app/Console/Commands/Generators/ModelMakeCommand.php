@@ -30,6 +30,7 @@ class ModelMakeCommand extends GeneratorCommandBase
     protected function generate($name)
     {
         $this->generateModel($name);
+        $this->generateObserver($name);
         $this->generatePresenter($name);
         $this->addModelFactory($name);
         $this->generateUnitTest($name);
@@ -203,6 +204,32 @@ class ModelMakeCommand extends GeneratorCommandBase
      * @param  string $name
      * @return bool
      */
+    protected function generateObserver($name)
+    {
+        $className = $this->getClassName($name);
+        $tableName = $this->getTableName($name);
+
+        $path = $this->getObserverPath($name);
+        if ($this->alreadyExists($path)) {
+            $this->error($path.' already exists.');
+
+            return false;
+        }
+
+        $stub = $this->files->get($this->getStubForObserver());
+
+        $this->replaceTemplateVariable($stub, 'CLASS', $className);
+        $this->replaceTemplateVariable($stub, 'TABLE', $tableName);
+
+        $this->files->put($path, $stub);
+
+        return true;
+    }
+
+    /**
+     * @param  string $name
+     * @return bool
+     */
     protected function generatePresenter($name)
     {
         $className = $this->getClassName($name);
@@ -248,11 +275,30 @@ class ModelMakeCommand extends GeneratorCommandBase
      * @param  string $name
      * @return string
      */
+    protected function getObserverPath($name)
+    {
+        $className = $this->getClassName($name);
+
+        return $this->laravel['path'].'/Observers/'.$className.'Observer.php';
+    }
+
+    /**
+     * @param  string $name
+     * @return string
+     */
     protected function getPresenterPath($name)
     {
         $className = $this->getClassName($name);
 
         return $this->laravel['path'].'/Presenters/'.$className.'Presenter.php';
+    }
+
+    /**
+     * @return string
+     */
+    protected function getStubForObserver()
+    {
+        return __DIR__.'/stubs/observer.stub';
     }
 
     /**

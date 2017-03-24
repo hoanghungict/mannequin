@@ -62,6 +62,12 @@ class SiteConfiguration extends Base
      */
     protected $hidden = [];
 
+    public static function boot()
+    {
+        parent::boot();
+        parent::observe(new \App\Observers\SiteConfigurationObserver);
+    }
+
     /*
      * API Presentation
      */

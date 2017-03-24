@@ -38,6 +38,12 @@ class Import extends Base
 
     protected $presenter = \App\Presenters\ImportPresenter::class;
 
+    public static function boot()
+    {
+        parent::boot();
+        parent::observe(new \App\Observers\ImportObserver);
+    }
+
     // Relations
     public function creator()
     {

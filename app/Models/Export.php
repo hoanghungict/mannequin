@@ -44,6 +44,12 @@ class Export extends Base
 
     protected $presenter = \App\Presenters\ExportPresenter::class;
 
+    public static function boot()
+    {
+        parent::boot();
+        parent::observe(new \App\Observers\ExportObserver);
+    }
+
     // Relations
     public function details()
     {

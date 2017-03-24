@@ -245,6 +245,18 @@ class AdminCRUDMakeCommand extends GeneratorCommandBase
             } elseif ($type == 'edit') {
                 $inputs = $this->generateForm($name);
                 $this->replaceTemplateVariable($stub, 'FORM', $inputs);
+
+                $columns = $this->getColumnNamesAndTypes($name);
+                $imageScript = '';
+                foreach ($columns as $column) {
+                    if (\StringHelper::endsWith($column['name'], 'image_id')) {
+                        $fieldName = substr($column['name'], 0, strlen($column['name']) - 9);
+                        $imageScript =        '$("#' . $fieldName . '-image").change(function (event) {'
+                        .PHP_EOL. '                $("#' . $fieldName . '-image-preview").attr("src", URL.createObjectURL(event.target.files[0]));'
+                        .PHP_EOL. '            });';
+                    }
+                }
+                $this->replaceTemplateVariable($stub, 'IMAGE_SCRIPT', $imageScript);
             }
 
             $this->replaceTemplateVariables($stub, $name);
@@ -348,17 +360,21 @@ class AdminCRUDMakeCommand extends GeneratorCommandBase
                 $relationName = lcfirst(\StringHelper::snake2Camel($fieldName));
                 $idName = \StringHelper::camel2Spinal($relationName);
 
-                $template = '                    <div class="form-group text-center">'
-                    .PHP_EOL.'                      @if( !empty($%%class%%->%%relation%%) )'
-                    .PHP_EOL.'                          <img id="%%id%%-preview"  style="max-width: 500px; width: 100%;" src="{!! $%%class%%->%%relation%%->getThumbnailUrl(480, 300) !!}" alt="" class="margin" />'
-                    .PHP_EOL.'                      @else'
-                    .PHP_EOL.'                          <img id="%%id%%-preview" style="max-width: 500px; width: 100%;" src="{!! \URLHelper::asset(\'img/no_image.jpg\', \'common\') !!}" alt="" class="margin" />'
-                    .PHP_EOL.'                      @endif'
-                    .PHP_EOL.'                      <input type="file" style="display: none;"  id="%%id%%" name="%%field%%">'
-                    .PHP_EOL.'                      <p class="help-block" style="font-weight: bolder;">'
-                    .PHP_EOL.'                          @lang(\'admin.pages.%%classes-spinal%%.columns.%%column%%\')'
-                    .PHP_EOL.'                          <label for="%%id%%" style="font-weight: 100; color: #549cca; margin-left: 10px; cursor: pointer;">@lang(\'admin.pages.common.buttons.edit\')</label>'
-                    .PHP_EOL.'                      </p>'
+                $template = '                    <div class="row">'
+                    .PHP_EOL.'                        <div class="col-md-12">'
+                    .PHP_EOL.'                            <div class="form-group text-center">'
+                    .PHP_EOL.'                                @if( !empty($%%class%%->%%relation%%) )'
+                    .PHP_EOL.'                                    <img id="%%id%%-preview"  style="max-width: 500px; width: 100%;" src="{!! $%%class%%->%%relation%%->getThumbnailUrl(480, 300) !!}" alt="" class="margin" />'
+                    .PHP_EOL.'                                @else'
+                    .PHP_EOL.'                                    <img id="%%id%%-preview" style="max-width: 500px; width: 100%;" src="{!! \URLHelper::asset(\'img/no_image.jpg\', \'common\') !!}" alt="" class="margin" />'
+                    .PHP_EOL.'                                @endif'
+                    .PHP_EOL.'                                <input type="file" style="display: none;"  id="%%id%%" name="%%field%%">'
+                    .PHP_EOL.'                                <p class="help-block" style="font-weight: bolder;">'
+                    .PHP_EOL.'                                    @lang(\'admin.pages.%%classes-spinal%%.columns.%%column%%\')'
+                    .PHP_EOL.'                                    <label for="%%id%%" style="font-weight: 100; color: #549cca; margin-left: 10px; cursor: pointer;">@lang(\'admin.pages.common.buttons.edit\')</label>'
+                    .PHP_EOL.'                                </p>'
+                    .PHP_EOL.'                            </div>'
+                    .PHP_EOL.'                        </div>'
                     .PHP_EOL.'                    </div>';
                 $this->replaceTemplateVariable($template, 'column', $column['name']);
                 $this->replaceTemplateVariable($template, 'field', $fieldName);
@@ -374,24 +390,32 @@ class AdminCRUDMakeCommand extends GeneratorCommandBase
 
             switch ($column['type']) {
                 case 'TextType':
-                    $template = '                    <div class="form-group @if ($errors->has(\'%%column%%\')) has-error @endif">'
-                        .PHP_EOL.'                        <label for="%%column%%">@lang(\'admin.pages.%%classes-spinal%%.columns.%%column%%\')</label>'
-                        .PHP_EOL.'                        <textarea name="%%column%%" class="form-control" rows="5" placeholder="@lang(\'admin.pages.%%classes-spinal%%.columns.%%column%%\')">{{ old(\'%%column%%\') ? old(\'%%column%%\') : $%%class%%->%%column%% }}</textarea>'
+                    $template =  '                    <div class="row">'
+                        .PHP_EOL.'                        <div class="col-md-12">'
+                        .PHP_EOL.'                            <div class="form-group @if ($errors->has(\'%%column%%\')) has-error @endif">'
+                        .PHP_EOL.'                                <label for="%%column%%">@lang(\'admin.pages.%%classes-spinal%%.columns.%%column%%\')</label>'
+                        .PHP_EOL.'                                <textarea name="%%column%%" class="form-control" rows="5" placeholder="@lang(\'admin.pages.%%classes-spinal%%.columns.%%column%%\')">{{ old(\'%%column%%\') ? old(\'%%column%%\') : $%%class%%->%%column%% }}</textarea>'
+                        .PHP_EOL.'                            </div>'
+                        .PHP_EOL.'                        </div>'
                         .PHP_EOL.'                    </div>';
                     $this->replaceTemplateVariable($template, 'column', $column['name']);
                     $this->replaceTemplateVariable($template, 'class', strtolower(substr($name, 0, 1)).substr($name, 1));
                     $this->replaceTemplateVariable($template, 'classes-spinal',
-                        \StringHelper::camel2Spinal(\StringHelper::pluralize($name)));
+                   \StringHelper::camel2Spinal(\StringHelper::pluralize($name)));
                     $result = $result.PHP_EOL.$template.PHP_EOL;
                     break;
                 case 'BooleanType':
-                    $template = '                    <div class="form-group">'
-                        .PHP_EOL.'                        <div class="checkbox">'
-                        .PHP_EOL.'                        <label>'
-                        .PHP_EOL.'                        <input type="checkbox" name="%%column%%" value="1"'
-                        .PHP_EOL.'                        @if( $%%class%%->%%column%%) checked @endif'
-                        .PHP_EOL.'                        > @lang(\'admin.pages.companies.columns.%%column%%\')'
-                        .PHP_EOL.'                        </label>'
+                    $template =  '                    <div class="row">'
+                        .PHP_EOL.'                        <div class="col-md-12">'
+                        .PHP_EOL.'                            <div class="form-group">'
+                        .PHP_EOL.'                                <div class="checkbox">'
+                        .PHP_EOL.'                                    <label>'
+                        .PHP_EOL.'                                        <input type="checkbox" name="%%column%%" value="1"'
+                        .PHP_EOL.'                                        @if( $%%class%%->%%column%%) checked @endif >'
+                        .PHP_EOL.'                                        @lang(\'admin.pages.%%classes-spinal%%.columns.%%column%%\')'
+                        .PHP_EOL.'                                   </label>'
+                        .PHP_EOL.'                                </div>'
+                        .PHP_EOL.'                            </div>'
                         .PHP_EOL.'                        </div>'
                         .PHP_EOL.'                    </div>';
                     $this->replaceTemplateVariable($template, 'column', $column['name']);
@@ -399,14 +423,18 @@ class AdminCRUDMakeCommand extends GeneratorCommandBase
                     $result = $result.PHP_EOL.$template.PHP_EOL;
                     break;
                 case 'DateTimeType':
-                    $template = '                    <div class="form-group">'
-                        .PHP_EOL.'                        <label for="%%column%%">@lang(\'admin.pages.%%classes-spinal%%.columns.%%column%%\')</label>'
-                        .PHP_EOL.'                        <div class="input-group date datetime-field">'
-                        .PHP_EOL.'                        <input type="text" class="form-control" name="%%column%%"'
-                        .PHP_EOL.'                        value="{{ old(\'%%column%%\') ? old(\'%%column%%\') : $%%class%%->%%column%% }}">'
-                        .PHP_EOL.'                        <span class="input-group-addon">'
-                        .PHP_EOL.'                        <span class="glyphicon glyphicon-calendar"></span>'
-                        .PHP_EOL.'                        </span>'
+                    $template =  '                    <div class="row">'
+                        .PHP_EOL.'                        <div class="col-md-12">'
+                        .PHP_EOL.'                            <div class="form-group">'
+                        .PHP_EOL.'                                <label for="%%column%%">@lang(\'admin.pages.%%classes-spinal%%.columns.%%column%%\')</label>'
+                        .PHP_EOL.'                                <div class="input-group date datetime-field">'
+                        .PHP_EOL.'                                    <input type="text" class="form-control" name="%%column%%"'
+                        .PHP_EOL.'                                         value="{{ old(\'%%column%%\') ? old(\'%%column%%\') : $%%class%%->%%column%% }}">'
+                        .PHP_EOL.'                                    <span class="input-group-addon">'
+                        .PHP_EOL.'                                        <span class="glyphicon glyphicon-calendar"></span>'
+                        .PHP_EOL.'                                    </span>'
+                        .PHP_EOL.'                                </div>'
+                        .PHP_EOL.'                            </div>'
                         .PHP_EOL.'                        </div>'
                         .PHP_EOL.'                    </div>';
                     $this->replaceTemplateVariable($template, 'column', $column['name']);
@@ -416,14 +444,18 @@ class AdminCRUDMakeCommand extends GeneratorCommandBase
                 case 'StringType':
                 case 'IntegerType':
                 default:
-                    $template = '                    <div class="form-group @if ($errors->has(\'%%column%%\')) has-error @endif">'
-                        .PHP_EOL.'                        <label for="%%column%%">@lang(\'admin.pages.%%classes-spinal%%.columns.%%column%%\')</label>'
-                        .PHP_EOL.'                        <input type="text" class="form-control" id="%%column%%" name="%%column%%" value="{{ old(\'%%column%%\') ? old(\'%%column%%\') : $%%class%%->%%column%% }}">'
+                    $template =  '                    <div class="row">'
+                        .PHP_EOL.'                        <div class="col-md-12">'
+                        .PHP_EOL.'                            <div class="form-group @if ($errors->has(\'%%column%%\')) has-error @endif">'
+                        .PHP_EOL.'                                <label for="%%column%%">@lang(\'admin.pages.%%classes-spinal%%.columns.%%column%%\')</label>'
+                        .PHP_EOL.'                                <input type="text" class="form-control" id="%%column%%" name="%%column%%" value="{{ old(\'%%column%%\') ? old(\'%%column%%\') : $%%class%%->%%column%% }}">'
+                        .PHP_EOL.'                            </div>'
+                        .PHP_EOL.'                        </div>'
                         .PHP_EOL.'                    </div>';
                     $this->replaceTemplateVariable($template, 'column', $column['name']);
                     $this->replaceTemplateVariable($template, 'class', strtolower(substr($name, 0, 1)).substr($name, 1));
                     $this->replaceTemplateVariable($template, 'classes-spinal',
-                        \StringHelper::camel2Spinal(\StringHelper::pluralize($name)));
+                   \StringHelper::camel2Spinal(\StringHelper::pluralize($name)));
                     $result = $result.PHP_EOL.$template.PHP_EOL;
             }
         }

@@ -37,6 +37,12 @@ class District extends Base
 
     protected $presenter = \App\Presenters\DistrictPresenter::class;
 
+    public static function boot()
+    {
+        parent::boot();
+        parent::observe(new \App\Observers\DistrictObserver);
+    }
+
     // Relations
     public function Province()
     {

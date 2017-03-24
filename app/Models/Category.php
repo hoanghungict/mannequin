@@ -22,8 +22,7 @@ class Category extends Base
     protected $fillable = [
         'name',
         'slug',
-        'parent_id',
-        'sort',
+        'order',
         'notes',
     ];
 
@@ -34,15 +33,23 @@ class Category extends Base
      */
     protected $hidden = [];
 
-    protected $dates  = ['deleted_at'];
+    protected $dates = ['deleted_at'];
 
-//    protected $presenter = \App\Presenters\CategoryPresenter::class;
+    protected $presenter = \App\Presenters\CategoryPresenter::class;
+
+    public static function boot()
+    {
+        parent::boot();
+        parent::observe(new \App\Observers\CategoryObserver);
+    }
 
     // Relations
     public function subcategories()
     {
-        return $this->hasMany('App\Models\Category', 'parent_id', 'id')->orderBy('order', 'asc');
+        return $this->hasMany('App\Models\Subcategory', 'category_id', 'id')->orderBy('order', 'asc');
     }
+
+    // Utility Functions
 
     /*
      * API Presentation
@@ -54,6 +61,7 @@ class Category extends Base
             'name'  => $this->getLocalizedColumn('name'),
             'slug'  => $this->slug,
             'order' => $this->order,
+            'notes' => $this->notes,
         ];
     }
 

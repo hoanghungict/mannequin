@@ -76,6 +76,12 @@ class AdminUser extends AuthenticatableBase
 
     protected $dates = ['deleted_at'];
 
+    public static function boot()
+    {
+        parent::boot();
+        parent::observe(new \App\Observers\AdminUserObserver);
+    }
+
     // Relation
 
     public function profileImage()

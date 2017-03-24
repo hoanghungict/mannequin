@@ -18,18 +18,19 @@ class SingleKeyModelRepository extends BaseRepository implements SingleKeyModelR
     public function find($id)
     {
         $modelClass = $this->getModelClassName();
-        if ($this->cacheEnabled) {
-            $key = $this->getCacheKey([$id]);
-            \Log::info("Cache Check $key");
-            $data = \Cache::remember($key, $this->cacheLifeTime, function () use ($id, $modelClass) {
-                $modelClass = $this->getModelClassName();
+        $cacheKey   = $modelClass::getTableName();
+        $cached = \Redis::hget(\CacheHelper::generateCacheKey('hash_' . $cacheKey), $id);
+        if( $cached ) {
+            $object = new $modelClass(json_decode($cached, true));
+            $object['attributes'] = json_decode($cached, true);
+            $object['original']   = json_decode($cached, true);
+            $object['exists']     = true;
 
-                return $modelClass::find($id);
-            });
-
-            return $data;
+            return $object;
         } else {
-            return $modelClass::find($id);
+            $object = $modelClass::find($id);
+            \Redis::hsetnx(\CacheHelper::generateCacheKey('hash_' . $cacheKey), $id, $object);
+            return $object;
         }
     }
 
@@ -106,7 +107,8 @@ class SingleKeyModelRepository extends BaseRepository implements SingleKeyModelR
         $model = $this->getBlankModel();
         $model = $this->update($model, $input);
 
-        $query = \DB::getQueryLog()[0];
+        $queries = \DB::getQueryLog();
+        $query = $queries[count($queries) - 1];
         foreach( $query['bindings'] as $key => $value ) {
             $query['query'] = preg_replace("/\?/", "`$value`", $query['query'], 1);
         }
@@ -114,17 +116,18 @@ class SingleKeyModelRepository extends BaseRepository implements SingleKeyModelR
         if( \App::environment() != 'testing' ) {
             // crud actions must be execute by repository
             $admin = \Auth::guard('admins')->user();
-
-            Log::create(
-                [
-                    'user_name' => $admin->name,
-                    'email'     => $admin->email,
-                    'table'     => $model->getTable(),
-                    'action'    => Log::TYPE_ACTION_INSERT,
-                    'record_id' => $model->id,
-                    'query'     => $query['query'],
-                ]
-            );
+            if( !empty($admin) ) {
+                Log::create(
+                    [
+                        'user_name' => $admin->name,
+                        'email'     => $admin->email,
+                        'table'     => $model->getTable(),
+                        'action'    => Log::TYPE_ACTION_INSERT,
+                        'record_id' => $model->id,
+                        'query'     => $query['query'],
+                    ]
+                );
+            }
         }
 
         return $model;
@@ -136,13 +139,6 @@ class SingleKeyModelRepository extends BaseRepository implements SingleKeyModelR
             if (array_key_exists($column, $input)) {
                 $model->$column = array_get($input, $column);
             }
-        }
-
-        if ($this->cacheEnabled) {
-            $primaryKey = $this->getPrimaryKey();
-            $key = $this->getCacheKey([$model->$primaryKey]);
-            \Log::info("Cache Remove $key");
-            \Cache::forget($key);
         }
 
         if( isset($model->id) && $model->id ) {
@@ -162,17 +158,18 @@ class SingleKeyModelRepository extends BaseRepository implements SingleKeyModelR
                 if( \App::environment() != 'testing' ) {
                     // crud actions must be execute by repository
                     $admin = \Auth::guard('admins')->user();
-
-                    Log::create(
-                        [
-                            'user_name' => $admin->name,
-                            'email'     => $admin->email,
-                            'table'     => $model->getTable(),
-                            'action'    => Log::TYPE_ACTION_UPDATE,
-                            'record_id' => $model->id,
-                            'query'     => $query['query'],
-                        ]
-                    );
+                    if( !empty($admin) ) {
+                        Log::create(
+                            [
+                                'user_name' => $admin->name,
+                                'email'     => $admin->email,
+                                'table'     => $model->getTable(),
+                                'action'    => Log::TYPE_ACTION_UPDATE,
+                                'record_id' => $model->id,
+                                'query'     => $query['query'],
+                            ]
+                        );
+                    }
                 }
             }
         } else {
@@ -196,7 +193,8 @@ class SingleKeyModelRepository extends BaseRepository implements SingleKeyModelR
         \DB::connection()->enableQueryLog();
         $deleted = $model->delete();
 
-        $query = \DB::getQueryLog()[0];
+        $queries = \DB::getQueryLog();
+        $query = $queries[count($queries) - 1];
         foreach( $query['bindings'] as $key => $value ) {
             $query['query'] = preg_replace("/\?/", "`$value`", $query['query'], 1);
         }
@@ -205,16 +203,18 @@ class SingleKeyModelRepository extends BaseRepository implements SingleKeyModelR
             // crud actions must be execute by repository
             $admin = \Auth::guard('admins')->user();
 
-            Log::create(
-                [
-                    'user_name' => $admin->name,
-                    'email'     => $admin->email,
-                    'table'     => $model->getTable(),
-                    'action'    => Log::TYPE_ACTION_DELETE,
-                    'record_id' => $model->id,
-                    'query'     => $query['query'],
-                ]
-            );
+            if( !empty($admin) ) {
+                Log::create(
+                    [
+                        'user_name' => $admin->name,
+                        'email'     => $admin->email,
+                        'table'     => $model->getTable(),
+                        'action'    => Log::TYPE_ACTION_DELETE,
+                        'record_id' => $model->id,
+                        'query'     => $query['query'],
+                    ]
+                );
+            }
         }
 
         return $deleted;

@@ -1,6 +1,8 @@
 machine:
   php:
     version: 7.0.7
+  services:
+      - redis
 
   environment:
     APP_ENV: testing
