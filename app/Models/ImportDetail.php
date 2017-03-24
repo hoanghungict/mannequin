@@ -39,6 +39,12 @@ class ImportDetail extends Base
 
     protected $presenter = \App\Presenters\ImportDetailPresenter::class;
 
+    public static function boot()
+    {
+        parent::boot();
+        parent::observe(new \App\Observers\ImportDetailObserver);
+    }
+
     // Relations
     public function import()
     {

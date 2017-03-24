@@ -21,7 +21,7 @@ class CustomerTest extends TestCase
         $customerModel = new Customer();
 
         $customerData = factory(Customer::class)->make();
-        foreach( $customerData->toArray() as $key => $value ) {
+        foreach( $customerData->toFillableArray() as $key => $value ) {
             $customerModel->$key = $value;
         }
         $customerModel->save();

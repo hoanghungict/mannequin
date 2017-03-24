@@ -35,11 +35,27 @@ class Customer extends Base
      */
     protected $hidden = [];
 
-    protected $dates  = ['deleted_at'];
+    protected $dates = ['deleted_at'];
 
     protected $presenter = \App\Presenters\CustomerPresenter::class;
 
+    public static function boot()
+    {
+        parent::boot();
+        parent::observe(new \App\Observers\CustomerObserver);
+    }
+
     // Relations
+    public function province()
+    {
+        return $this->belongsTo(\App\Models\Province::class, 'province_id', 'id');
+    }
+
+    public function district()
+    {
+        return $this->belongsTo(\App\Models\District::class, 'district_id', 'id');
+    }
+
     public function avatarImage()
     {
         return $this->hasOne(\App\Models\Image::class, 'id', 'avatar_image_id');

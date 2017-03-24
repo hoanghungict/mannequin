@@ -33,6 +33,12 @@ class ProductOptionProperty extends Base
 
     protected $presenter = \App\Presenters\ProductOptionPropertyPresenter::class;
 
+    public static function boot()
+    {
+        parent::boot();
+        parent::observe(new \App\Observers\ProductOptionPropertyObserver);
+    }
+
     // Relations
     public function productOption() 
     {

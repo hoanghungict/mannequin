@@ -36,6 +36,12 @@ class ProductImage extends Base
 
     protected $presenter = \App\Presenters\ProductImagePresenter::class;
 
+    public static function boot()
+    {
+        parent::boot();
+        parent::observe(new \App\Observers\ProductImageObserver);
+    }
+
     // Relations
     public function product()
     {

@@ -19,7 +19,7 @@ class CreateCustomersTable extends Migration
             $table->string('telephone');
             $table->integer('province_id')->default(0);
             $table->integer('district_id')->default(0);
-            $table->bigInteger('avatar_image_id')->default(0);
+            $table->bigInteger('avatar_image_id')->nullable()->default(0);
 
             $table->softDeletes();
             $table->timestamps();

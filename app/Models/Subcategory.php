@@ -38,6 +38,12 @@ class Subcategory extends Base
 
 //    protected $presenter = \App\Presenters\SubcategoryPresenter::class;
 
+    public static function boot()
+    {
+        parent::boot();
+        parent::observe(new \App\Observers\SubcategoryObserver);
+    }
+
     // Relations
     public function category()
     {

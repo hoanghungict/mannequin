@@ -34,6 +34,12 @@ class Unit extends Base
 
     protected $presenter = \App\Presenters\UnitPresenter::class;
 
+    public static function boot()
+    {
+        parent::boot();
+        parent::observe(new \App\Observers\UnitObserver);
+    }
+
     // Relations
     
 

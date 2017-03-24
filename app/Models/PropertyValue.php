@@ -35,6 +35,12 @@ class PropertyValue extends Base
 
     protected $presenter = \App\Presenters\PropertyValuePresenter::class;
 
+    public static function boot()
+    {
+        parent::boot();
+        parent::observe(new \App\Observers\PropertyValueObserver);
+    }
+
     // Relations
     public function property() 
     {

@@ -38,6 +38,12 @@ class ExportPriceHistory extends Base
 
     protected $presenter = \App\Presenters\ExportPriceHistoryPresenter::class;
 
+    public static function boot()
+    {
+        parent::boot();
+        parent::observe(new \App\Observers\ExportPriceHistoryObserver);
+    }
+
     // Relations
     public function product()
     {

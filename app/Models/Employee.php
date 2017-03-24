@@ -39,6 +39,12 @@ class Employee extends Base
 
     protected $presenter = \App\Presenters\EmployeePresenter::class;
 
+    public static function boot()
+    {
+        parent::boot();
+        parent::observe(new \App\Observers\EmployeeObserver);
+    }
+
     // Relations
     public function province()
     {
