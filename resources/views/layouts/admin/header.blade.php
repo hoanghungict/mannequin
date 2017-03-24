@@ -15,8 +15,9 @@
 
         <div class="navbar-custom-menu">
             <ul class="nav navbar-nav">
-                <!-- Notifications: style can be found in dropdown.less -->
-                <li class="dropdown messages-menu">
+                @if( $authUser->hasRole(\App\Models\AdminUserRole::ROLE_ADMIN) )
+                    <!-- Notifications: style can be found in dropdown.less -->
+                    <li class="dropdown messages-menu">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                         <i class="fa fa-bell-o"></i>
                         <span class="label label-warning">{{$unreadNotificationCount}}</span>
@@ -30,10 +31,10 @@
                                     <li @if($notification->read ==0) style="background-color: #edf2fa" @endif><!-- start message -->
                                         <a href="{!! action('Admin\AdminUserNotificationController@show', $notification->id) !!}" style="white-space: inherit;">
                                             <div class="pull-left">
-                                                <img src="{!! \URLHelper::asset('libs/adminlte/img/user2-160x160.jpg','admin') !!}" class="img-circle" alt="User Image">
+                                                <img src="@if($notification->type == \App\Models\Notification::TYPE_GENERAL_ALERT) {!! \URLHelper::asset('img/warning.png','common') !!} @else {!! \URLHelper::asset('img/message.png','common') !!} @endif" class="img-circle" alt="User Image">
                                             </div>
                                             <h4>
-                                                System Messages
+                                                @if($notification->type == \App\Models\Notification::TYPE_GENERAL_ALERT) System Warning @else @lang(config('notification.system.general_alert.products.title')) @endif
 
                                                 <small>
                                                     <i class="fa fa-clock-o"></i>
@@ -59,6 +60,7 @@
                         <li class="footer"><a href="{!! action('Admin\AdminUserNotificationController@index') !!}">See All Messages</a></li>
                     </ul>
                 </li>
+                @endif
 
                 <!-- User Account: style can be found in dropdown.less -->
                 <li class="dropdown user user-menu">

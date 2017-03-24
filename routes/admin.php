@@ -36,6 +36,9 @@
             \Route::resource('admin-users', 'Admin\AdminUserController');
             \Route::resource('admin-user-notifications', 'Admin\AdminUserNotificationController');
 
+            \Route::get('admin-user-notifications/view/{id}','Admin\AdminUserNotificationController@view');
+            \Route::get('load-notification/{offset}',['as'=>'load-notification','uses'=> 'Admin\AdminUserNotificationController@loadNotification']);
+
             \Route::resource('customers', 'Admin\CustomerController');
             \Route::resource('employees', 'Admin\EmployeeController');
         });
@@ -54,8 +57,5 @@
 
         \Route::post('signout', 'Admin\AuthController@postSignOut');
         /* NEW ADMIN RESOURCE ROUTE */
-
-        \Route::get('admin-user-notifications/view/{id}','Admin\AdminUserNotificationController@view');
-        \Route::get('load-notification/{offset}',['as'=>'load-notification','uses'=> 'Admin\AdminUserNotificationController@loadNotification']);
     });
 });
