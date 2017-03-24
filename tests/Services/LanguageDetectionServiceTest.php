@@ -19,14 +19,14 @@ class LanguageDetectionServiceTest extends TestCase
         $service = \App::make(\App\Services\LanguageDetectionServiceInterface::class);
         $this->assertNotNull($service);
 
-        $locale = $service->normalize('vn');
-        $this->assertEquals('vn', $locale);
-
         $locale = $service->normalize('gb');
         $this->assertEquals('gb', $locale);
 
-        $locale = $service->normalize('hage');
+        $locale = $service->normalize('VN');
         $this->assertEquals('vn', $locale);
+
+        $locale = $service->normalize('hage');
+        $this->assertEquals('gb', $locale);
     }
 
     public function testDetect()
@@ -35,7 +35,7 @@ class LanguageDetectionServiceTest extends TestCase
         $service = \App::make(\App\Services\LanguageDetectionServiceInterface::class);
         $this->assertNotNull($service);
 
-        $locale = $service->detect('vn');
-        $this->assertEquals('vn', $locale);
+        $locale = $service->detect('gb');
+        $this->assertEquals('gb', $locale);
     }
 }

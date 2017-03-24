@@ -45,7 +45,7 @@ class AdminUserNotificationControllerTest extends TestCase
     public function testEditModel()
     {
         $adminUserNotification = factory(\App\Models\AdminUserNotification::class)->create();
-        $this->action('GET', 'Admin\AdminUserNotificationController@show', [$adminUserNotification->id]);
+        $this->action('GET', 'Admin\AdminUserNotificationController@edit', [$adminUserNotification->id]);
         $this->assertResponseOk();
     }
 

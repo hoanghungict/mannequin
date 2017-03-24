@@ -32,6 +32,12 @@ class %%CLASS%% extends Base
 
     protected $presenter = \App\Presenters\%%CLASS%%Presenter::class;
 
+    public static function boot()
+    {
+        parent::boot();
+        parent::observe(new \App\Observers\%%CLASS%%Observer);
+    }
+
     // Relations
     %%RELATIONS%%
 

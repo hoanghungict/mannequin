@@ -38,13 +38,13 @@ class UserController extends Controller {
      * @return \Response
      */
     public function index( PaginationRequest $request ) {
-        $paginate[ 'offset' ] = $request->offset();
-        $paginate[ 'limit' ] = $request->limit();
-        $paginate[ 'order' ] = $request->order();
+        $paginate[ 'offset' ]    = $request->offset();
+        $paginate[ 'limit' ]     = $request->limit();
+        $paginate[ 'order' ]     = $request->order();
         $paginate[ 'direction' ] = $request->direction();
-        $paginate[ 'baseUrl' ] = action( 'Admin\UserController@index' );
+        $paginate[ 'baseUrl' ]   = action( 'Admin\UserController@index' );
 
-        $count = $this->userRepository->count();
+        $count  = $this->userRepository->count();
         $models = $this->userRepository->get(
             $paginate[ 'order' ],
             $paginate[ 'direction' ],
@@ -55,8 +55,8 @@ class UserController extends Controller {
         return view(
             'pages.admin.users.index',
             [
-                'models' => $models,
-                'count' => $count,
+                'models'   => $models,
+                'count'    => $count,
                 'paginate' => $paginate,
             ]
         );
@@ -90,12 +90,16 @@ class UserController extends Controller {
                 'name',
                 'email',
                 'password',
+                'telephone',
+                'birthday',
                 'locale',
-                'api_access_token',
-                'remember_token'
+                'address',
             ]
         );
 
+        $input['is_activated']  = $request->get('is_activated', 0);
+        $input['gender']        = $request->get('gender', 1);
+        $input['locale']        = $request->get('locale', 'en');
         $model = $this->userRepository->create( $input );
 
         if( empty( $model ) ) {
@@ -175,13 +179,17 @@ class UserController extends Controller {
             [
                 'name',
                 'email',
+                'gender',
+                'telephone',
+                'birthday',
                 'locale',
-                'api_access_token',
-                'remember_token'
+                'address',
             ]
         );
 
-        $this->userRepository->update( $model, $input );
+        $input['is_activated']  = $request->get('is_activated', 0);
+        $input['gender']        = $request->get('gender', 1);
+        $model = $this->userRepository->update( $model, $input );
 
         if ($request->hasFile('profile_image')) {
             $file       = $request->file('profile_image');

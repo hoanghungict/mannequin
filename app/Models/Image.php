@@ -7,23 +7,23 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 /**
  * App\Models\Image.
  *
- * @property int $id
- * @property string $url
- * @property string $title
- * @property string $entity_type
- * @property int $entity_id
- * @property bool $is_local
- * @property string $file_category_type
- * @property string $s3_key
- * @property string $s3_bucket
- * @property string $s3_region
- * @property string $s3_extension
- * @property string $media_type
- * @property string $format
- * @property int $file_size
- * @property int $width
- * @property int $height
- * @property bool $is_enabled
+ * @property int            $id
+ * @property string         $url
+ * @property string         $title
+ * @property string         $entity_type
+ * @property int            $entity_id
+ * @property bool           $is_local
+ * @property string         $file_category_type
+ * @property string         $s3_key
+ * @property string         $s3_bucket
+ * @property string         $s3_region
+ * @property string         $s3_extension
+ * @property string         $media_type
+ * @property string         $format
+ * @property int            $file_size
+ * @property int            $width
+ * @property int            $height
+ * @property bool           $is_enabled
  * @property \Carbon\Carbon $created_at
  * @property \Carbon\Carbon $updated_at
  * @property \Carbon\Carbon $deleted_at
@@ -96,6 +96,12 @@ class Image extends Base
 
     protected $presenter = \App\Presenters\ImagePresenter::class;
 
+    public static function boot()
+    {
+        parent::boot();
+        parent::observe(new \App\Observers\ImageObserver);
+    }
+
     // Relations
 
     // Urility Functions
@@ -129,7 +135,7 @@ class Image extends Base
                 $height = intval($width / 4 * 3);
             }
 
-            return 'https://placehold.jp/'.$width.'x'.$height.'.jpg';
+            return 'https://placehold.jp/' . $width . 'x' . $height . '.jpg';
         }
 
         $categoryType = $this->file_category_type;
@@ -152,19 +158,19 @@ class Image extends Base
 
             foreach (array_get($conf, 'thumbnails', []) as $thumbnail) {
                 if ($width === $thumbnail[0] && $height === $thumbnail[1]) {
-                    return $base.'_'.$thumbnail[0].'_'.$thumbnail[1].'.'.$ext;
+                    return $base . '_' . $thumbnail[0] . '_' . $thumbnail[1] . '.' . $ext;
                 }
                 if ($thumbnail[1] == 0 && $height == 0 && $width <= $thumbnail[0]) {
-                    return $base.'_'.$thumbnail[0].'_'.$thumbnail[1].'.'.$ext;
+                    return $base . '_' . $thumbnail[0] . '_' . $thumbnail[1] . '.' . $ext;
                 }
                 if ($thumbnail[1] == 0 && $height != 0 && $size[1] != 0) {
                     if (floor($width / $height * 1000) === floor($size[0] / $size[1] * 1000) && $width <= $thumbnail[0]) {
-                        return $base.'_'.$thumbnail[0].'_'.$thumbnail[1].'.'.$ext;
+                        return $base . '_' . $thumbnail[0] . '_' . $thumbnail[1] . '.' . $ext;
                     }
                 }
                 if ($thumbnail[1] > 0 && $height > 0) {
                     if (floor($width / $height * 1000) === floor($thumbnail[0] / $thumbnail[1] * 1000) && $width <= $thumbnail[0]) {
-                        return $base.'_'.$thumbnail[0].'_'.$thumbnail[1].'.'.$ext;
+                        return $base . '_' . $thumbnail[0] . '_' . $thumbnail[1] . '.' . $ext;
                     }
                 }
             }
@@ -179,20 +185,20 @@ class Image extends Base
     public function toAPIArray()
     {
         return [
-            'id' => $this->id,
-            'url' => $this->url,
-            'title' => $this->title,
+            'id'            => $this->id,
+            'url'           => $this->url,
+            'title'         => $this->title,
             'file_category' => $this->file_category_type,
-            's3_key' => $this->s3_key,
-            's3_bucket' => $this->s3_bucket,
-            's3_region' => $this->s3_region,
-            's3_extension' => $this->s3_extension,
-            'media_type' => $this->media_type,
-            'format' => $this->format,
-            'file_size' => $this->file_size,
-            'width' => $this->width,
-            'height' => $this->height,
-            'is_enabled' => $this->is_enabled,
+            's3_key'        => $this->s3_key,
+            's3_bucket'     => $this->s3_bucket,
+            's3_region'     => $this->s3_region,
+            's3_extension'  => $this->s3_extension,
+            'media_type'    => $this->media_type,
+            'format'        => $this->format,
+            'file_size'     => $this->file_size,
+            'width'         => $this->width,
+            'height'        => $this->height,
+            'is_enabled'    => $this->is_enabled,
         ];
     }
 }

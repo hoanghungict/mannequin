@@ -69,6 +69,6 @@ class AdminUserRole extends Base
 
     public function getRoleName()
     {
-        return trans( config( 'admin_user.roles.' . $this->role . '.name' ) );
+        return trans(config('admin_user.roles.' . $this->role . '.name'));
     }
 }

@@ -54,8 +54,7 @@
         </div>
     @endif
 
-    <form action="@if($isNew) {!! action('Admin\AdminUserController@store') !!} @else {!! action('Admin\AdminUserController@update', [$adminUser->id]) !!} @endif"
-          method="POST" enctype="multipart/form-data">
+    <form action="@if($isNew) {!! action('Admin\AdminUserController@store') !!} @else {!! action('Admin\AdminUserController@update', [$adminUser->id]) !!} @endif" method="POST" enctype="multipart/form-data">
         @if( !$isNew ) <input type="hidden" name="_method" value="PUT"> @endif
         {!! csrf_field() !!}
 
@@ -69,8 +68,8 @@
                 <div class="row">
                     <div class="col-lg-5">
                         <div class="form-group text-center">
-                            @if( !empty($adminUser->profileImage) )
-                                <img id="profile-image-preview" style="max-width: 500px; width: 100%;" src="{!! $adminUser->profileImage->getThumbnailUrl(480, 300) !!}" alt="" class="margin"/>
+                            @if( !empty($adminUser->present()->profileImage()) )
+                                <img id="profile-image-preview" style="max-width: 500px; width: 100%;" src="{!! $adminUser->present()->profileImage()->getThumbnailUrl(480, 300) !!}" alt="" class="margin"/>
                             @else
                                 <img id="profile-image-preview" style="max-width: 500px; width: 100%;" src="{!! \URLHelper::asset('img/no_image.jpg', 'common') !!}" alt="" class="margin"/>
                             @endif
@@ -127,19 +126,26 @@
                                     <label for="locale">@lang('admin.pages.admin-users.columns.locale')</label>
                                 </td>
                                 <td>
-                                    <input type="text" class="form-control" id="locale" name="locale" value="{{ old('locale') ? old('locale') : $adminUser->locale }}">
+                                    <select class="form-control" name="locale" id="locale" style="margin-bottom: 15px;" required>
+                                        <option value="">@lang('admin.pages.common.label.select_locale')</option>
+                                        @foreach( config('locale.languages') as $code => $locale )
+                                            <option value="{!! $code !!}" @if( (old('locale') && old('locale') == $code) || ( $adminUser->locale === $code) ) selected @endif >
+                                                {{ trans($locale['name']) }}
+                                            </option>
+                                        @endforeach
+                                    </select>
                                 </td>
                             </tr>
 
                             <tr>
                                 <td>
-                                    <label for="locale">@lang('admin.pages.admin-users.columns.permissions')</label>
+                                    <label for="role">@lang('admin.pages.admin-users.columns.permissions')</label>
                                 </td>
                                 <td>
                                     @if( $authUser->hasRole(\App\Models\AdminUserRole::ROLE_SUPER_USER) )
                                         <span class="button-checkbox">
                                             <button type="button" class="btn btn-xs" data-color="primary">@lang('admin.roles.super_user')</button>
-                                        <input type="checkbox" name="role[]" value="{{ \App\Models\AdminUserRole::ROLE_SUPER_USER }}" class="hidden" @if( $adminUser->hasRole(\App\Models\AdminUserRole::ROLE_SUPER_USER, false) ) checked @endif />
+                                            <input type="checkbox" name="role[]" value="{{ \App\Models\AdminUserRole::ROLE_SUPER_USER }}" class="hidden" @if( $adminUser->hasRole(\App\Models\AdminUserRole::ROLE_SUPER_USER, false) ) checked @endif />
                                         </span>
                                     @endif
 

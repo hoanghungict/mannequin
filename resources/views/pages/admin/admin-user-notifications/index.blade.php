@@ -56,25 +56,25 @@
 
                     <th style="width: 40px">@lang('admin.pages.common.label.actions')</th>
                 </tr>
-                @foreach( $models as $model )
+                @foreach( $notifications as $notify )
                     <tr>
-                        <td>{{ $model->id }}</td>
-                        <td>{{ $model->locale }}</td>
+                        <td>{{ $notify->id }}</td>
+                        <td>{{ $notify->locale }}</td>
                         <td>
-                            @if( $model->read )
+                            @if( $notify->read )
                                 <span class="badge bg-green">@lang('admin.pages.admin-user-notifications.columns.read_true')</span>
                             @else
                                 <span class="badge bg-yellow">@lang('admin.pages.admin-user-notifications.columns.read_false')</span>
                             @endif
                         </td>
-                        <td>{{ $model->category_type }}</td>
-                        <td>{{ $model->type }}</td>
-                        <td>{{ $model->sent_at }}</td>
+                        <td>{{ $notify->category_type }}</td>
+                        <td>{{ $notify->type }}</td>
+                        <td>{{ $notify->sent_at }}</td>
                         <td>
-                            <a href="{!! URL::action('Admin\AdminUserNotificationController@show', $model->id) !!}"
+                            <a href="{!! URL::action('Admin\AdminUserNotificationController@edit', $notify->id) !!}"
                                class="btn btn-block btn-primary btn-xs">@lang('admin.pages.common.buttons.edit')</a>
                             <a href="#" class="btn btn-block btn-danger btn-xs delete-button"
-                               data-delete-url="{!! action('Admin\AdminUserNotificationController@destroy', $model->id) !!}">@lang('admin.pages.common.buttons.delete')</a>
+                               data-delete-url="{!! action('Admin\AdminUserNotificationController@destroy', $notify->id) !!}">@lang('admin.pages.common.buttons.delete')</a>
                         </td>
                     </tr>
                 @endforeach

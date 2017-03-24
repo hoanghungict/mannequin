@@ -29,9 +29,7 @@
                 <div class="col-sm-6">
                     <h3 class="box-title">
                         <p class="text-right">
-                            <a href="{!! URL::action('Admin\AdminUserController@create') !!}"
-                               class="btn btn-block btn-primary btn-sm"
-                               style="width: 125px;">@lang('admin.pages.common.buttons.create')</a>
+                            <a href="{!! URL::action('Admin\AdminUserController@create') !!}" class="btn btn-block btn-primary btn-sm" style="width: 125px;">@lang('admin.pages.common.buttons.create')</a>
                         </p>
                     </h3>
                     <br>
@@ -50,6 +48,7 @@
                     <th style="width: 10px">ID</th>
                     <th>@lang('admin.pages.admin-users.columns.name')</th>
                     <th>@lang('admin.pages.admin-users.columns.email')</th>
+                    <th>@lang('admin.pages.admin-users.columns.role')</th>
                     <th>@lang('admin.pages.admin-users.columns.locale')</th>
 
                     <th style="width: 40px">@lang('admin.pages.common.label.actions')</th>
@@ -59,7 +58,8 @@
                         <td>{{ $adminUser->id }}</td>
                         <td>{{ $adminUser->name }}</td>
                         <td>{{ $adminUser->email }}</td>
-                        <td>{{ $adminUser->locale }}</td>
+                        <td>@if( count($adminUser->roles) ) {{ $adminUser->roles[0]->getRoleName() }} @endif</td>
+                        <td>{{ trans('config.locale.languages.' . $adminUser->locale . '.name') }}</td>
 
                         <td>
                             <a href="{!! URL::action('Admin\AdminUserController@show', $adminUser->id) !!}" class="btn btn-block btn-primary btn-xs">@lang('admin.pages.common.buttons.edit')</a>

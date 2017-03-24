@@ -38,6 +38,12 @@ class AdminUserNotification extends Notification {
 
     protected $presenter = \App\Presenters\AdminUserNotificationPresenter::class;
 
+    public static function boot()
+    {
+        parent::boot();
+        parent::observe(new \App\Observers\AdminUserNotificationObserver);
+    }
+
     // Relations
     public function adminUser() {
         return $this->belongsTo( \App\Models\AdminUser::class, 'user_id', 'id' );
