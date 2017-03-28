@@ -2,6 +2,7 @@
 
 namespace App\Repositories\Eloquent;
 
+use Illuminate\Support\Facades\Redis;
 use App\Repositories\SingleKeyModelRepositoryInterface;
 use Illuminate\Support\Str;
 use App\Models\Log;
@@ -19,7 +20,7 @@ class SingleKeyModelRepository extends BaseRepository implements SingleKeyModelR
     {
         $modelClass = $this->getModelClassName();
         $cacheKey   = $modelClass::getTableName();
-        $cached = \Redis::hget(\CacheHelper::generateCacheKey('hash_' . $cacheKey), $id);
+        $cached = Redis::hget(\CacheHelper::generateCacheKey('hash_' . $cacheKey), $id);
         if( $cached ) {
             $object = new $modelClass(json_decode($cached, true));
             $object['attributes'] = json_decode($cached, true);
@@ -29,7 +30,7 @@ class SingleKeyModelRepository extends BaseRepository implements SingleKeyModelR
             return $object;
         } else {
             $object = $modelClass::find($id);
-            \Redis::hsetnx(\CacheHelper::generateCacheKey('hash_' . $cacheKey), $id, $object);
+            Redis::hsetnx(\CacheHelper::generateCacheKey('hash_' . $cacheKey), $id, $object);
             return $object;
         }
     }
