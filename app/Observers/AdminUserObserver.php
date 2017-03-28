@@ -1,5 +1,6 @@
 <?php namespace App\Observers;
 
+use Illuminate\Support\Facades\Redis;
 
 class AdminUserObserver extends BaseObserver
 {
@@ -7,16 +8,16 @@ class AdminUserObserver extends BaseObserver
 
     public function created($user)
     {
-        \Redis::hsetnx(\CacheHelper::generateCacheKey('hash_' . $this->cachePrefix), $user->id, $user);
+        Redis::hsetnx(\CacheHelper::generateCacheKey('hash_' . $this->cachePrefix), $user->id, $user);
     }
 
     public function updated($user)
     {
-        \Redis::hset(\CacheHelper::generateCacheKey('hash_' . $this->cachePrefix), $user->id, $user);
+        Redis::hset(\CacheHelper::generateCacheKey('hash_' . $this->cachePrefix), $user->id, $user);
     }
 
     public function deleted($user)
     {
-        \Redis::hdel(\CacheHelper::generateCacheKey('hash_' . $this->cachePrefix), $user->id);
+        Redis::hdel(\CacheHelper::generateCacheKey('hash_' . $this->cachePrefix), $user->id);
     }
 }
