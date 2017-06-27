@@ -32,7 +32,7 @@ class ProductRepository extends SingleKeyModelRepository implements ProductRepos
     public function getWithFilter($filter, $order, $direction, $offset, $limit)
     {
         $productModel = $this->getBlankModel()
-                             ->select( 'products.id', 'products.code', 'products.name', 'products.subcategory_id', 'products.is_enabled' );
+                             ->select();
 
         $keyword = isset($filter['keyword']) ? $filter['keyword'] : '';
         $productModel = $productModel->where(function ($subquery) use ($keyword) {
@@ -47,7 +47,7 @@ class ProductRepository extends SingleKeyModelRepository implements ProductRepos
     public function countWithFilter($filter)
     {
         $productModel = $this->getBlankModel()
-                             ->select( 'products.id', 'products.code', 'products.name', 'products.subcategory_id', 'products.is_enabled' );
+                             ->select();
 
         $keyword = isset($filter['keyword']) ? $filter['keyword'] : '';
         $productModel = $productModel->where(function ($subquery) use ($keyword) {
