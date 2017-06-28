@@ -41,6 +41,9 @@
 
             \Route::resource('customers', 'Admin\CustomerController');
             \Route::resource('employees', 'Admin\EmployeeController');
+            \Route::group(['prefix' => 'api/customers'], function() {
+                \Route::post('/', 'API\V1\CustomerController@store');
+            });
         });
 
         \Route::resource('products', 'Admin\ProductController');

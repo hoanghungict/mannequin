@@ -31,15 +31,13 @@
             </h3>
         </div>
         <div class="box-body">
-            <div class="row" style="margin: 15px 0; border: 1px solid #cccccc; padding: 30px;">
+            <div class="row" style="margin: 15px 0; border: 1px solid #cccccc; padding: 30px; padding-top: 0;">
                 <div class="row" style="padding-bottom: 20px; border-bottom: 1px solid #cccccc;">
                     <div class="col-md-6" style="float: left;">
-                        <div class="logo" style="border: 1px solid #cccccc;background: #cccccc; width: 250px; height: 120px;">
-                            <p>Logo</p>
-                        </div>
+                        <img src="{!! \URLHelper::asset('img/logo.jpg', 'common') !!}" alt="" style="width: 280px; height: 120px;">
                     </div>
 
-                    <div class="col-md-5 col-md-offset-1" style="float: right;">
+                    <div class="col-md-5 col-md-offset-1" style="float: right; padding-top: 20px;">
                         <h1 style="margin-top: 0;">Mannequin Thu Huyền</h1>
                         <h5>Cổng số 6 - Chợ Đồng Xuân / Kiot 24 Chợ Ninh Hiệp</h5>
                         <h5>SĐT: 0986156651 / 0168862268</h5>

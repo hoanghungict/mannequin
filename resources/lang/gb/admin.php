@@ -308,6 +308,7 @@ return [
                 'export_price'   => 'Export Price',
                 'quantity'       => 'Quantity',
                 'unit'           => 'Unit',
+                'new_customer'   => 'Create New Customer'
             ],
             'view'    => [
                 'delivery_bill'  => 'Delivery Bill',

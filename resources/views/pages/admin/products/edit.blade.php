@@ -118,26 +118,28 @@
                     </div>
                 </div>
 
-                <div class="row">
-                    <div class="col-sm-6">
-                        <div class="form-group @if ($errors->has('import_price')) has-error @endif" style="position:relative;">
-                            <label for="import_price">@lang('admin.pages.products.columns.import_price')</label>
-                            <input type="number" class="form-control" id="import-price" name="import_price" @if( !$isNew ) disabled @endif required value="{{ old('import_price') ? old('import_price') : (isset($product->present()->getStandardOption->import_price) ? $product->present()->getStandardOption->import_price : 0) }}">
-                            @if( !$isNew )
-                                <div id="edit-import-price" style="position: absolute; right: 20px; top: 32px; cursor: pointer; color: #005999;"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></div>
-                            @endif
+                @if( $authUser->hasRole(\App\Models\AdminUserRole::ROLE_SUPER_USER) )
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group @if ($errors->has('import_price')) has-error @endif" style="position:relative;">
+                                <label for="import_price">@lang('admin.pages.products.columns.import_price')</label>
+                                <input type="number" class="form-control" id="import-price" name="import_price" @if( !$isNew ) disabled @endif required value="{{ old('import_price') ? old('import_price') : (isset($product->present()->getStandardOption->import_price) ? $product->present()->getStandardOption->import_price : 0) }}">
+                                @if( !$isNew )
+                                    <div id="edit-import-price" style="position: absolute; right: 20px; top: 32px; cursor: pointer; color: #005999;"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></div>
+                                @endif
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group @if ($errors->has('export_price')) has-error @endif">
+                                <label for="export_price">@lang('admin.pages.products.columns.export_price')</label>
+                                <input type="number" class="form-control" id="export-price" name="export_price" @if( !$isNew ) disabled @endif required value="{{ old('export_price') ? old('export_price') : (isset($product->present()->getStandardOption->export_price) ? $product->present()->getStandardOption->export_price : 0) }}">
+                                @if( !$isNew )
+                                    <div id="edit-export-price" style="position: absolute; right: 20px; top: 32px; cursor: pointer; color: #005999;"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></div>
+                                @endif
+                            </div>
                         </div>
                     </div>
-                    <div class="col-sm-6">
-                        <div class="form-group @if ($errors->has('export_price')) has-error @endif">
-                            <label for="export_price">@lang('admin.pages.products.columns.export_price')</label>
-                            <input type="number" class="form-control" id="export-price" name="export_price" @if( !$isNew ) disabled @endif required value="{{ old('export_price') ? old('export_price') : (isset($product->present()->getStandardOption->export_price) ? $product->present()->getStandardOption->export_price : 0) }}">
-                            @if( !$isNew )
-                                <div id="edit-export-price" style="position: absolute; right: 20px; top: 32px; cursor: pointer; color: #005999;"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></div>
-                            @endif
-                        </div>
-                    </div>
-                </div>
+                @endif
 
                 <div class="row">
                     <div class="col-sm-6">
@@ -182,40 +184,63 @@
     </form>
 
     @if( !$isNew )
+        @if( $authUser->hasRole(\App\Models\AdminUserRole::ROLE_SUPER_USER) )
+        @endif
         <form action="{{ \URL::action('Admin\ProductOptionController@create') }}" method="post" onsubmit="return confirm('Are you sure to create new Product Options');">
             {!! csrf_field() !!}
             <input type="hidden" name="product_id" value="{{ $product->id }}">
             <div class="box">
                 <div class="box-header with-border">
                     <strong style="font-size: 18px;"></strong>
-                    <h3 class="box-title">
-                        <span class="btn btn-block btn-default btn-sm" data-toggle="modal" data-target="#ModalOptions" onclick="resetModalProductOption();"  style="width: 125px;">@lang('admin.pages.products.options.create_option_button')</span>
-                    </h3>
+
+                    @if( $authUser->hasRole(\App\Models\AdminUserRole::ROLE_SUPER_USER) )
+                        <h3 class="box-title">
+                            <span class="btn btn-block btn-default btn-sm" data-toggle="modal" data-target="#ModalOptions" onclick="resetModalProductOption();"  style="width: 125px;">@lang('admin.pages.products.options.create_option_button')</span>
+                        </h3>
+                    @endif
                 </div>
 
                 <div class="box-body">
                     <table class="table table-bordered create-product-options">
                         <tr>
-                            <th width="100px">@lang('admin.pages.products.columns.import_price')</th>
-                            <th width="100px">@lang('admin.pages.products.columns.export_price')</th>
-                            <th width="100px">@lang('admin.pages.products.columns.quantity')</th>
                             <th>@lang('admin.pages.products.options.properties')</th>
-                            <th width="100px">@lang('admin.pages.common.label.actions')</th>
+
+                            @if( $authUser->hasRole(\App\Models\AdminUserRole::ROLE_SUPER_USER) )
+                                <th width="100px">@lang('admin.pages.products.columns.import_price')</th>
+                                <th width="100px">@lang('admin.pages.products.columns.export_price')</th>
+                            @endif
+
+                            <th width="100px">@lang('admin.pages.products.columns.quantity')</th>
+                            <th width="100px">@lang('admin.pages.products.columns.unit_id')</th>
+
+                            @if( $authUser->hasRole(\App\Models\AdminUserRole::ROLE_SUPER_USER) )
+                                <th width="100px">@lang('admin.pages.common.label.actions')</th>
+                            @endif
                         </tr>
                         @foreach( $product->options as $option )
                             <tr>
-                                <td>{{ number_format($option['import_price'], '0', ',', ' ') }}</td>
-                                <td>{{ number_format($option['export_price'], '0', ',', ' ') }}</td>
-                                <td>{{ number_format($option['quantity'], '0', ',', ' ') }}</td>
                                 <td>{{ $option->present()->getProductOptionName}}</td>
-                                <td></td>
+
+                                @if( $authUser->hasRole(\App\Models\AdminUserRole::ROLE_SUPER_USER) )
+                                    <td>{{ number_format($option['import_price'], '0', ',', ' ') }}</td>
+                                    <td>{{ number_format($option['export_price'], '0', ',', ' ') }}</td>
+                                @endif
+
+                                <td>{{ number_format($option['quantity'], '0', ',', ' ') }}</td>
+                                <td>{{ $product->unit->name }}</td>
+
+                                @if( $authUser->hasRole(\App\Models\AdminUserRole::ROLE_SUPER_USER) )
+                                    <td></td>
+                                @endif
                             </tr>
                         @endforeach
                     </table>
                 </div>
 
                 <div class="box-footer">
-                    <button type="submit" class="btn btn-primary btn-sm" style="width: 125px;">@lang('admin.pages.common.buttons.save')</button>
+                    @if( $authUser->hasRole(\App\Models\AdminUserRole::ROLE_SUPER_USER) )
+                        <button type="submit" class="btn btn-primary btn-sm" style="width: 125px;">@lang('admin.pages.common.buttons.save')</button>
+                    @endif
                 </div>
             </div>
         </form>
