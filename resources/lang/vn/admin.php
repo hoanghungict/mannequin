@@ -306,6 +306,7 @@ return [
                 'export_price'   => 'Giá xuất',
                 'quantity'       => 'Số lượng',
                 'unit'           => 'Đơn vị',
+                'new_customer'   => 'Khách Hàng Mới'
             ],
             'view'    => [
                 'delivery_bill'  => 'Hóa Đơn Thanh Toán',

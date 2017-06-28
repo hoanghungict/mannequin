@@ -13,6 +13,8 @@ use App\Repositories\StoreRepositoryInterface;
 use App\Repositories\ProductRepositoryInterface;
 use App\Services\ProductOptionServiceInterface;
 use App\Services\ExportServiceInterface;
+use App\Repositories\ProvinceRepositoryInterface;
+use App\Repositories\DistrictRepositoryInterface;
 
 class ExportController extends Controller
 {
@@ -37,6 +39,12 @@ class ExportController extends Controller
     /** @var \App\Services\ExportServiceInterface */
     protected $exportService;
 
+    /** @var \App\Repositories\ProvinceRepositoryInterface */
+    protected $provinceRepository;
+
+    /** @var \App\Repositories\DistrictRepositoryInterface */
+    protected $districtRepository;
+
     public function __construct(
         ExportRepositoryInterface       $exportRepository,
         EmployeeRepositoryInterface     $employeeRepository,
@@ -44,7 +52,9 @@ class ExportController extends Controller
         StoreRepositoryInterface        $storeRepository,
         ProductRepositoryInterface      $productRepository,
         ProductOptionServiceInterface   $productOptionService,
-        ExportServiceInterface          $exportService
+        ExportServiceInterface          $exportService,
+        ProvinceRepositoryInterface     $provinceRepository,
+        DistrictRepositoryInterface     $districtRepository
     )
     {
         $this->exportRepository         = $exportRepository;
@@ -54,6 +64,8 @@ class ExportController extends Controller
         $this->productRepository        = $productRepository;
         $this->productOptionService     = $productOptionService;
         $this->exportService            = $exportService;
+        $this->provinceRepository       = $provinceRepository;
+        $this->districtRepository       = $districtRepository;
     }
 
     /**
@@ -105,6 +117,8 @@ class ExportController extends Controller
                 'employees' => $this->employeeRepository->all(),
                 'stores'    => $this->storeRepository->all(),
                 'products'  => $this->productRepository->allEnabled('name', 'asc'),
+                'provinces' => $this->provinceRepository->all(),
+                'districts' => $this->districtRepository->all()
             ]
         );
     }
@@ -169,7 +183,9 @@ class ExportController extends Controller
         return view(
             'pages.admin.exports.view',
             [
-                'export'    => $export
+                'export'    => $export,
+                'provinces' => $this->provinceRepository->all(),
+                'districts' => $this->districtRepository->all()
             ]
         );
     }

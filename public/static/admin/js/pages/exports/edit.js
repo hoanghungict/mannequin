@@ -131,3 +131,42 @@ function deleteProduct(span) {
         $(span).parent().parent().remove();
     }
 }
+
+function createNewCustomer() {
+    data = {
+        _token: Boilerplate.csrfToken,
+        name: $('#modal-customer-name').val(),
+        telephone: $('#modal-customer-telephone').val(),
+        province_id: $('#modal-customer-province_id').val(),
+        district_id: $('#modal-customer-district_id').val(),
+        address: $('#modal-customer-address').val()
+    };
+
+    $.ajax({
+        type: 'POST',
+        url: $('#modal-form-customers').attr('action'),
+        data: data,
+        success: function (response) {
+            if( response.code == 100 ) {
+                customer = response.data;
+                $('#customer-id').append('<option value="' + customer.id + '">' + customer.name + '</option>');
+            } else {
+                alert(response.message);
+            }
+        },
+        error: function () {
+
+        }
+    });
+
+    $('.close').click();
+    return false;
+}
+
+function resetModalCustomer() {
+    $('#modal-customer-name').val('');
+    $('#modal-customer-telephone').val('');
+    $('#modal-customer-province_id').val('');
+    $('#modal-customer-district_id').val('');
+    $('#modal-customer-address').val('');
+}

@@ -13,11 +13,28 @@
         foreach( $products as $key => $product ) {
             $products[$key]['unit_name'] = $product->unit->name;
         }
-    @endphp
 
+        foreach( $districts as $key => $district ) {
+            $districts[$key]['full_name'] = $district->present()->fullName;
+        }
+    @endphp
     <script>
+        Boilerplate.districts   = {!! $districts !!};
         Boilerplate.employeeId  = @if( empty($export->employee_id) ) '[]' @else {!! $export->employee_id !!} @endif ;
         Boilerplate.products    = {!! $products !!};
+
+        $('select[name="modal_customer_province_id"]').on('change', function () {
+            generateDistricts();
+        });
+
+        function generateDistricts() {
+            $('select[name="district_id"]').html('');
+            Boilerplate.districts.forEach(function (district) {
+                if( district.province_id == $('select[name="modal_customer_province_id"]').val() ) {
+                    $('select[name="modal_customer_district_id"]').append('<option value="' + district.id + '">' + district.full_name + '</option>');
+                }
+            });
+        }
     </script>
 
     <script src="{{ \URLHelper::asset('libs/moment/moment.min.js', 'admin') }}"></script>
@@ -73,7 +90,10 @@
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label for="customer-id">@lang('admin.pages.exports.columns.customer_id')</label>
+                            <label for="customer-id">
+                                @lang('admin.pages.exports.columns.customer_id')
+                                <i class="fa fa-plus-square-o new-customer" data-toggle="modal" data-target="#ModalNewCustomer"  aria-hidden="true" style="vertical-align: middle; margin-left: 5px; cursor: pointer;"></i>
+                            </label>
                             <select class="form-control customer-id" name="customer_id" required id="customer-id" style="margin-bottom: 15px;">
                                 <option value="">@lang('admin.pages.common.label.select_customer')</option>
                                 @foreach( $customers as $key => $customer )
@@ -298,6 +318,104 @@
                             </div>
                             <div class="btn-group" role="group">
                                 <button type="submit" id="modal-save" class="btn btn-default btn-hover-green" data-action="save" role="button">
+                                    @lang('admin.pages.common.buttons.save')
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!------------------------------------------------------------------->
+
+    <!------------------------------------------------------------------->
+    <!-- line modal: new customers -->
+    <div class="modal fade" id="ModalNewCustomer" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+        <div class="modal-dialog" style="margin-top: 100px;">
+            <div class="modal-content" style="width: 700px;">
+                <form action="{{action('API\V1\CustomerController@store')}}" id="modal-form-customers" onsubmit="return createNewCustomer();">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">
+                            <span aria-hidden="true">×</span>
+                            <span class="sr-only">@lang('admin.pages.common.buttons.close')</span>
+                        </button>
+                        <h3 class="modal-title box-title" id="" style="text-align: center;">@lang('admin.pages.exports.modal.new_customer')</h3>
+                    </div>
+
+                    <div class="modal-body" style="padding-bottom: 0;">
+                        <table class="table" id="modal-new-customer" style="margin-bottom: 0;">
+                            <tr>
+                                <td>
+                                    <label for="name">@lang('admin.pages.customers.columns.name')</label>
+                                </td>
+                                <td>
+                                    <input type="text" class="form-control" id="modal-customer-name" name="modal_customer_name" value="{{ old('name') }}" required>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <label for="telephone">@lang('admin.pages.customers.columns.telephone')</label>
+                                </td>
+                                <td>
+                                    <input type="text" class="form-control" id="modal-customer-telephone" name="modal_customer_telephone" value="{{ old('telephone') }}" required>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    <label for="province_id">@lang('admin.pages.customers.columns.province_id')</label>
+                                </td>
+                                <td>
+                                    <select class="form-control" id="modal-customer-province_id" name="modal_customer_province_id" required>
+                                        <option value="">@lang('admin.pages.common.label.select_province')</option>
+                                        @foreach( $provinces as $key => $province )
+                                            <option value="{!! $province->id !!}" @if( (old('province_id') && old('province_id') == $province->id) ) selected @endif >
+                                                {{ $province->present()->name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    <label for="district_id">@lang('admin.pages.customers.columns.district_id')</label>
+                                </td>
+                                <td>
+                                    <select class="form-control" id="modal-customer-district_id" name="modal_customer_district_id" required>
+                                        <option value="">@lang('admin.pages.common.label.select_district')</option>
+                                        @foreach( $districts as $key => $district )
+                                            @if( isset($customer->province_id) && $district->province_id == $customer->province_id )
+                                                <option value="{!! $district->id !!}" @if( (old('district_id') && old('district_id') == $district->id) || ($district->id === $customer->district_id) ) selected @endif >
+                                                    {{ $district->present()->fullName }}
+                                                </option>
+                                            @endif
+                                        @endforeach
+                                    </select>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    <label for="address">@lang('admin.pages.customers.columns.address')</label>
+                                </td>
+                                <td>
+                                    <input type="text" class="form-control" id="modal-customer-address" name="modal_customer_address" value="{{ old('address') }}" required>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <div class="modal-footer">
+                        <div class="btn-group btn-group-justified" role="group" aria-label="group button">
+                            <div class="btn-group" role="group">
+                                <button type="button" class="btn btn-default" data-dismiss="modal" role="button">
+                                    @lang('admin.pages.common.buttons.close')
+                                </button>
+                            </div>
+                            <div class="btn-group" role="group">
+                                <button type="submit" id="modal-customer-save" class="btn btn-default btn-hover-green" data-action="save" role="button">
                                     @lang('admin.pages.common.buttons.save')
                                 </button>
                             </div>
