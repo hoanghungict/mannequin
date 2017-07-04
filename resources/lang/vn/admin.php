@@ -16,6 +16,7 @@ return [
         'products'                 => 'Sản Phẩm',
         'imports'                  => 'Nhập Kho',
         'exports'                  => 'Xuất Kho',
+        'categories'               => 'Danh Mục'
     ],
     'breadcrumb' => [
         'dashboard'                => 'Bảng Điều Khiển',
@@ -32,6 +33,7 @@ return [
         'products'                 => 'Sản Phẩm',
         'imports'                  => 'Nhập Kho',
         'exports'                  => 'Xuất Kho',
+        'categories'               => 'Danh Mục',
         'create_new'               => 'Create New',
     ],
     'messages' => [

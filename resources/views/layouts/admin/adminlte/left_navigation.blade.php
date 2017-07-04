@@ -40,6 +40,7 @@
                 <li @if( $menu=='logs') class="active" @endif ><a href="{!! \URL::action('Admin\LogController@index') !!}"><i class="fa fa-sticky-note-o"></i> <span>@lang('admin.menu.log_system')</span></a></li>
                 <li @if( $menu=='images') class="active" @endif ><a href="{!! \URL::action('Admin\ImageController@index') !!}"><i class="fa fa-file-image-o"></i> <span>@lang('admin.menu.images')</span></a></li>
                 <li @if( $menu=='articles') class="active" @endif ><a href="{!! \URL::action('Admin\ArticleController@index') !!}"><i class="fa fa-file-word-o"></i> <span>@lang('admin.menu.articles')</span></a></li>
+                <li @if( $menu=='categories') class="active" @endif ><a href="{!! \URL::action('Admin\CategoryController@index') !!}"><i class="fa fa-bookmark-o"></i> <span>@lang('admin.menu.categories')</span></a></li>
             @endif
 
             @if( $authUser->hasRole(\App\Models\AdminUserRole::ROLE_ADMIN) )

@@ -16,6 +16,7 @@ return [
         'products'                 => 'Products',
         'imports'                  => 'Imports',
         'exports'                  => 'Exports',
+        'categories'               => 'Categories'
     ],
     'breadcrumb' => [
         'dashboard'                => 'Dashboard',
@@ -32,6 +33,7 @@ return [
         'products'                 => 'Products',
         'imports'                  => 'Imports',
         'exports'                  => 'Exports',
+        'categories'               => 'Categories',
         'create_new'               => 'Create New',
     ],
     'messages'   => [
@@ -338,6 +340,14 @@ return [
                 'receiver'       => 'Receiver',
                 'sign_and_name'  => '(Sign & Full name)',
             ]
+        ],
+        'categories'   => [
+            'columns'  => [
+                'name' => 'Name',
+                'slug' => 'Slug',
+                'order' => 'Order',
+                'notes' => 'Notes',
+            ],
         ],
         /* NEW PAGE STRINGS */
     ],
