@@ -53,7 +53,7 @@ class EmployeeController extends Controller {
         );
 
         return view(
-            'pages.admin.employees.index',
+            'pages.admin.' . config('view.admin') . '.employees.index',
             [
                 'models'   => $models,
                 'count'    => $count,
@@ -69,7 +69,7 @@ class EmployeeController extends Controller {
      */
     public function create() {
         return view(
-            'pages.admin.employees.edit',
+            'pages.admin.' . config('view.admin') . '.employees.edit',
             [
                 'isNew'     => true,
                 'employee'  => $this->employeeRepository->getBlankModel(),
@@ -125,7 +125,7 @@ class EmployeeController extends Controller {
         }
 
         return view(
-            'pages.admin.employees.edit',
+            'pages.admin.' . config('view.admin') . '.employees.edit',
             [
                 'isNew'     => false,
                 'employee'  => $model,

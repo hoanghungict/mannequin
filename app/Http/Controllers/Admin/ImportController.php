@@ -66,7 +66,7 @@ class ImportController extends Controller
         );
 
         return view(
-            'pages.admin.imports.index',
+            'pages.admin.' . config('view.admin') . '.imports.index',
             [
                 'imports'  => $imports,
                 'count'    => $count,
@@ -83,7 +83,7 @@ class ImportController extends Controller
     public function create()
     {
         return view(
-            'pages.admin.imports.edit',
+            'pages.admin.' . config('view.admin') . '.imports.edit',
             [
                 'isNew'     => true,
                 'import'    => $this->importRepository->getBlankModel(),
@@ -142,7 +142,7 @@ class ImportController extends Controller
         }
 
         return view(
-            'pages.admin.imports.edit',
+            'pages.admin.' . config('view.admin') . '.imports.edit',
             [
                 'isNew'     => false,
                 'import'    => $import,

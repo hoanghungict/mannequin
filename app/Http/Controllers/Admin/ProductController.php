@@ -86,7 +86,7 @@ class ProductController extends Controller {
         );
 
         return view(
-            'pages.admin.products.index',
+            'pages.admin.' . config('view.admin') . '.products.index',
             [
                 'products' => $products,
                 'count'    => $count,
@@ -107,7 +107,7 @@ class ProductController extends Controller {
         $units          = $this->unitRepository->all();
 
         return view(
-            'pages.admin.products.edit',
+            'pages.admin.' . config('view.admin') . '.products.edit',
             [
                 'isNew'         => true,
                 'product'       => $this->productRepository->getBlankModel(),
@@ -203,7 +203,7 @@ class ProductController extends Controller {
         $units          = $this->unitRepository->all();
 
         return view(
-            'pages.admin.products.edit',
+            'pages.admin.' . config('view.admin') . '.products.edit',
             [
                 'isNew'         => false,
                 'product'       => $product,

@@ -48,7 +48,7 @@ class CustomerController extends Controller {
         $customers = $this->customerRepository->get( $paginate['order'], $paginate['direction'], $paginate['offset'], $paginate['limit'] );
 
         return view(
-            'pages.admin.customers.index',
+            'pages.admin.' . config('view.admin') . '.customers.index',
             [
                 'customers' => $customers,
                 'count'     => $count,
@@ -64,7 +64,7 @@ class CustomerController extends Controller {
      */
     public function create() {
         return view(
-            'pages.admin.customers.edit',
+            'pages.admin.' . config('view.admin') . '.customers.edit',
             [
                 'isNew'     => true,
                 'customer'  => $this->customerRepository->getBlankModel(),
@@ -119,7 +119,7 @@ class CustomerController extends Controller {
         }
 
         return view(
-            'pages.admin.customers.edit',
+            'pages.admin.' . config('view.admin') . '.customers.edit',
             [
                 'isNew'     => false,
                 'customer'  => $customer,
