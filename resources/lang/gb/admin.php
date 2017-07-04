@@ -223,6 +223,7 @@ return [
                 'api_access_token'     => 'Api Access Token',
                 'profile_image_id'     => 'Profile Image',
                 'last_notification_id' => 'Last Notification Id',
+                'is_activated'         => 'is Activated',
             ],
         ],
         'customers'                => [

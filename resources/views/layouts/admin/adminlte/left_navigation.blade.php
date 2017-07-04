@@ -4,7 +4,7 @@
         <!-- Sidebar user panel -->
         <div class="user-panel">
             <div class="pull-left image">
-                <img src="@if(!empty($authUser->present()->profileImage())) {{ $authUser->present()->profileImage()->present()->url }} @else {!! \URLHelper::asset('img/user_avatar.png', 'common') !!} @endif" class="img-circle" alt="User Image">
+                <img src="@if(!empty($authUser->present()->profileImage())) {{ $authUser->present()->profileImage()->url }} @else {!! \URLHelper::asset('img/user_avatar.png', 'common') !!} @endif" class="img-circle" alt="User Image">
             </div>
             <div class="pull-left info">
                 <p>@if($authUser->name){{ $authUser->name }} @else {{ $authUser->email }} @endif</p>
@@ -41,6 +41,15 @@
                 <li @if( $menu=='images') class="active" @endif ><a href="{!! \URL::action('Admin\ImageController@index') !!}"><i class="fa fa-file-image-o"></i> <span>@lang('admin.menu.images')</span></a></li>
                 <li @if( $menu=='articles') class="active" @endif ><a href="{!! \URL::action('Admin\ArticleController@index') !!}"><i class="fa fa-file-word-o"></i> <span>@lang('admin.menu.articles')</span></a></li>
             @endif
+
+            @if( $authUser->hasRole(\App\Models\AdminUserRole::ROLE_ADMIN) )
+                <li @if( $menu=='customers') class="active" @endif ><a href="{!! \URL::action('Admin\CustomerController@index') !!}"><i class="fa fa-handshake-o"></i> <span>@lang('admin.menu.customers')</span></a></li>
+                <li @if( $menu=='employees') class="active" @endif ><a href="{!! \URL::action('Admin\EmployeeController@index') !!}"><i class="fa fa-user-o"></i> <span>@lang('admin.menu.employees')</span></a></li>
+            @endif
+
+            <li @if( $menu=='products') class="active" @endif ><a href="{!! \URL::action('Admin\ProductController@index') !!}"><i class="fa fa-product-hunt"></i> <span>@lang('admin.menu.products')</span></a></li>
+            <li @if( $menu=='imports') class="active" @endif ><a href="{!! \URL::action('Admin\ImportController@index') !!}"><i class="fa fa-download"></i> <span>@lang('admin.menu.imports')</span></a></li>
+            <li @if( $menu=='exports') class="active" @endif ><a href="{!! \URL::action('Admin\ExportController@index') !!}"><i class="fa fa-upload"></i> <span>@lang('admin.menu.exports')</span></a></li>
             <!-- %%SIDEMENU%% -->
         </ul>
     </section>

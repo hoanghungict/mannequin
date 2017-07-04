@@ -1,4 +1,4 @@
-<script src="{!! \URLHelper::asset('libs/plugins/jQuery/jquery-3.2.1.min.js', 'admin') !!}"></script>
+<script src="{!! \URLHelper::asset('libs/plugins/jQuery/jquery-2.2.3.min.js', 'admin') !!}"></script>
 <script src="{!! \URLHelper::asset('libs/plugins/jQueryUI/jQuery-ui.min.js', 'admin') !!}"></script>
 
 <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
@@ -9,6 +9,7 @@
 <script src="{!! \URLHelper::asset('libs/plugins/toastr/toastr.min.js', 'admin') !!}"></script>
 <script src="{!! \URLHelper::asset('libs/plugins/flagstrap/dist/js/jquery.flagstrap.min.js', 'admin') !!}"></script>
 <script src="{!! \URLHelper::asset('js/script.js', 'admin') !!}"></script>
+<script src="{!! \URLHelper::asset('js/header.js', 'admin') !!}"></script>
 
 <script type="text/javascript">
     var Boilerplate = {
@@ -17,8 +18,8 @@
 
     $('#language-switcher').flagStrap({
         countries: {
-            "GB": "English",
-            "VN": "Tiếng Việt"
+            "VN": "Tiếng Việt",
+            "GB": "English"
         },
         buttonSize: "btn-sm",
         buttonType: "btn-primary",

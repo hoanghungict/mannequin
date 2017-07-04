@@ -15,8 +15,9 @@
 
         <div class="navbar-custom-menu">
             <ul class="nav navbar-nav">
-                <!-- Notifications: style can be found in dropdown.less -->
-                <li class="dropdown messages-menu">
+                @if( $authUser->hasRole(\App\Models\AdminUserRole::ROLE_ADMIN) )
+                    <!-- Notifications: style can be found in dropdown.less -->
+                    <li class="dropdown messages-menu">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                         <i class="fa fa-bell-o"></i>
                         <span class="label label-warning">{{$unreadNotificationCount}}</span>
@@ -30,10 +31,10 @@
                                     <li @if($notification->read ==0) style="background-color: #edf2fa" @endif><!-- start message -->
                                         <a href="{!! action('Admin\AdminUserNotificationController@show', $notification->id) !!}" style="white-space: inherit;">
                                             <div class="pull-left">
-                                                <img src="{!! \URLHelper::asset('libs/adminlte/img/user2-160x160.jpg','admin') !!}" class="img-circle" alt="User Image">
+                                                <img src="@if($notification->type == \App\Models\Notification::TYPE_GENERAL_ALERT) {!! \URLHelper::asset('img/warning.png','common') !!} @else {!! \URLHelper::asset('img/message.png','common') !!} @endif" class="img-circle" alt="User Image">
                                             </div>
                                             <h4>
-                                                System Messages
+                                                @if($notification->type == \App\Models\Notification::TYPE_GENERAL_ALERT) System Warning @else @lang(config('notification.system.general_alert.products.title')) @endif
 
                                                 <small>
                                                     <i class="fa fa-clock-o"></i>
@@ -59,17 +60,18 @@
                         <li class="footer"><a href="{!! action('Admin\AdminUserNotificationController@index') !!}">See All Messages</a></li>
                     </ul>
                 </li>
+                @endif
 
                 <!-- User Account: style can be found in dropdown.less -->
                 <li class="dropdown user user-menu">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                        <img src="@if(!empty($authUser->present()->profileImage())) {{ $authUser->present()->profileImage()->present()->url }} @else {!! \URLHelper::asset('img/user_avatar.png', 'common') !!} @endif" class="user-image" alt="User Image">
+                        <img src="@if(!empty($authUser->present()->profileImage())) {{ $authUser->present()->profileImage()->url }} @else {!! \URLHelper::asset('img/user_avatar.png', 'common') !!} @endif" class="user-image" alt="User Image">
                         <span class="hidden-xs">@if($authUser->name){{ $authUser->name }} @else {{ $authUser->email }} @endif</span>
                     </a>
                     <ul class="dropdown-menu">
                         <!-- User image -->
                         <li class="user-header">
-                            <img src="@if(!empty($authUser->present()->profileImage())) {{ $authUser->present()->profileImage()->present()->url }} @else {!! \URLHelper::asset('img/user_avatar.png', 'common') !!} @endif" class="img-circle" alt="User Image">
+                            <img src="@if(!empty($authUser->present()->profileImage())) {{ $authUser->present()->profileImage()->url }} @else {!! \URLHelper::asset('img/user_avatar.png', 'common') !!} @endif" class="img-circle" alt="User Image">
 
                             <p>
                                 @if($authUser->name) {{ $authUser->name }} @else {{ $authUser->email }} @endif
@@ -82,8 +84,10 @@
                                 <a href="{{ action('Admin\MeController@index') }}" class="btn btn-default btn-flat">Profile</a>
                             </div>
                             <div class="pull-right">
-                                <form id="signout" method="post" action="{!! URL::action('Admin\AuthController@postSignOut') !!}">{!! csrf_field() !!}</form>
-                                <a href="#" class="btn btn-default btn-flat" onclick="$('#signout').submit(); return false;">Sign out</a>
+                                <form id="signout" method="post"
+                                      action="{!! URL::action('Admin\AuthController@postSignOut') !!}">{!! csrf_field() !!}</form>
+                                <a href="#" class="btn btn-default btn-flat"
+                                   onclick="$('#signout').submit(); return false;">Sign out</a>
                             </div>
                         </li>
                     </ul>
