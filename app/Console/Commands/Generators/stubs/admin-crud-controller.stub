@@ -38,7 +38,7 @@ class %%CLASS%%Controller extends Controller
         $count = $this->%%class%%Repository->count();
         $%%class%%s = $this->%%class%%Repository->get( $paginate['order'], $paginate['direction'], $paginate['offset'], $paginate['limit'] );
 
-        return view('pages.admin.%%classes-spinal%%.index', [
+        return view('pages.admin.' . config('view.admin') . '.%%classes-spinal%%.index', [
             '%%class%%s'    => $%%class%%s,
             'count'         => $count,
             'paginate'      => $paginate,
@@ -52,7 +52,7 @@ class %%CLASS%%Controller extends Controller
      */
     public function create()
     {
-        return view('pages.admin.%%classes-spinal%%.edit', [
+        return view('pages.admin.' . config('view.admin') . '.%%classes-spinal%%.edit', [
             'isNew'     => true,
             '%%class%%' => $this->%%class%%Repository->getBlankModel(),
         ]);
@@ -92,7 +92,7 @@ class %%CLASS%%Controller extends Controller
             abort(404);
         }
 
-        return view('pages.admin.%%classes-spinal%%.edit', [
+        return view('pages.admin.' . config('view.admin') . '.%%classes-spinal%%.edit', [
             'isNew' => false,
             '%%class%%' => $%%class%%,
         ]);

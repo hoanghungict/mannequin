@@ -2,6 +2,8 @@
 
 namespace App\Presenters;
 
+use Illuminate\Support\Facades\Redis;
+
 class ImagePresenter extends BasePresenter
 {
     public function url()
@@ -10,6 +12,7 @@ class ImagePresenter extends BasePresenter
             return $this->entity->url;
         }
 
-        return \URL::to($this->entity->url);
+        $config = config('file.categories.' . $this->entity->file_category_type);
+        return \URLHelper::asset($config['local_path'] . $this->entity->url, $config['local_type']);
     }
 }

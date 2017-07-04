@@ -17,6 +17,8 @@ return [
         realpath(base_path('resources/views')),
     ],
 
+    'admin' => 'adminlte',
+
     /*
     |--------------------------------------------------------------------------
     | Compiled View Path

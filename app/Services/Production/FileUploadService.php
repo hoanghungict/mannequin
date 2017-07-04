@@ -54,33 +54,34 @@ class FileUploadService extends BaseService implements FileUploadServiceInterfac
     }
 
     /**
-     * @param string $categoryType
-     * @param string $path
-     * @param string $mediaType
-     * @param array  $metaInputs
+     * @params  string  $configKey
+     *          object  $file {path, mimeType, size ...}
+     *          array   $storageInfo [ entityType, entityId, title ]
      *
-     * @return \App\Models\Image|\App\Models\File|null
+     * @return \App\Models\Image | \App\Models\File | null
      */
-    public function upload($categoryType, $path, $mediaType, $metaInputs)
+    public function upload($configKey, $file, $storageInfo)
     {
-        $conf = config('file.categories.'.$categoryType);
+        $conf = config('file.categories.' . $configKey);
         if (empty($conf)) {
-            return null;
+            return false;
         }
 
-        $acceptableFileList = config('file.acceptable.'.$conf['type']);
+        $acceptableFileList = config('file.acceptable.' . $conf['type']);
+        $mediaType          = $file->getClientMimeType();
         if (!array_key_exists($mediaType, $acceptableFileList)) {
-            return null;
+            return false;
         }
-        $ext = array_get($acceptableFileList, $mediaType);
+        $ext    = array_get($acceptableFileList, $mediaType);
+        $path   = $file->getPathname();
 
         $model = null;
         switch ($conf['type']) {
             case 'image':
-                $model = $this->uploadImage($conf, $ext, $categoryType, $path, $mediaType, $metaInputs);
+                $model = $this->uploadImage($configKey, $path, $mediaType, $ext, $storageInfo);
                 break;
             case 'file':
-                $model = $this->uploadFile($conf, $ext, $categoryType, $path, $mediaType, $metaInputs);
+                $model = $this->uploadFile($configKey, $path, $mediaType, $ext, $storageInfo);
                 break;
         }
 
@@ -88,38 +89,56 @@ class FileUploadService extends BaseService implements FileUploadServiceInterfac
     }
 
     /**
-     * @param \App\Models\Image|\App\Models\File $model
+     * @params  \App\Models\Image | \App\Models\File
      *
-     * @return bool|null
+     * @return  boolean
      */
     public function delete($model)
     {
-        $bucket = $model->s3_bucket;
-        $region = $model->s3_region;
-        $key = $model->s3_key;
-
-        if (empty($key)) {
-            return true;
+        $configKey = $model['file_category_type'];
+        $conf = config('file.categories.'.$configKey);
+        if( empty($conf) ) {
+            return false;
         }
 
-        $this->deleteS3($region, $bucket, $key);
+        if( env('LOCAL_STORAGE') ) {
+            $filePath  = 'static/' . $conf['local_type'] . '/' . $conf['local_path'] . $model['url'];
+            if( !file_exists($filePath) ) {
+                return false;
+            }
 
-        $categoryType = $model->file_category_type;
-        $conf = config('file.categories.'.$categoryType);
-        if (empty($conf)) {
-            return false;
+            unlink($filePath);
+        } else {
+            $bucket = $model->s3_bucket;
+            $region = $model->s3_region;
+            $key    = $model->s3_key;
+
+            if (empty($key)) {
+                return false;
+            }
+
+            $this->deleteS3($region, $bucket, $key);
+
+            switch ($conf['type']) {
+                case 'image':
+                    foreach (array_get($conf, 'thumbnails', []) as $thumbnail) {
+                        $thumbnailKey = $this->getThumbnailKeyFromKey($key, $thumbnail);
+                        if (!empty($thumbnailKey)) {
+                            $this->deleteS3($region, $bucket, $thumbnailKey);
+                        }
+                    }
+                    break;
+                case 'file':
+                    break;
+            }
         }
 
         switch ($conf['type']) {
             case 'image':
-                foreach (array_get($conf, 'thumbnails', []) as $thumbnail) {
-                    $thumbnailKey = $this->getThumbnailKeyFromKey($key, $thumbnail);
-                    if (!empty($thumbnailKey)) {
-                        $this->deleteS3($region, $bucket, $thumbnailKey);
-                    }
-                }
+                $this->imageRepository->delete($model);
                 break;
             case 'file':
+                $this->fileRepository->delete($model);
                 break;
         }
 
@@ -127,54 +146,160 @@ class FileUploadService extends BaseService implements FileUploadServiceInterfac
     }
 
     /**
+     * @params  string  $configKey
+     *          string  $path
+     *          string  $mediaType
+     *          string  $ext
+     *          array   $storageInfo [ entityType, entityId, title ]
      *
+     * @return \App\Models\File | null
      */
-    public function resetImageIdSession()
+    private function uploadFile($configKey, $path, $mediaType, $ext, $storageInfo)
     {
-        \Session::put(self::IMAGE_ID_SESSION_KEY, []);
-    }
+        $input = [
+            'title'              => array_get($storageInfo, 'title', ''),
+            'entity_type'        => array_get($storageInfo, 'entity_type', ''),
+            'entity_id'          => array_get($storageInfo, 'entity_id', ''),
+            'file_category_type' => $configKey,
+            'media_type'         => $mediaType,
+            'format'             => $ext,
+            'file_size'          => filesize($path),
+            'is_enabled'         => true
+        ];
 
-    /**
-     * @param int $imageId
-     */
-    public function addImageIdToSession($imageId)
-    {
-        $sessionIds = \Session::get(self::IMAGE_ID_SESSION_KEY, []);
-        array_push($sessionIds, intval($imageId));
-        \Session::put(self::IMAGE_ID_SESSION_KEY, array_values($sessionIds));
-    }
+        $seed     = array_get(config('file.categories.' . $configKey), 'seed_prefix', '').time().rand();
+        $fileName = $this->generateFileName($seed, null, $ext);
 
-    /**
-     * @param int $imageId
-     */
-    public function removeImageIdFromSession($imageId)
-    {
-        $sessionIds = \Session::get(self::IMAGE_ID_SESSION_KEY, []);
-        $pos = array_search(intval($imageId), $sessionIds);
-        if ($pos !== false) {
-            unset($sessionIds[$pos]);
-            \Session::put(self::IMAGE_ID_SESSION_KEY, array_values($sessionIds));
+
+        if( env('LOCAL_STORAGE') ) {
+            $localPath  = 'static/' . config('file.categories.' . $configKey . '.local_type') . '/' . config('file.categories.' . $configKey . '.local_path');
+            if (!is_dir($localPath)) {
+                mkdir($localPath);
+            }
+
+            move_uploaded_file( $path, $localPath . $fileName );
+
+            $input['url']      = $fileName;
+            $input['is_local'] = true;
+        } else {
+            $bucket = $this->decideBucket(array_get(config('file.categories.' . $configKey), 'buckets', ''));
+            $region = array_get(config('file.categories.' . $configKey), 'region', 'ap-northeast-1');
+            $url = $this->uploadToS3($path, $region, $bucket, $fileName, $mediaType);
+
+            $input['url']          = $url;
+            $input['is_local']     = false;
+            $input['s3_key']       = $fileName;
+            $input['s3_bucket']    = $bucket;
+            $input['s3_region']    = $region;
+            $input['s3_extension'] = $ext;
         }
+
+        /** @var  \App\Models\File | null $file */
+        $file = $this->fileRepository->create($input);
+
+        return $file;
     }
 
     /**
-     * @return array
-     */
-    public function getImageIdsFromSession()
-    {
-        return \Session::get(self::IMAGE_ID_SESSION_KEY, []);
-    }
-
-    /**
-     * @param int $imageId
+     * @params  string  $configKey
+     *          string  $path
+     *          string  $mediaType
+     *          string  $ext
+     *          array   $storageInfo [ entityType, entityId, title ]
      *
-     * @return bool
+     * @return \App\Models\Image | null
      */
-    public function hasImageIdInSession($imageId)
+    private function uploadImage($configKey, $path, $mediaType, $ext, $storageInfo)
     {
-        $sessionIds = \Session::get(self::IMAGE_ID_SESSION_KEY, []);
+        $input = [
+            'title'              => array_get($storageInfo, 'title', ''),
+            'entity_type'        => array_get($storageInfo, 'entity_type', ''),
+            'entity_id'          => array_get($storageInfo, 'entity_id', ''),
+            'file_category_type' => $configKey,
+            'media_type'         => $mediaType,
+            'format'             => $ext,
+            'is_enabled'         => true
+        ];
 
-        return in_array(intval($imageId), $sessionIds);
+        $seed     = array_get(config('file.categories.' . $configKey), 'seed_prefix', '').time().rand();
+        $fileName = $this->generateFileName($seed, null, $ext);
+
+        $localPath  = 'static/' . config('file.categories.' . $configKey . '.local_type') . '/' . config('file.categories.' . $configKey . '.local_path');
+        if (!is_dir($localPath)) {
+            mkdir($localPath);
+        }
+
+        $fileUploadedPath = $localPath . $fileName;
+
+        $this->imageService->resizeImage($path, config('file.categories.' . $configKey . '.size'), $fileUploadedPath);
+        if( !file_exists($fileUploadedPath) ) {
+            return false;
+        }
+        $input['file_size'] = filesize($fileUploadedPath);
+        $input['width']     = getimagesize($fileUploadedPath)[0];
+        $input['height']    = getimagesize($fileUploadedPath)[1];
+
+        if( env('LOCAL_STORAGE') ) {
+            $input['url']      = $fileName;
+            $input['is_local'] = true;
+
+            foreach (array_get(config('file.categories.' . $configKey), 'thumbnails', []) as $thumbnail) {
+                $thumbnailKey = $this->getThumbnailKeyFromKey($fileName, $thumbnail);
+                $this->imageService->resizeImage($path, $thumbnail, $localPath . $thumbnailKey);
+            }
+        } else {
+            $bucket = $this->decideBucket(array_get(config('file.categories.' . $configKey), 'buckets', ''));
+            $region = array_get(config('file.categories.' . $configKey), 'region', 'ap-northeast-1');
+            $url = $this->uploadToS3($fileUploadedPath, $region, $bucket, $fileName, $mediaType);
+
+            $input['url']          = $url;
+            $input['is_local']     = false;
+            $input['s3_key']       = $fileName;
+            $input['s3_bucket']    = $bucket;
+            $input['s3_region']    = $region;
+            $input['s3_extension'] = $ext;
+
+            foreach (array_get(config('file.categories.' . $configKey), 'thumbnails', []) as $thumbnail) {
+                $thumbnailKey = $this->getThumbnailKeyFromKey($fileName, $thumbnail);
+                $this->imageService->resizeImage($path, $thumbnail, $localPath . $thumbnailKey);
+                $this->uploadToS3($localPath . $thumbnailKey, $region, $bucket, $thumbnailKey, $mediaType);
+            }
+        }
+
+        /** @var  \App\Models\Image | null $image */
+        $file = $this->imageRepository->create($input);
+
+        return $file;
+    }
+
+    /**
+     * @param string $path
+     * @param string $region
+     * @param string $bucket
+     * @param string $key
+     * @param string $mediaType
+     *
+     * @return null|string
+     */
+    private function uploadToS3($path, $region, $bucket, $key, $mediaType = 'binary/octet-stream')
+    {
+        $client = $this->getS3Client($region);
+
+        if (!file_exists($path)) {
+            return null;
+        }
+
+        $client->putObject([
+            'Bucket' => $bucket,
+            'Key' => $key,
+            'SourceFile' => $path,
+            'ContentType' => $mediaType,
+            'ACL' => 'public-read',
+        ]);
+
+        unlink($path);
+
+        return $client->getObjectUrl($bucket, $key);
     }
 
     /**
@@ -210,127 +335,6 @@ class FileUploadService extends BaseService implements FileUploadServiceInterfac
         }
 
         return $filename;
-    }
-
-    /**
-     * @param array  $conf
-     * @param string $ext
-     * @param int    $categoryType
-     * @param string $path
-     * @param string $mediaType
-     * @param array  $metaInputs
-     *
-     * @return \App\Models\File|null
-     */
-    private function uploadFile($conf, $ext, $categoryType, $path, $mediaType, $metaInputs)
-    {
-        $fileSize = filesize($path);
-        $bucket = $this->decideBucket($conf['buckets']);
-        $region = array_get($conf, 'region', 'ap-northeast-1');
-        $seed = array_get($conf, 'seed_prefix', '').time().rand();
-        $key = $this->generateFileName($seed, null, $ext);
-        $url = $this->uploadToS3($path, $region, $bucket, $key, $mediaType);
-
-        /** @var  \App\Models\File|null $file */
-        $file = $this->fileRepository->create([
-            'url' => $url,
-            'title' => array_get($metaInputs, 'title', ''),
-            'file_category_type' => $categoryType,
-            's3_key' => $key,
-            's3_bucket' => $bucket,
-            's3_region' => $region,
-            's3_extension' => $ext,
-            'media_type' => $mediaType,
-            'format' => $mediaType,
-            'file_size' => $fileSize,
-            'is_enabled' => true,
-        ]);
-
-        return $file;
-    }
-
-    /**
-     * @param array  $conf
-     * @param string $ext
-     * @param int    $categoryType
-     * @param string $path
-     * @param string $mediaType
-     * @param array  $metaInputs
-     *
-     * @return \App\Models\Image|null
-     */
-    private function uploadImage($conf, $ext, $categoryType, $path, $mediaType, $metaInputs)
-    {
-        $dstPath = $path.'.converted';
-        $format = array_get($conf, 'format', 'jpeg');
-        $size = $this->imageService->convert($path, $dstPath, $format, array_get($conf, 'size'));
-        if (!file_exists($dstPath)) {
-            return null;
-        }
-
-        $fileSize = filesize($dstPath);
-        $bucket = $this->decideBucket($conf['buckets']);
-        $region = array_get($conf, 'region', 'ap-northeast-1');
-        $seed = array_get($conf, 'seed_prefix', '').time().rand();
-        $key = $this->generateFileName($seed, null, $ext);
-        $url = $this->uploadToS3($dstPath, $region, $bucket, $key, 'image/'.$format);
-
-        /** @var  \App\Models\Image|null $image */
-        $image = $this->imageRepository->create([
-            'url' => $url,
-            'title' => array_get($metaInputs, 'title', ''),
-            'file_category_type' => $categoryType,
-            'entity_type' => array_get($metaInputs, 'entityType', ''),
-            'entity_id' => array_get($metaInputs, 'entityId', ''),
-            's3_key' => $key,
-            's3_bucket' => $bucket,
-            's3_region' => $region,
-            's3_extension' => $ext,
-            'media_type' => $mediaType,
-            'format' => $mediaType,
-            'file_size' => $fileSize,
-            'width' => array_get($size, 'width', 0),
-            'height' => array_get($size, 'height', 0),
-            'is_enabled' => true,
-        ]);
-
-        foreach (array_get($conf, 'thumbnails', []) as $thumbnail) {
-            $this->imageService->convert($path, $dstPath, $format, $thumbnail, true);
-            $thumbnailKey = $this->getThumbnailKeyFromKey($key, $thumbnail);
-            $this->uploadToS3($dstPath, $region, $bucket, $thumbnailKey, 'image/'.$format);
-        }
-
-        return $image;
-    }
-
-    /**
-     * @param string $path
-     * @param string $region
-     * @param string $bucket
-     * @param string $key
-     * @param string $mediaType
-     *
-     * @return null|string
-     */
-    private function uploadToS3($path, $region, $bucket, $key, $mediaType = 'binary/octet-stream')
-    {
-        $client = $this->getS3Client($region);
-
-        if (!file_exists($path)) {
-            return null;
-        }
-
-        $client->putObject([
-            'Bucket' => $bucket,
-            'Key' => $key,
-            'SourceFile' => $path,
-            'ContentType' => $mediaType,
-            'ACL' => 'public-read',
-        ]);
-
-        unlink($path);
-
-        return $client->getObjectUrl($bucket, $key);
     }
 
     /**

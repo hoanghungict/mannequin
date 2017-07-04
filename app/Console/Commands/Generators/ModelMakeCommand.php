@@ -247,7 +247,7 @@ class ModelMakeCommand extends GeneratorCommandBase
         $columns = $this->getFillableColumns($tableName);
         $multilingualKeys = [];
         foreach ($columns as $column) {
-            if (preg_match('/^(.*)_en$/', $column, $matches)) {
+            if (preg_match('/^(.*)_gb$/', $column, $matches)) {
                 $multilingualKeys[] = $matches[1];
             }
         }
@@ -265,6 +265,10 @@ class ModelMakeCommand extends GeneratorCommandBase
         $this->replaceTemplateVariable($stub, 'IMAGE_COLUMNS', $imageFieldString);
 
         $this->replaceTemplateVariable($stub, 'CLASS', $className);
+
+        $relation = $this->generateRelationFunctions($name);
+        $this->replaceTemplateVariable($stub, 'RELATION_CLASS', $relation['class']);
+        $this->replaceTemplateVariable($stub, 'RELATION_FUNCTION', $relation['functions']);
 
         $this->files->put($path, $stub);
 
@@ -307,6 +311,84 @@ class ModelMakeCommand extends GeneratorCommandBase
     protected function getStubForPresenter()
     {
         return __DIR__.'/stubs/presenter.stub';
+    }
+
+
+    /**
+     * @return array[ functions, class ]
+     * */
+    protected function generateRelationFunctions($name)
+    {
+        $tableName = $this->getTableName($name);
+        $columns = $this->getTableColumns($tableName);
+
+        $result['class'] = "";
+        $result['functions'] = "";
+
+        foreach ($columns as $column) {
+            $columnName = $column->getName();
+            if (preg_match('/^(.*_image)_id$/', $columnName, $matches)) {
+                $relationName = \StringHelper::snake2Camel($matches[1]);
+
+                $result['functions'] .= '/**' . PHP_EOL . '    ' .
+                    '* @return \App\Models\Image' . PHP_EOL . '    ' .
+                    '* */' . PHP_EOL . '    ' .
+                    'public function ' . $relationName . '()' . PHP_EOL . '    ' .
+                    '{' . PHP_EOL . '        ' .
+                        'if( \CacheHelper::cacheRedisEnabled() ) {' . PHP_EOL . '            ' .
+                            '$cached = Redis::hget(\CacheHelper::generateCacheKey(\'hash_images\'), $this->entity->' . $columnName . ');' . PHP_EOL . '            ' .
+                                'if( $cached ) {' . PHP_EOL . '                ' .
+                                '$image = new Image(json_decode($cached, true));' . PHP_EOL . '                ' .
+                                '$image[\'id\'] = json_decode($cached, true)[\'id\'];' . PHP_EOL . '                ' .
+                                'return $image;' . PHP_EOL . '            ' .
+                            '} else {' . PHP_EOL . '                ' .
+                                '$image = $this->entity->' . $relationName . ';' . PHP_EOL . '                ' .
+                                'Redis::hsetnx(\CacheHelper::generateCacheKey(\'hash_images\'), $this->entity->' . $columnName . ', $image);' . PHP_EOL . '                ' .
+                                'return $image;' . PHP_EOL . '            ' .
+                            '}' . PHP_EOL . '        ' .
+                        '}' . PHP_EOL . PHP_EOL . '        ' .
+
+                        '$image = $this->entity->' . $relationName . ';' . PHP_EOL . '        ' .
+                        'return $image;' . PHP_EOL . '    ' .
+
+                    '}' . PHP_EOL . PHP_EOL . '    ';
+
+                $result['class'] .= 'use App\Models\Image;' . PHP_EOL;
+            } elseif (preg_match('/^(.*)_id$/', $columnName, $matches)) {
+                $relationName = \StringHelper::snake2Camel($matches[1]);
+                $className = ucfirst($relationName);
+                if (!$this->getPath($className)) {
+                    continue;
+                }
+
+                $result['functions'] .= '/**' . PHP_EOL . '    ' .
+                    '* @return \App\Models\\' . $className . PHP_EOL . '    ' .
+                    '* */' . PHP_EOL . '    ' .
+                    'public function ' . $relationName . '()' . PHP_EOL . '    ' .
+                    '{' . PHP_EOL . '        ' .
+                        'if( \CacheHelper::cacheRedisEnabled() ) {' . PHP_EOL . '            ' .
+                            '$cached = Redis::hget(\CacheHelper::generateCacheKey(\'hash_' . $this->getTableName($className) . '\'), $this->entity->' . $columnName . ');' . PHP_EOL . '            ' .
+                                'if( $cached ) {' . PHP_EOL . '                ' .
+                                '$' . $relationName . ' = new ' . $className . '(json_decode($cached, true));' . PHP_EOL . '                ' .
+                                '$' . $relationName . '[\'id\'] = json_decode($cached, true)[\'id\'];' . PHP_EOL . '                ' .
+                                'return $' . $relationName . ';' . PHP_EOL . '            ' .
+                            '} else {' . PHP_EOL . '                ' .
+                                '$' . $relationName . ' = $this->entity->' . $relationName . ';' . PHP_EOL . '                ' .
+                                'Redis::hsetnx(\CacheHelper::generateCacheKey(\'hash_' . $this->getTableName($className) . '\'), $this->entity->' . $columnName . ', $' . $relationName . ');' . PHP_EOL . '                ' .
+                                'return $' . $relationName . ';' . PHP_EOL . '            ' .
+                            '}' . PHP_EOL . '        ' .
+                        '}' . PHP_EOL . PHP_EOL . '        ' .
+
+                        '$image = $this->entity->' . $relationName . ';' . PHP_EOL . '        ' .
+                        'return $image;' . PHP_EOL . '    ' .
+
+                    '}' . PHP_EOL . PHP_EOL . '    ';
+
+                $result['class'] .= 'use App\Models\\' . $className . ';' . PHP_EOL;
+            }
+        }
+
+        return $result;
     }
 
     /**
@@ -413,14 +495,14 @@ class ModelMakeCommand extends GeneratorCommandBase
             $columnName = $column->getName();
             if (preg_match('/^(.*_image)_id$/', $columnName, $matches)) {
                 $relationName = \StringHelper::snake2Camel($matches[1]);
-                $relations .= '    public function '.$relationName.'()'.PHP_EOL.'    {'.PHP_EOL.'        return $this->hasOne(\App\Models\Image::class, \'id\', \''.$columnName.'\');'.PHP_EOL.'    }'.PHP_EOL.PHP_EOL;
+                $relations .= 'public function ' . $relationName . '()' . PHP_EOL . '    {' . PHP_EOL . '        return $this->hasOne(\App\Models\Image::class, \'id\', \'' . $columnName . '\');' . PHP_EOL . '    }' . PHP_EOL . PHP_EOL . '    ';
             } elseif (preg_match('/^(.*)_id$/', $columnName, $matches)) {
                 $relationName = \StringHelper::snake2Camel($matches[1]);
                 $className = ucfirst($relationName);
                 if (!$this->getPath($className)) {
                     continue;
                 }
-                $relations .= '    public function '.$relationName.'()'.PHP_EOL.'    {'.PHP_EOL.'        return $this->belongsTo(\App\Models\\'.$className.'::class, \''.$columnName.'\', \'id\');'.PHP_EOL.'    }'.PHP_EOL.PHP_EOL;
+                $relations .= 'public function ' . $relationName . '()' . PHP_EOL . '    {' . PHP_EOL . '        return $this->belongsTo(\App\Models\\' . $className . '::class, \'' . $columnName . '\', \'id\');' . PHP_EOL . '    }' . PHP_EOL . PHP_EOL . '    ';
             }
         }
 

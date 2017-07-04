@@ -61,7 +61,7 @@ class AdminUserNotificationController extends Controller
         );
 
         return view(
-            'pages.admin.admin-user-notifications.index',
+            'pages.admin.' . config('view.admin') . '.admin-user-notifications.index',
             [
                 'notifications' => $notifications,
                 'count'         => $count,
@@ -78,7 +78,7 @@ class AdminUserNotificationController extends Controller
     public function create()
     {
         return view(
-            'pages.admin.admin-user-notifications.edit',
+            'pages.admin.' . config('view.admin') . '.admin-user-notifications.edit',
             [
                 'isNew'                 => true,
                 'adminUserNotification' => $this->adminUserNotificationRepository->getBlankModel(),
@@ -161,7 +161,7 @@ class AdminUserNotificationController extends Controller
         }
 
         return view(
-            'pages.admin.admin-user-notifications.edit',
+            'pages.admin.' . config('view.admin') . '.admin-user-notifications.edit',
             [
                 'isNew'                 => false,
                 'adminUserNotification' => $model,

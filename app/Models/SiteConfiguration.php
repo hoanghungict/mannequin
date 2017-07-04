@@ -39,6 +39,8 @@ class SiteConfiguration extends Base
      */
     protected $table = 'site_configurations';
 
+    protected $presenter = \App\Presenters\SiteConfigurationPresenter::class;
+
     /**
      * The attributes that are mass assignable.
      *

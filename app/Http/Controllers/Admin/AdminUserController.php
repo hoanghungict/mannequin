@@ -62,7 +62,7 @@ class AdminUserController extends Controller
         );
 
         return view(
-            'pages.admin.admin-users.index',
+            'pages.admin.' . config('view.admin') . '.admin-users.index',
             [
                 'adminUsers' => $adminUsers,
                 'count'      => $count,
@@ -79,7 +79,7 @@ class AdminUserController extends Controller
     public function create()
     {
         return view(
-            'pages.admin.admin-users.edit',
+            'pages.admin.' . config('view.admin') . '.admin-users.edit',
             [
                 'isNew'     => true,
                 'adminUser' => $this->adminUserRepository->getBlankModel(),
@@ -131,16 +131,14 @@ class AdminUserController extends Controller
 
         if ($request->hasFile('profile_image')) {
             $file       = $request->file('profile_image');
-            $mediaType  = $file->getClientMimeType();
-            $path       = $file->getPathname();
-            $image      = $this->fileUploadService->upload(
-                'user-profile-image',
-                $path,
-                $mediaType,
+
+            $image = $this->fileUploadService->upload(
+                'user_profile_image',
+                $file,
                 [
-                    'entityType' => 'user-profile-image',
-                    'entityId'   => $adminUser->id,
-                    'title'      => $request->input('name', ''),
+                    'entity_type' => 'user_profile_image',
+                    'entity_id'   => $adminUser->id,
+                    'title'       => $request->input('name', ''),
                 ]
             );
 
@@ -169,7 +167,7 @@ class AdminUserController extends Controller
         }
 
         return view(
-            'pages.admin.admin-users.edit',
+            'pages.admin.' . config('view.admin') . '.admin-users.edit',
             [
                 'isNew'     => false,
                 'adminUser' => $adminUser,
@@ -217,27 +215,24 @@ class AdminUserController extends Controller
 
         if ($request->hasFile('profile_image')) {
             $file = $request->file('profile_image');
-            $mediaType = $file->getClientMimeType();
-            $path = $file->getPathname();
-            $image = $this->fileUploadService->upload(
-                'user-profile-image',
-                $path,
-                $mediaType,
+
+            $newImage = $this->fileUploadService->upload(
+                'user_profile_image',
+                $file,
                 [
-                    'entityType' => 'user-profile-image',
-                    'entityId'   => $adminUser->id,
-                    'title'      => $request->input('name', ''),
+                    'entity_type' => 'user_profile_image',
+                    'entity_id'   => $adminUser->id,
+                    'title'       => $request->input('name', ''),
                 ]
             );
 
-            if (!empty($image)) {
+            if (!empty($newImage)) {
                 $oldImage = $adminUser->coverImage;
                 if (!empty($oldImage)) {
                     $this->fileUploadService->delete($oldImage);
-                    $this->imageRepository->delete($oldImage);
                 }
 
-                $this->adminUserRepository->update($adminUser, ['profile_image_id' => $image->id]);
+                $this->adminUserRepository->update($adminUser, ['profile_image_id' => $newImage->id]);
             }
         }
 

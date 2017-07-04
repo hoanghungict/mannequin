@@ -18,7 +18,7 @@ class AuthController extends Controller
 
     public function getSignIn()
     {
-        return view('pages.admin.auth.signin', [
+        return view('pages.admin.' . config('view.admin') . '.auth.signin', [
         ]);
     }
 
@@ -29,7 +29,7 @@ class AuthController extends Controller
             return redirect()->action('Admin\AuthController@getSignIn');
         }
 
-        return \RedirectHelper::intended('/admin', $this->adminUserService->getGuardName());
+        return \RedirectHelper::intended(action('Admin\IndexController@index'), $this->adminUserService->getGuardName());
     }
 
     public function postSignOut()

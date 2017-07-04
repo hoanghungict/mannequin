@@ -2,8 +2,8 @@
 
 namespace App\Repositories\Eloquent;
 
-use Illuminate\Support\Facades\Redis;
 use App\Repositories\SingleKeyModelRepositoryInterface;
+use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Str;
 use App\Models\Log;
 
@@ -19,20 +19,25 @@ class SingleKeyModelRepository extends BaseRepository implements SingleKeyModelR
     public function find($id)
     {
         $modelClass = $this->getModelClassName();
-        $cacheKey   = $modelClass::getTableName();
-        $cached = Redis::hget(\CacheHelper::generateCacheKey('hash_' . $cacheKey), $id);
-        if( $cached ) {
-            $object = new $modelClass(json_decode($cached, true));
-            $object['attributes'] = json_decode($cached, true);
-            $object['original']   = json_decode($cached, true);
-            $object['exists']     = true;
+        if( \CacheHelper::cacheRedisEnabled() ) {
+            $cacheKey   = $modelClass::getTableName();
+            $cached = Redis::hget(\CacheHelper::generateCacheKey('hash_' . $cacheKey), $id);
+            if( $cached ) {
+                $object = new $modelClass(json_decode($cached, true));
+                $object['attributes'] = json_decode($cached, true);
+                $object['original']   = json_decode($cached, true);
+                $object['exists']     = true;
 
-            return $object;
-        } else {
-            $object = $modelClass::find($id);
-            Redis::hsetnx(\CacheHelper::generateCacheKey('hash_' . $cacheKey), $id, $object);
-            return $object;
+                return $object;
+            } else {
+                $object = $modelClass::find($id);
+                Redis::hsetnx(\CacheHelper::generateCacheKey('hash_' . $cacheKey), $id, $object);
+                return $object;
+            }
         }
+
+        $object = $modelClass::find($id);
+        return $object;
     }
 
     public function allByIds($ids, $order = null, $direction = null, $reorder = false)

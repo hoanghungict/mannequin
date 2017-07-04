@@ -56,7 +56,7 @@ class AuthController extends Controller
 
         $user = $this->userService->signInByAPI($data);
         if(empty($user)) {
-            return $this->response(101);
+            return $this->response(902);
         }
 
         return $this->response(100, $user->toAPIArray());

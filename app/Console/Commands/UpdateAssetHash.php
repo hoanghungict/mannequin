@@ -26,7 +26,7 @@ class UpdateAssetHash extends Command
 
     protected $type = '';
 
-    public function __construct( Filesystem $files )
+    public function __construct(Filesystem $files)
     {
         parent::__construct();
         $this->files = $files;
@@ -40,11 +40,11 @@ class UpdateAssetHash extends Command
     public function handle()
     {
         $configPath = $this->getConfigFilePath();
-        $config = $this->files->get( $configPath );
+        $config = $this->files->get($configPath);
         $newVersionNumber = $this->getNewVersionNumber();
-        $newConfig = $this->replaceVersionNumber( $config, $newVersionNumber );
-        echo "new version: $newVersionNumber" . PHP_EOL;
-        $this->files->put( $configPath, $newConfig );
+        $newConfig = $this->replaceVersionNumber($config, $newVersionNumber);
+        echo "new version: $newVersionNumber".PHP_EOL;
+        $this->files->put($configPath, $newConfig);
     }
 
     /**
@@ -52,7 +52,7 @@ class UpdateAssetHash extends Command
      */
     private function getConfigFilePath()
     {
-        return $this->laravel[ 'path.config' ] . '/asset.php';
+        return $this->laravel['path.config'].'/asset.php';
     }
 
     /**
@@ -60,13 +60,12 @@ class UpdateAssetHash extends Command
      */
     private function getNewVersionNumber()
     {
-        return \DateTimeHelper::now()
-                              ->format( 'U' );
+        return \DateTimeHelper::now()->format('U');
     }
 
-    private function replaceVersionNumber( $file, $version )
+    private function replaceVersionNumber($file, $version)
     {
-        $file = preg_replace( '/\'\d{10}\'/', "'$version'", $file );
+        $file = preg_replace('/\'\d{10}\'/', "'$version'", $file);
 
         return $file;
     }

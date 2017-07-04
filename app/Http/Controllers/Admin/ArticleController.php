@@ -30,18 +30,18 @@ class ArticleController extends Controller
     protected $imageService;
 
     public function __construct(
-        ArticleRepositoryInterface $articleRepository,
-        ArticleServiceInterface $articleService,
-        FileUploadServiceInterface $fileUploadService,
-        ImageRepositoryInterface $imageRepository,
-        ImageServiceInterface $imageService
+        ArticleRepositoryInterface      $articleRepository,
+        ArticleServiceInterface         $articleService,
+        FileUploadServiceInterface      $fileUploadService,
+        ImageRepositoryInterface        $imageRepository,
+        ImageServiceInterface           $imageService
     )
     {
-        $this->articleRepository = $articleRepository;
-        $this->articleService = $articleService;
-        $this->fileUploadService = $fileUploadService;
-        $this->imageRepository = $imageRepository;
-        $this->imageService = $imageService;
+        $this->articleRepository        = $articleRepository;
+        $this->articleService           = $articleService;
+        $this->fileUploadService        = $fileUploadService;
+        $this->imageRepository          = $imageRepository;
+        $this->imageService             = $imageService;
     }
 
     /**
@@ -53,14 +53,14 @@ class ArticleController extends Controller
      */
     public function index( PaginationRequest $request )
     {
-        $paginate[ 'offset' ] = $request->offset();
-        $paginate[ 'limit' ] = $request->limit();
-        $paginate[ 'order' ] = $request->order();
+        $paginate[ 'offset' ]    = $request->offset();
+        $paginate[ 'limit' ]     = $request->limit();
+        $paginate[ 'order' ]     = $request->order();
         $paginate[ 'direction' ] = $request->direction();
-        $paginate[ 'baseUrl' ] = action( 'Admin\ArticleController@index' );
+        $paginate[ 'baseUrl' ]   = action( 'Admin\ArticleController@index' );
 
         $count = $this->articleRepository->count();
-        $models = $this->articleRepository->get(
+        $articles = $this->articleRepository->get(
             $paginate[ 'order' ],
             $paginate[ 'direction' ],
             $paginate[ 'offset' ],
@@ -68,9 +68,9 @@ class ArticleController extends Controller
         );
 
         return view(
-            'pages.admin.articles.index',
+            'pages.admin.' . config('view.admin') . '.articles.index',
             [
-                'models'   => $models,
+                'models'   => $articles,
                 'count'    => $count,
                 'paginate' => $paginate,
             ]
@@ -85,7 +85,7 @@ class ArticleController extends Controller
     public function create()
     {
         return view(
-            'pages.admin.articles.edit',
+            'pages.admin.' . config('view.admin') . '.articles.edit',
             [
                 'isNew'   => true,
                 'article' => $this->articleRepository->getBlankModel(),
@@ -100,7 +100,7 @@ class ArticleController extends Controller
      *
      * @return \Response
      */
-    public function store( ArticleRequest $request )
+    public function store(ArticleRequest $request)
     {
         $input = $request->only(
             [
@@ -114,44 +114,42 @@ class ArticleController extends Controller
             ]
         );
 
-        $input[ 'is_enabled' ] = $request->get( 'is_enabled', 0 );
-        $input[ 'locale' ] = $request->get( 'locale', 'ja' );
-        $input[ 'publish_started_at' ] = ( $input[ 'publish_started_at' ] != "" ) ? $input[ 'publish_started_at' ] : null;
-        $input[ 'publish_ended_at' ] = ( $input[ 'publish_ended_at' ] != "" ) ? $input[ 'publish_ended_at' ] : null;
+        $input['is_enabled']         = $request->get('is_enabled', 0);
+        $input['locale']             = $request->get('locale', 'ja');
+        $input['publish_started_at'] = ($input['publish_started_at'] != "") ? $input['publish_started_at'] : null;
+        $input['publish_ended_at']   = ($input['publish_ended_at'] != "") ? $input['publish_ended_at'] : null;
 
-        $model = $this->articleRepository->create( $input );
+        $model = $this->articleRepository->create($input);
 
-        if( empty( $model ) ) {
+        if (empty($model)) {
             return redirect()
                 ->back()
-                ->withErrors( trans( 'admin.errors.general.save_failed' ) );
+                ->withErrors(trans('admin.errors.general.save_failed'));
         }
 
-        if( $request->hasFile( 'cover_image' ) ) {
-            $file = $request->file( 'cover_image' );
-            $mediaType = $file->getClientMimeType();
-            $path = $file->getPathname();
+        if ($request->hasFile('cover_image')) {
+            $file = $request->file('cover_image');
+
             $image = $this->fileUploadService->upload(
-                'article-cover-image',
-                $path,
-                $mediaType,
+                'article_cover_image',
+                $file,
                 [
-                    'entityType' => 'article-cover-image',
-                    'entityId'   => $model->id,
-                    'title'      => $request->input( 'title', '' ),
+                    'entity_type' => 'article_cover_image',
+                    'entity_id'   => $model->id,
+                    'title'       => $request->input('name', ''),
                 ]
             );
 
-            if( !empty( $image ) ) {
-                $this->articleRepository->update( $model, ['cover_image_id' => $image->id] );
+            if (!empty($image)) {
+                $this->articleRepository->update($model, ['cover_image_id' => $image->id]);
             }
         }
 
         return redirect()
-            ->action( 'Admin\ArticleController@index' )
+            ->action('Admin\ArticleController@index')
             ->with(
                 'message-success',
-                trans( 'admin.messages.general.create_success' )
+                trans('admin.messages.general.create_success')
             );
     }
 
@@ -162,18 +160,18 @@ class ArticleController extends Controller
      *
      * @return \Response
      */
-    public function show( $id )
+    public function show($id)
     {
-        $model = $this->articleRepository->find( $id );
-        if( empty( $model ) ) {
-            abort( 404 );
+        $article = $this->articleRepository->find($id);
+        if (empty($article)) {
+            abort(404);
         }
 
         return view(
-            'pages.admin.articles.edit',
+            'pages.admin.' . config('view.admin') . '.articles.edit',
             [
                 'isNew'   => false,
-                'article' => $model,
+                'article' => $article,
             ]
         );
     }
@@ -198,13 +196,14 @@ class ArticleController extends Controller
      *
      * @return \Response
      */
-    public function update( $id, ArticleRequest $request )
+    public function update($id, ArticleRequest $request)
     {
         /** @var \App\Models\Article $article */
-        $article = $this->articleRepository->find( $id );
-        if( empty( $article ) ) {
-            abort( 404 );
+        $article = $this->articleRepository->find($id);
+        if (empty($article)) {
+            abort(404);
         }
+
         $input = $request->only(
             [
                 'slug',
@@ -215,48 +214,45 @@ class ArticleController extends Controller
             ]
         );
 
-        $input[ 'is_enabled' ] = $request->get( 'is_enabled', 0 );
-        $input[ 'locale' ] = $request->get( 'locale', 'ja' );
-        if( $request->get( 'publish_started_at' ) != "" ) {
-            $input[ 'publish_started_at' ] = $request->get( 'publish_started_at' );
+        $input['is_enabled'] = $request->get('is_enabled', 0);
+        $input['locale']     = $request->get('locale', 'ja');
+        if ($request->get('publish_started_at') != "") {
+            $input['publish_started_at'] = $request->get('publish_started_at');
         }
-        if( $request->get( 'publish_ended_at' ) != "" ) {
-            $input[ 'publish_ended_at' ] = $request->get( 'publish_ended_at' );
+        if ($request->get('publish_ended_at') != "") {
+            $input['publish_ended_at'] = $request->get('publish_ended_at');
         }
 
-        $article = $this->articleRepository->update( $article, $input );
+        $article = $this->articleRepository->update($article, $input);
 
-        if( $request->hasFile( 'cover_image' ) ) {
+        if ($request->hasFile('cover_image')) {
             $currentImage = $article->coverImage;
-            $file = $request->file( 'cover_image' );
-            $mediaType = $file->getClientMimeType();
-            $path = $file->getPathname();
+            $file = $request->file('cover_image');
+
             $newImage = $this->fileUploadService->upload(
-                'article-cover-image',
-                $path,
-                $mediaType,
+                'article_cover_image',
+                $file,
                 [
-                    'entityType' => 'article',
-                    'entityId'   => $article->id,
-                    'title'      => $request->input( 'name', '' ),
+                    'entity_type' => 'article_cover_image',
+                    'entity_id'   => $article->id,
+                    'title'       => $request->input('name', ''),
                 ]
             );
 
-            if( !empty( $newImage ) ) {
-                $this->articleRepository->update( $article, ['cover_image_id' => $newImage->id] );
+            if (!empty($newImage)) {
+                $this->articleRepository->update($article, ['cover_image_id' => $newImage->id]);
 
-                if( !empty( $currentImage ) ) {
-                    $this->fileUploadService->delete( $currentImage );
-                    $this->imageRepository->delete( $currentImage );
+                if (!empty($currentImage)) {
+                    $this->fileUploadService->delete($currentImage);
                 }
             }
         }
 
         return redirect()
-            ->action( 'Admin\ArticleController@show', [$id] )
+            ->action('Admin\ArticleController@show', [$id])
             ->with(
                 'message-success',
-                trans( 'admin.messages.general.update_success' )
+                trans('admin.messages.general.update_success')
             );
     }
 
@@ -267,18 +263,19 @@ class ArticleController extends Controller
      *
      * @return \Response
      */
-    public function destroy( $id )
+    public function destroy($id)
     {
-        /** @var \App\Models\Article $model */
-        $model = $this->articleRepository->find( $id );
-        if( empty( $model ) ) {
-            abort( 404 );
+        /** @var \App\Models\Article $article */
+        $article = $this->articleRepository->find($id);
+        if (empty($article)) {
+            abort(404);
         }
-        $this->articleRepository->delete( $model );
+
+        $this->articleRepository->delete($article);
 
         return redirect()
-            ->action( 'Admin\ArticleController@index' )
-            ->with( 'message-success', trans( 'admin.messages.general.delete_success' ) );
+            ->action('Admin\ArticleController@index')
+            ->with('message-success', trans('admin.messages.general.delete_success'));
     }
 
     /**
@@ -288,75 +285,75 @@ class ArticleController extends Controller
      */
     public function preview(BaseRequest $request)
     {
-        $locale = $request->input('language');
-
-        $content = $this->articleService->filterContent($request->input('content'), $locale);
-        $title = $request->input('title');
-        $response = response()->view('pages.admin.articles.preview', [
+        $locale     = $request->input('language');
+        $content    = $this->articleService->filterContent($request->input('content'), $locale);
+        $title      = $request->input('title');
+        $response   = response()->view('pages.admin.articles.preview', [
             'content' => $content,
-            'title' => $title,
+            'title'   => $title,
         ]);
+
         //        $response->headers->set('Content-Security-Policy', "default-src 'self' 'unsafe-inline'");
         $response->headers->set('X-XSS-Protection', '0');
 
         return $response;
     }
 
-    public function getImages( PaginationRequest $request )
+    public function getImages(PaginationRequest $request)
     {
-        $entityId = intval( $request->input( 'article_id', 0 ) );
-        $type = $request->input( 'type', 'article-image' );
+        $entityId = intval($request->input('article_id', 0));
+        $type = $request->input('type', 'article_image');
 
-        if( $entityId == 0 ) {
+        if ($entityId == 0) {
             $imageIds = $this->articleService->getImageIdsFromSession();
-            $models = $this->imageRepository->allByIds( $imageIds );
+            $models   = $this->imageRepository->allByIds($imageIds);
         } else {
             /** @var \App\Models\Image[] $models */
-            $models = $this->imageRepository->allByFileCategoryTypeAndEntityId( $type, $entityId );
+            $models = $this->imageRepository->allByFileCategoryTypeAndEntityId($type, $entityId);
         }
+
         $result = [];
-        foreach( $models as $model ) {
+        foreach ($models as $model) {
             $result[] = [
                 'id'    => $model->id,
                 'url'   => $model->url,
-                'thumb' => $model->getThumbnailUrl( 400, 300 ),
+                'thumb' => $model->getThumbnailUrl(400, 300),
             ];
         }
 
-        return response()->json( $result );
+        return response()->json($result);
     }
 
-    public function postImage( BaseRequest $request )
+    public function postImage(BaseRequest $request)
     {
-        if( !$request->hasFile( 'file' ) ) {
+        if (!$request->hasFile('file')) {
             // [TODO] ERROR JSON
-            abort( 400, 'No Image File' );
+            abort(400, 'No Image File');
         }
 
-        $type = $request->input( 'type', 'article-image' );
-        $entityId = $request->input( 'article_id', 0 );
+        $type     = $request->input('type', 'article_image');
+        $entityId = $request->input('article_id', 0);
 
-        $conf = config( 'file.categories.' . $type );
-        if( empty( $conf ) ) {
-            abort( 400, 'Invalid type: ' . $type );
+        $conf = config('file.categories.' . $type);
+        if (empty($conf)) {
+            abort(400, 'Invalid type: ' . $type);
         }
 
-        $file = $request->file( 'file' );
-        $mediaType = $file->getClientMimeType();
-        $path = $file->getPathname();
+        $file = $request->file('file');
+
         $image = $this->fileUploadService->upload(
-            $type,
-            $path,
-            $mediaType,
+            'article_cover_image',
+            $file,
             [
-                'entityType' => 'article',
-                'entityId'   => $entityId,
-                'title'      => $request->input( 'title', '' ),
+                'entity_type' => $type,
+                'entity_id'   => $entityId,
+                'title'       => $request->input('title', ''),
             ]
         );
 
-        if( $entityId == 0 ) {
-            $this->articleService->addImageIdToSession( $image->id );
+
+        if ($entityId == 0) {
+            $this->articleService->addImageIdToSession($image->id);
         }
 
         return response()->json(
@@ -367,33 +364,34 @@ class ArticleController extends Controller
         );
     }
 
-    public function deleteImage( BaseRequest $request )
+    public function deleteImage(BaseRequest $request)
     {
-        $url = $request->input( 'src' );
-        if( empty( $url ) ) {
-            abort( 400, 'No URL Given' );
+        $url = $request->input('src');
+        if (empty($url)) {
+            abort(400, 'No URL Given');
         }
+
         /** @var \App\Models\Image|null $image */
-        $image = $this->imageRepository->findByUrl( $url );
-        if( empty( $image ) ) {
-            abort( 404 );
+        $image = $this->imageRepository->findByUrl($url);
+        if (empty($image)) {
+            abort(404);
         }
-        $entityId = $request->input( 'article_id', 0 );
-        if( $entityId != $image->entity_id ) {
-            abort( 400, 'Article ID Mismatch' );
+
+        $entityId = $request->input('article_id', 0);
+        if ($entityId != $image->entity_id) {
+            abort(400, 'Article ID Mismatch');
         } else {
-            if( $entityId == 0 && !$this->articleService->hasImageIdInSession( $image->id ) ) {
-                abort( 400, 'Entity ID Mismatch' );
+            if ($entityId == 0 && !$this->articleService->hasImageIdInSession($image->id)) {
+                abort(400, 'Entity ID Mismatch');
             }
         }
 
-        $this->fileUploadService->delete( $image );
-        $this->imageRepository->delete( $image );
+        $this->fileUploadService->delete($image);
 
-        if( $entityId == 0 ) {
-            $this->articleService->removeImageIdFromSession( $image->id );
+        if ($entityId == 0) {
+            $this->articleService->removeImageIdFromSession($image->id);
         }
 
-        return response()->json( ['status' => 'ok'], 204 );
+        return response()->json(['status' => 'ok'], 204);
     }
 }

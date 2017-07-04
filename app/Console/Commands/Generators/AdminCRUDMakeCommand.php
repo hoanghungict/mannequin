@@ -278,7 +278,7 @@ class AdminCRUDMakeCommand extends GeneratorCommandBase
 
     protected function getSideBarViewPath()
     {
-        return $this->laravel['path'].'/../resources/views/layouts/admin/left_navigation.blade.php';
+        return $this->laravel['path'].'/../resources/views/layouts/admin/' . config('view.admin') . '/left_navigation.blade.php';
     }
 
     /**
@@ -291,7 +291,7 @@ class AdminCRUDMakeCommand extends GeneratorCommandBase
     {
         $directoryName = \StringHelper::camel2Spinal(\StringHelper::pluralize($name));
 
-        return $this->laravel['path'].'/../resources/views/pages/admin/'.$directoryName.'/'.$type.'.blade.php';
+        return $this->laravel['path'].'/../resources/views/pages/admin/' . config('view.admin') . '/'.$directoryName.'/'.$type.'.blade.php';
     }
 
     /**
@@ -315,7 +315,7 @@ class AdminCRUDMakeCommand extends GeneratorCommandBase
 
         $routes = $this->files->get($this->getRoutesPath());
         $key = '/* NEW ADMIN RESOURCE ROUTE */';
-        $route = '\\Route::resource(\''.$directoryName.'\', \'Admin\\'.$name.'Controller\');'.PHP_EOL.'                '.$key;
+        $route = '\\Route::resource(\''.$directoryName.'\', \'Admin\\'.$name.'Controller\');'.PHP_EOL.'        '.$key;
         $routes = str_replace($key, $route, $routes);
         $this->files->put($this->getRoutesPath(), $routes);
 
@@ -364,7 +364,7 @@ class AdminCRUDMakeCommand extends GeneratorCommandBase
                     .PHP_EOL.'                        <div class="col-md-12">'
                     .PHP_EOL.'                            <div class="form-group text-center">'
                     .PHP_EOL.'                                @if( !empty($%%class%%->%%relation%%) )'
-                    .PHP_EOL.'                                    <img id="%%id%%-preview"  style="max-width: 500px; width: 100%;" src="{!! $%%class%%->%%relation%%->getThumbnailUrl(480, 300) !!}" alt="" class="margin" />'
+                    .PHP_EOL.'                                    <img id="%%id%%-preview"  style="max-width: 500px; width: 100%;" src="{!! $%%class%%->present()->%%relation%%->present()->url !!}" alt="" class="margin" />'
                     .PHP_EOL.'                                @else'
                     .PHP_EOL.'                                    <img id="%%id%%-preview" style="max-width: 500px; width: 100%;" src="{!! \URLHelper::asset(\'img/no_image.jpg\', \'common\') !!}" alt="" class="margin" />'
                     .PHP_EOL.'                                @endif'
@@ -394,7 +394,7 @@ class AdminCRUDMakeCommand extends GeneratorCommandBase
                         .PHP_EOL.'                        <div class="col-md-12">'
                         .PHP_EOL.'                            <div class="form-group @if ($errors->has(\'%%column%%\')) has-error @endif">'
                         .PHP_EOL.'                                <label for="%%column%%">@lang(\'admin.pages.%%classes-spinal%%.columns.%%column%%\')</label>'
-                        .PHP_EOL.'                                <textarea name="%%column%%" class="form-control" rows="5" placeholder="@lang(\'admin.pages.%%classes-spinal%%.columns.%%column%%\')">{{ old(\'%%column%%\') ? old(\'%%column%%\') : $%%class%%->%%column%% }}</textarea>'
+                        .PHP_EOL.'                                <textarea name="%%column%%" class="form-control" rows="5" required placeholder="@lang(\'admin.pages.%%classes-spinal%%.columns.%%column%%\')">{{ old(\'%%column%%\') ? old(\'%%column%%\') : $%%class%%->%%column%% }}</textarea>'
                         .PHP_EOL.'                            </div>'
                         .PHP_EOL.'                        </div>'
                         .PHP_EOL.'                    </div>';
@@ -410,7 +410,7 @@ class AdminCRUDMakeCommand extends GeneratorCommandBase
                         .PHP_EOL.'                            <div class="form-group">'
                         .PHP_EOL.'                                <div class="checkbox">'
                         .PHP_EOL.'                                    <label>'
-                        .PHP_EOL.'                                        <input type="checkbox" name="%%column%%" value="1"'
+                        .PHP_EOL.'                                        <input type="checkbox" name="%%column%%" required value="1"'
                         .PHP_EOL.'                                        @if( $%%class%%->%%column%%) checked @endif >'
                         .PHP_EOL.'                                        @lang(\'admin.pages.%%classes-spinal%%.columns.%%column%%\')'
                         .PHP_EOL.'                                   </label>'
@@ -428,7 +428,7 @@ class AdminCRUDMakeCommand extends GeneratorCommandBase
                         .PHP_EOL.'                            <div class="form-group">'
                         .PHP_EOL.'                                <label for="%%column%%">@lang(\'admin.pages.%%classes-spinal%%.columns.%%column%%\')</label>'
                         .PHP_EOL.'                                <div class="input-group date datetime-field">'
-                        .PHP_EOL.'                                    <input type="text" class="form-control" name="%%column%%"'
+                        .PHP_EOL.'                                    <input type="text" class="form-control" name="%%column%%" required'
                         .PHP_EOL.'                                         value="{{ old(\'%%column%%\') ? old(\'%%column%%\') : $%%class%%->%%column%% }}">'
                         .PHP_EOL.'                                    <span class="input-group-addon">'
                         .PHP_EOL.'                                        <span class="glyphicon glyphicon-calendar"></span>'
@@ -448,7 +448,7 @@ class AdminCRUDMakeCommand extends GeneratorCommandBase
                         .PHP_EOL.'                        <div class="col-md-12">'
                         .PHP_EOL.'                            <div class="form-group @if ($errors->has(\'%%column%%\')) has-error @endif">'
                         .PHP_EOL.'                                <label for="%%column%%">@lang(\'admin.pages.%%classes-spinal%%.columns.%%column%%\')</label>'
-                        .PHP_EOL.'                                <input type="text" class="form-control" id="%%column%%" name="%%column%%" value="{{ old(\'%%column%%\') ? old(\'%%column%%\') : $%%class%%->%%column%% }}">'
+                        .PHP_EOL.'                                <input type="text" class="form-control" id="%%column%%" name="%%column%%" required value="{{ old(\'%%column%%\') ? old(\'%%column%%\') : $%%class%%->%%column%% }}">'
                         .PHP_EOL.'                            </div>'
                         .PHP_EOL.'                        </div>'
                         .PHP_EOL.'                    </div>';
@@ -465,7 +465,7 @@ class AdminCRUDMakeCommand extends GeneratorCommandBase
 
     protected function getLanguageFilePath()
     {
-        return $this->laravel['path'].'/../resources/lang/en/admin.php';
+        return $this->laravel['path'].'/../resources/lang/gb/admin.php';
     }
 
     protected function generateUnitTest($name)

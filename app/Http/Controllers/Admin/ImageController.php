@@ -42,7 +42,7 @@ class ImageController extends Controller {
         );
 
         return view(
-            'pages.admin.images.index',
+            'pages.admin.' . config('view.admin') . '.images.index',
             [
                 'models' => $models,
                 'count' => $count,
@@ -58,7 +58,7 @@ class ImageController extends Controller {
      */
     public function create() {
         return view(
-            'pages.admin.images.edit',
+            'pages.admin.' . config('view.admin') . '.images.edit',
             [
                 'isNew' => true,
                 'image' => $this->imageRepository->getBlankModel(),
@@ -117,11 +117,11 @@ class ImageController extends Controller {
     public function show( $id ) {
         $model = $this->imageRepository->find( $id );
         if( empty( $model ) ) {
-            \App::abort( 404 );
+            abort( 404 );
         }
 
         return view(
-            'pages.admin.images.edit',
+            'pages.admin.' . config('view.admin') . '.images.edit',
             [
                 'isNew' => false,
                 'image' => $model,
@@ -152,7 +152,7 @@ class ImageController extends Controller {
         /** @var \App\Models\Image $model */
         $model = $this->imageRepository->find( $id );
         if( empty( $model ) ) {
-            \App::abort( 404 );
+            abort( 404 );
         }
         $input = $request->only(
             [
@@ -192,7 +192,7 @@ class ImageController extends Controller {
         /** @var \App\Models\Image $model */
         $model = $this->imageRepository->find( $id );
         if( empty( $model ) ) {
-            \App::abort( 404 );
+            abort( 404 );
         }
         $this->imageRepository->delete( $model );
 
