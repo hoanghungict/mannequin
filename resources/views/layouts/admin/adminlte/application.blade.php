@@ -2,12 +2,12 @@
 <html>
 <head>
     <!-------------------------------- Begin: Meta ----------------------------------->
-    @include('layouts.admin.meta')
+    @include('layouts.admin.' . config('view.admin') . '.meta')
     @yield('metadata')
     <!-------------------------------- End: Meta ----------------------------------->
 
     <!-------------------------------- Begin: stylesheet ----------------------------------->
-    @include('layouts.admin.styles')
+    @include('layouts.admin.' . config('view.admin') . '.styles')
     @yield('styles')
     <!-------------------------------- End: stylesheet ----------------------------------->
 
@@ -18,11 +18,11 @@
 @else
     <div class="wrapper">
         <!-------------------------------- Begin: Header ----------------------------------->
-        @include('layouts.admin.header')
+        @include('layouts.admin.' . config('view.admin') . '.header')
                 <!-------------------------------- End: Header ----------------------------------->
 
         <!-------------------------------- Begin: Left Navigation ----------------------------------->
-        @include('layouts.admin.left_navigation')
+        @include('layouts.admin.' . config('view.admin') . '.left_navigation')
                 <!-------------------------------- End: Left Navigation ----------------------------------->
 
         <!-- Content Wrapper. Contains page content -->
@@ -46,13 +46,13 @@
         </div>
 
         <!-------------------------------- Begin: Footer ----------------------------------->
-        @include('layouts.admin.footer')
+        @include('layouts.admin.' . config('view.admin') . '.footer')
                 <!-------------------------------- End: Footer ----------------------------------->
     </div>
 @endif
 
 <!-------------------------------- Begin: Script ----------------------------------->
-@include('layouts.admin.scripts')
+@include('layouts.admin.' . config('view.admin') . '.scripts')
 @yield('scripts')
 <!-------------------------------- End: Script ----------------------------------->
 </body>

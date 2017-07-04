@@ -1,4 +1,4 @@
-@extends('layouts.admin.application', ['menu' => 'products'] )
+@extends('layouts.admin.' . config('view.admin') . '.application', ['menu' => 'products'] )
 
 @section('metadata')
 @stop
@@ -41,7 +41,7 @@
 @section('content')
     <div class="box box-primary">
         <div class="box-header with-border">
-            @include('pages.admin.products.index.searchBar')
+            @include('pages.admin.' . config('view.admin') . '.products.index.searchBar')
 
             <div class="row">
                 <div class="col-sm-6">
