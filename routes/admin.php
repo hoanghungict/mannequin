@@ -25,6 +25,7 @@
             \Route::post('articles/images', 'Admin\ArticleController@postImage');
             \Route::delete('articles/images', 'Admin\ArticleController@deleteImage');
             \Route::resource('categories', 'Admin\CategoryController');
+            \Route::resource('subcategories', 'Admin\SubcategoryController');
 
             \Route::delete('images/delete', 'Admin\ImageController@deleteByUrl');
             \Route::resource('images', 'Admin\ImageController');

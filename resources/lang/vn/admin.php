@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'menu'     => [
+    'menu'       => [
         'dashboard'                => 'Bảng Điều Khiển',
         'admin_users'              => 'Quản Trị Viên',
         'users'                    => 'Người Dùng',
@@ -16,7 +16,8 @@ return [
         'products'                 => 'Sản Phẩm',
         'imports'                  => 'Nhập Kho',
         'exports'                  => 'Xuất Kho',
-        'categories'               => 'Danh Mục'
+        'categories'               => 'Danh Mục',
+        'subcategories'            => 'Danh Mục Con'
     ],
     'breadcrumb' => [
         'dashboard'                => 'Bảng Điều Khiển',
@@ -34,9 +35,10 @@ return [
         'imports'                  => 'Nhập Kho',
         'exports'                  => 'Xuất Kho',
         'categories'               => 'Danh Mục',
+        'subcategories'            => 'Danh Mục Con',
         'create_new'               => 'Create New',
     ],
-    'messages' => [
+    'messages'   => [
         'general' => [
             'update_success' => 'Cập nhật thông tin thành công !!!',
             'create_success' => 'Tạo mới dữ liệu thành công !!!',
@@ -47,7 +49,7 @@ return [
             'code_invalid'   => 'Code này đã được sử dụng !!!'
         ],
     ],
-    'errors'   => [
+    'errors'     => [
         'general'  => [
             'save_failed' => 'Failed To Save. Please contact with developers',
         ],
@@ -63,7 +65,7 @@ return [
             ],
         ],
     ],
-    'pages'    => [
+    'pages'      => [
         'common'                   => [
             'label'   => [
                 'page'               => 'Trang',
@@ -332,9 +334,26 @@ return [
                 'sign_and_name'  => '(Ký và ghi rõ họ tên)',
             ]
         ],
+        'categories'               => [
+            'columns' => [
+                'name'  => 'Tên',
+                'slug'  => 'Slug',
+                'order' => 'Thứ tự',
+                'notes' => 'Ghi chú',
+            ],
+        ],
+        'subcategories'            => [
+            'columns' => [
+                'category_id' => 'Danh Mục Cha',
+                'name'        => 'Tên',
+                'slug'        => 'Slug',
+                'order'       => 'Thứ tự',
+                'notes'       => 'Ghi chú',
+            ],
+        ],
         /* NEW PAGE STRINGS */
     ],
-    'roles'    => [
+    'roles'      => [
         'super_user' => 'Super User',
         'admin'      => 'Administrator',
         'employee'   => 'Employee'

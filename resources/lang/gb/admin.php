@@ -16,7 +16,8 @@ return [
         'products'                 => 'Products',
         'imports'                  => 'Imports',
         'exports'                  => 'Exports',
-        'categories'               => 'Categories'
+        'categories'               => 'Categories',
+        'subcategories'            => 'SubCategories'
     ],
     'breadcrumb' => [
         'dashboard'                => 'Dashboard',
@@ -34,6 +35,7 @@ return [
         'imports'                  => 'Imports',
         'exports'                  => 'Exports',
         'categories'               => 'Categories',
+        'subcategories'            => 'SubCategories',
         'create_new'               => 'Create New',
     ],
     'messages'   => [
@@ -341,12 +343,20 @@ return [
                 'sign_and_name'  => '(Sign & Full name)',
             ]
         ],
-        'categories'   => [
-            'columns'  => [
-                'name' => 'Name',
-                'slug' => 'Slug',
+        'categories'               => [
+            'columns' => [
+                'name'  => 'Name',
+                'slug'  => 'Slug',
                 'order' => 'Order',
                 'notes' => 'Notes',
+            ],
+        ],
+        'subcategories'            => [
+            'columns' => [
+                'category_id' => 'Category ID',
+                'name'        => 'Name',
+                'slug'        => 'Slug',
+                'order'       => 'Order',
             ],
         ],
         /* NEW PAGE STRINGS */
