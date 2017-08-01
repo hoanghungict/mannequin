@@ -18,6 +18,8 @@ class CreateProductsTable extends Migration
             $table->string('name');
             $table->integer('subcategory_id');
             $table->integer('unit_id');
+            $table->integer('unit2_id')->default(0);
+            $table->integer('unit_exchange')->default(0);
             $table->text('descriptions')->nullable();
             $table->integer('is_enabled')->default(1);
 
@@ -27,7 +29,7 @@ class CreateProductsTable extends Migration
             $table->index('id');
         });
 
-        $this->updateTimestampDefaultValue('users', ['updated_at'], ['created_at']);
+        $this->updateTimestampDefaultValue('products', ['updated_at'], ['created_at']);
     }
 
     /**

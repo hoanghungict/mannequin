@@ -34,7 +34,7 @@ class CreateExportsTable extends Migration
             $table->index('id');
         });
 
-        $this->updateTimestampDefaultValue('users', ['updated_at'], ['created_at']);
+        $this->updateTimestampDefaultValue('exports', ['updated_at'], ['created_at']);
     }
 
     /**

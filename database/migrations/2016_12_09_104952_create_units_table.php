@@ -22,7 +22,7 @@ class CreateUnitsTable extends Migration
             $table->index('id');
         });
 
-        $this->updateTimestampDefaultValue('users', ['updated_at'], ['created_at']);
+        $this->updateTimestampDefaultValue('units', ['updated_at'], ['created_at']);
     }
 
     /**

@@ -28,7 +28,7 @@ class CreateExportDetailsTable extends Migration
             $table->index(['id', 'export_id']);
         });
 
-        $this->updateTimestampDefaultValue('users', ['updated_at'], ['created_at']);
+        $this->updateTimestampDefaultValue('export_details', ['updated_at'], ['created_at']);
 
     }
 
