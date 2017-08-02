@@ -21,6 +21,7 @@ class CreateExportDetailsTable extends Migration
             $table->bigInteger('prices');
             $table->integer('quantity');
             $table->integer('unit_id');
+            $table->integer('unit_exchange')->default(1);
 
             $table->softDeletes();
             $table->timestamps();
