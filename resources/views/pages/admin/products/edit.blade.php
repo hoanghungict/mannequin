@@ -142,22 +142,31 @@
                 @endif
 
                 <div class="row">
-                    <div class="col-sm-6">
+                    <div class="col-sm-4">
                         <div class="form-group @if ($errors->has('quantity')) has-error @endif">
                             <label for="quantity">@lang('admin.pages.products.columns.quantity')</label>
                             <input type="number" @if( !$isNew ) disabled @endif class="form-control" id="quantity" name="quantity" value="{{ old('quantity') ? old('quantity') : (isset($product->present()->getStandardOption->quantity) ? $product->present()->getStandardOption->quantity : 0) }}">
                         </div>
                     </div>
-                    <div class="col-sm-6">
+                    <div class="col-sm-4">
                         <label for="unit_id">@lang('admin.pages.products.columns.unit_id')</label>
-                        <select class="form-control" name="unit_id" style="margin-bottom: 15px;">
+                        <select class="form-control" id="unit-id" name="unit_id" style="margin-bottom: 15px;" @if( !$isNew ) disabled @endif>
                             <option value="">@lang('admin.pages.common.label.select_unit')</option>
                             @foreach( $units as $unit )
-                                <option value="{!! $unit->id !!}" @if( (old('unit_id') && old('unit_id') == $unit->id) || ( isset($product->unit_id) && ($product->unit_id == $unit->id) ) ) selected @endif >
-                                    {{ $unit->name }}
-                                </option>
+                                <option value="{!! $unit->id !!}" @if( (old('unit_id') && old('unit_id') == $unit->id) || ( isset($product->unit_id) && ($product->unit_id == $unit->id) ) ) selected @endif >{{ $unit->name }}</option>
                             @endforeach
                         </select>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="form-group @if ($errors->has('unit2_id')) has-error @endif">
+                            <label for="unit2_id">@lang('admin.pages.products.columns.unit2_id')</label>
+                            <input type="text" disabled class="form-control" id="unit2-id" value="{{(isset($product->unit2) && $product->unit_exchange) ? $product->unit2->name . ' (' . $product->unit_exchange . ' ' . $product->unit->name . ')' : ''}}">
+                            <input type="hidden" name="unit2_id" value="2">
+                            <input type="hidden" name="unit_exchange" value="2">
+                            <div id="edit-unit2" data-toggle="modal" data-target="#ModalChangeUnit2"  style="position: absolute; right: 20px; top: 32px; cursor: pointer; color: #005999;">
+                                <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -183,71 +192,148 @@
         </div>
     </form>
 
-    @if( !$isNew )
-        @if( $authUser->hasRole(\App\Models\AdminUserRole::ROLE_SUPER_USER) )
-        @endif
-        <form action="{{ \URL::action('Admin\ProductOptionController@create') }}" method="post" onsubmit="return confirm('Are you sure to create new Product Options');">
-            {!! csrf_field() !!}
-            <input type="hidden" name="product_id" value="{{ $product->id }}">
-            <div class="box">
-                <div class="box-header with-border">
-                    <strong style="font-size: 18px;"></strong>
 
-                    @if( $authUser->hasRole(\App\Models\AdminUserRole::ROLE_SUPER_USER) )
-                        <h3 class="box-title">
-                            <span class="btn btn-block btn-default btn-sm" data-toggle="modal" data-target="#ModalOptions" onclick="resetModalProductOption();"  style="width: 125px;">@lang('admin.pages.products.options.create_option_button')</span>
-                        </h3>
-                    @endif
-                </div>
+    @if( $authUser->hasRole(\App\Models\AdminUserRole::ROLE_SUPER_USER) )
+        @if( !$isNew )
+            <form action="{{ \URL::action('Admin\ProductOptionController@create') }}" method="post" onsubmit="return confirm('Are you sure to create new Product Options');">
+                {!! csrf_field() !!}
+                <input type="hidden" name="product_id" value="{{ $product->id }}">
+                <div class="box">
+                    <div class="box-header with-border">
+                        <strong style="font-size: 18px;"></strong>
 
-                <div class="box-body">
-                    <table class="table table-bordered create-product-options">
-                        <tr>
-                            <th>@lang('admin.pages.products.options.properties')</th>
+                        @if( $authUser->hasRole(\App\Models\AdminUserRole::ROLE_SUPER_USER) )
+                            <h3 class="box-title">
+                                <span class="btn btn-block btn-default btn-sm" data-toggle="modal" data-target="#ModalOptions" onclick="resetModalProductOption();"  style="width: 125px;">@lang('admin.pages.products.options.create_option_button')</span>
+                            </h3>
+                        @endif
+                    </div>
 
-                            @if( $authUser->hasRole(\App\Models\AdminUserRole::ROLE_SUPER_USER) )
-                                <th width="100px">@lang('admin.pages.products.columns.import_price')</th>
-                                <th width="100px">@lang('admin.pages.products.columns.export_price')</th>
-                            @endif
-
-                            <th width="100px">@lang('admin.pages.products.columns.quantity')</th>
-                            <th width="100px">@lang('admin.pages.products.columns.unit_id')</th>
-
-                            @if( $authUser->hasRole(\App\Models\AdminUserRole::ROLE_SUPER_USER) )
-                                <th width="100px">@lang('admin.pages.common.label.actions')</th>
-                            @endif
-                        </tr>
-                        @foreach( $product->options as $option )
+                    <div class="box-body">
+                        <table class="table table-bordered create-product-options">
                             <tr>
-                                <td>{{ $option->present()->getProductOptionName}}</td>
+                                <th>@lang('admin.pages.products.options.properties')</th>
 
                                 @if( $authUser->hasRole(\App\Models\AdminUserRole::ROLE_SUPER_USER) )
-                                    <td>{{ number_format($option['import_price'], '0', ',', ' ') }}</td>
-                                    <td>{{ number_format($option['export_price'], '0', ',', ' ') }}</td>
+                                    <th width="100px">@lang('admin.pages.products.columns.import_price')</th>
+                                    <th width="100px">@lang('admin.pages.products.columns.export_price')</th>
                                 @endif
 
-                                <td>{{ number_format($option['quantity'], '0', ',', ' ') }}</td>
-                                <td>{{ $product->unit->name }}</td>
+                                <th width="100px">@lang('admin.pages.products.columns.quantity')</th>
+                                <th width="100px">@lang('admin.pages.products.columns.unit_id')</th>
 
                                 @if( $authUser->hasRole(\App\Models\AdminUserRole::ROLE_SUPER_USER) )
-                                    <td></td>
+                                    <th width="100px">@lang('admin.pages.common.label.actions')</th>
                                 @endif
                             </tr>
-                        @endforeach
-                    </table>
-                </div>
+                            @foreach( $product->options as $option )
+                                <tr>
+                                    <td>{{ $option->present()->getProductOptionName}}</td>
 
-                <div class="box-footer">
-                    @if( $authUser->hasRole(\App\Models\AdminUserRole::ROLE_SUPER_USER) )
-                        <button type="submit" class="btn btn-primary btn-sm" style="width: 125px;">@lang('admin.pages.common.buttons.save')</button>
-                    @endif
+                                    @if( $authUser->hasRole(\App\Models\AdminUserRole::ROLE_SUPER_USER) )
+                                        <td>{{ number_format($option['import_price'], '0', ',', ' ') }}</td>
+                                        <td>{{ number_format($option['export_price'], '0', ',', ' ') }}</td>
+                                    @endif
+
+                                    <td>{{ number_format($option['quantity'], '0', ',', ' ') }}</td>
+                                    <td>{{ $product->unit->name }}</td>
+
+                                    @if( $authUser->hasRole(\App\Models\AdminUserRole::ROLE_SUPER_USER) )
+                                        <td></td>
+                                    @endif
+                                </tr>
+                            @endforeach
+                        </table>
+                    </div>
+
+                    <div class="box-footer">
+                        @if( $authUser->hasRole(\App\Models\AdminUserRole::ROLE_SUPER_USER) )
+                            <button type="submit" class="btn btn-primary btn-sm" style="width: 125px;">@lang('admin.pages.common.buttons.save')</button>
+                        @endif
+                    </div>
+                </div>
+            </form>
+
+            <!------------------------------------------------------------------->
+            <!-- line modal: create product option -->
+            <div class="modal fade" id="ModalOptions" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+                <div class="modal-dialog" style="margin-top: 60px;">
+                    <div class="modal-content">
+                        <form action="#" onsubmit="return false;">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal">
+                                    <span aria-hidden="true">×</span>
+                                    <span class="sr-only">@lang('admin.pages.common.buttons.close')</span>
+                                </button>
+                                <h3 class="modal-title box-title" id="lineModalLabel" style="text-align: center;">@lang('admin.pages.products.options.create_option_title')</h3>
+                            </div>
+
+                            <div class="modal-body" style="padding-bottom: 0;">
+                                <table class="table" id="" style="margin-bottom: 0;">
+                                    <tr>
+                                        <th style="">@lang('admin.pages.products.columns.import_price')</th>
+                                        <td>
+                                            <input type="number" name="option_import_price" class="form-control" required="required" min="0" style="width: 70%;" index="-1" id="option-import-price" value="0">
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <th style="width: 175px;">@lang('admin.pages.products.columns.export_price')</th>
+                                        <td>
+                                            <input type="number" name="option_export_price" class="form-control" required="required" min="0" style="width: 70%;" id="option-export-price" value="0">
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <th style="width: 175px;">@lang('admin.pages.products.columns.quantity')</th>
+                                        <td>
+                                            <input type="number" name="option_quantity" class="form-control" required="required" min="0" style="width: 70%;" id="option-quantity" value="0">
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td colspan="2">
+                                            <table class="table " style="display: table; margin-bottom: 0;">
+                                                <tr>
+                                                    <td style="border: none;">
+                                                        <section>
+                                                            <div id="initRow" style="margin-bottom: 10px;">
+                                                                <input class="form-control" name="property_name[]" placeholder="Property" style="width: 35%; display: inline-block;">
+                                                                <input class="form-control" name="property_values[]" placeholder="Values (Ex: value 1, value 2)" style="width: 55%; display: inline-block;">
+                                                            </div>
+                                                        </section>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+
+                            <div class="modal-footer">
+                                <div class="btn-group btn-group-justified" role="group" aria-label="group button">
+                                    <div class="btn-group" role="group">
+                                        <button type="button" class="btn btn-default" data-dismiss="modal" role="button">
+                                            @lang('admin.pages.common.buttons.close')
+                                        </button>
+                                    </div>
+                                    <div class="btn-group" role="group">
+                                        <button type="submit" id="save-properties" class="btn btn-default btn-hover-green" data-action="save" role="button">
+                                            @lang('admin.pages.common.buttons.save')
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
-        </form>
+            <!------------------------------------------------------------------->
+        @endif
 
         <!------------------------------------------------------------------->
-        <!-- line modal: create product option -->
-        <div class="modal fade" id="ModalOptions" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+        <!-- line modal: change unit2 -->
+        <div class="modal fade" id="ModalChangeUnit2" tabindex="-2" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
             <div class="modal-dialog" style="margin-top: 60px;">
                 <div class="modal-content">
                     <form action="#" onsubmit="return false;">
@@ -262,40 +348,25 @@
                         <div class="modal-body" style="padding-bottom: 0;">
                             <table class="table" id="" style="margin-bottom: 0;">
                                 <tr>
-                                    <th style="">@lang('admin.pages.products.columns.import_price')</th>
+                                    <th style="vertical-align: middle">@lang('admin.pages.products.columns.unit2_id')</th>
                                     <td>
-                                        <input type="number" name="option_import_price" class="form-control" required="required" min="0" style="width: 70%;" index="-1" id="option-import-price" value="0">
+                                        <select class="form-control" name="modal_unit2_id" id="modal-unit2-id" required="required">
+                                            <option value="">@lang('admin.pages.common.label.select_unit')</option>
+                                            @foreach( $units as $unit )
+                                                @if( isset($product->unit_id) && ($product->unit_id != $unit->id) )
+                                                    <option value="{!! $unit->id !!}">{{$unit->name}}</option>
+                                                @endif
+                                            @endforeach
+                                        </select>
                                     </td>
                                 </tr>
-
                                 <tr>
-                                    <th style="width: 175px;">@lang('admin.pages.products.columns.export_price')</th>
+                                    <th style="vertical-align: middle">@lang('admin.pages.products.columns.unit_exchange')</th>
                                     <td>
-                                        <input type="number" name="option_export_price" class="form-control" required="required" min="0" style="width: 70%;" id="option-export-price" value="0">
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <th style="width: 175px;">@lang('admin.pages.products.columns.quantity')</th>
-                                    <td>
-                                        <input type="number" name="option_quantity" class="form-control" required="required" min="0" style="width: 70%;" id="option-quantity" value="0">
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td colspan="2">
-                                        <table class="table " style="display: table; margin-bottom: 0;">
-                                            <tr>
-                                                <td style="border: none;">
-                                                    <section>
-                                                        <div id="initRow" style="margin-bottom: 10px;">
-                                                            <input class="form-control" name="property_name[]" placeholder="Property" style="width: 35%; display: inline-block;">
-                                                            <input class="form-control" name="property_values[]" placeholder="Values (Ex: value 1, value 2)" style="width: 55%; display: inline-block;">
-                                                        </div>
-                                                    </section>
-                                                </td>
-                                            </tr>
-                                        </table>
+                                        <div class="input-group" style="width: 100%; border: 1px solid #ccc; border-radius: 3px;">
+                                            <input type="number" id="modal-unit-exchange" name="modal_unit_exchange" class="form-control" required="required" min="0" value="0" style="border: none;">
+                                            <span id="modal-current-unit" class="input-group-addon" style="padding: 0 25px; border: none; background: #eeeeee">{{$product->unit->name}}</span>
+                                        </div>
                                     </td>
                                 </tr>
                             </table>
@@ -309,7 +380,7 @@
                                     </button>
                                 </div>
                                 <div class="btn-group" role="group">
-                                    <button type="submit" id="save-properties" class="btn btn-default btn-hover-green" data-action="save" role="button">
+                                    <button type="submit" id="save-change-unit2" class="btn btn-default btn-hover-green" data-action="save" role="button">
                                         @lang('admin.pages.common.buttons.save')
                                     </button>
                                 </div>

@@ -118,6 +118,24 @@ $(function () {
             }
         },
     });
+
+    // change unit2
+    $('#save-change-unit2').on('click', function () {
+        unit = $('#unit-id :selected').text();
+        unit2Text = $('#modal-unit2-id :selected').text();
+        unit2Id = $('#modal-unit2-id :selected').val();
+        unitExchange = $('#modal-unit-exchange').val();
+
+        if( $('#modal-unit2-id :selected').val() == '' || unitExchange <= 0 ) {
+            alert('Parameters is invalid !');
+            return false;
+        }
+
+        $('#unit2-id').val(unit2Text + ' (' + unitExchange + ' ' + unit + ')');
+        $('input[name=unit2_id]').val(unit2Id);
+        $('input[name=unit_exchange]').val(unitExchange);
+        $('.close').click();
+    });
 });
 
 function generateSubcategories() {

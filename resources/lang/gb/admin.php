@@ -245,7 +245,9 @@ return [
                 'name'           => 'Name',
                 'category_id'    => 'Category',
                 'subcategory_id' => 'Subcategory',
-                'unit_id'        => 'Unit',
+                'unit_id'        => 'Unit (retail)',
+                'unit2_id'       => 'Unit (wholesale)',
+                'unit_exchange'  => 'Unit Exchange',
                 'descriptions'   => 'Descriptions',
                 'quantity'       => 'Quantity',
                 'import_price'   => 'Import Prices',
@@ -253,6 +255,7 @@ return [
                 'price'          => 'Prices',
             ],
             'options' => [
+                'change_unit2_title'   => 'Change Unit (wholesale)',
                 'create_option_title'  => 'Create New Option',
                 'create_option_button' => 'Create Option',
                 'properties'           => 'Properties',
