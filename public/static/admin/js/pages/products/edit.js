@@ -136,6 +136,14 @@ $(function () {
         $('input[name=unit_exchange]').val(unitExchange);
         $('.close').click();
     });
+    $('#ModalChangeUnit2').on('show.bs.modal', function () {
+        if( $('#unit-id :selected').val() == '' ) {
+            alert('Cần chọn Đơn Vị (bán lẻ) trước');
+            return false;
+        }
+        unitText = $('#unit-id :selected').text();
+        $('#modal-current-unit').text(unitText);
+    });
 });
 
 function generateSubcategories() {

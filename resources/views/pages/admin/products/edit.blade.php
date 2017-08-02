@@ -150,7 +150,7 @@
                     </div>
                     <div class="col-sm-4">
                         <label for="unit_id">@lang('admin.pages.products.columns.unit_id')</label>
-                        <select class="form-control" id="unit-id" name="unit_id" style="margin-bottom: 15px;" @if( !$isNew ) disabled @endif>
+                        <select class="form-control" id="unit-id" name="unit_id" style="margin-bottom: 15px;" @if( !$isNew ) disabled @endif required>
                             <option value="">@lang('admin.pages.common.label.select_unit')</option>
                             @foreach( $units as $unit )
                                 <option value="{!! $unit->id !!}" @if( (old('unit_id') && old('unit_id') == $unit->id) || ( isset($product->unit_id) && ($product->unit_id == $unit->id) ) ) selected @endif >{{ $unit->name }}</option>
@@ -161,8 +161,8 @@
                         <div class="form-group @if ($errors->has('unit2_id')) has-error @endif">
                             <label for="unit2_id">@lang('admin.pages.products.columns.unit2_id')</label>
                             <input type="text" disabled class="form-control" id="unit2-id" value="{{(isset($product->unit2) && $product->unit_exchange) ? $product->unit2->name . ' (' . $product->unit_exchange . ' ' . $product->unit->name . ')' : ''}}">
-                            <input type="hidden" name="unit2_id" value="2">
-                            <input type="hidden" name="unit_exchange" value="2">
+                            <input type="hidden" name="unit2_id" value="0">
+                            <input type="hidden" name="unit_exchange" value="0">
                             <div id="edit-unit2" data-toggle="modal" data-target="#ModalChangeUnit2"  style="position: absolute; right: 20px; top: 32px; cursor: pointer; color: #005999;">
                                 <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                             </div>
@@ -236,7 +236,7 @@
                                     @endif
 
                                     <td>{{ number_format($option['quantity'], '0', ',', ' ') }}</td>
-                                    <td>{{ $product->unit->name }}</td>
+                                    <td>{{ isset($product->unit) ? $product->unit->name : '' }}</td>
 
                                     @if( $authUser->hasRole(\App\Models\AdminUserRole::ROLE_SUPER_USER) )
                                         <td></td>
@@ -353,9 +353,7 @@
                                         <select class="form-control" name="modal_unit2_id" id="modal-unit2-id" required="required">
                                             <option value="">@lang('admin.pages.common.label.select_unit')</option>
                                             @foreach( $units as $unit )
-                                                @if( isset($product->unit_id) && ($product->unit_id != $unit->id) )
-                                                    <option value="{!! $unit->id !!}">{{$unit->name}}</option>
-                                                @endif
+                                                <option value="{!! $unit->id !!}">{{$unit->name}}</option>
                                             @endforeach
                                         </select>
                                     </td>
@@ -365,7 +363,7 @@
                                     <td>
                                         <div class="input-group" style="width: 100%; border: 1px solid #ccc; border-radius: 3px;">
                                             <input type="number" id="modal-unit-exchange" name="modal_unit_exchange" class="form-control" required="required" min="0" value="0" style="border: none;">
-                                            <span id="modal-current-unit" class="input-group-addon" style="padding: 0 25px; border: none; background: #eeeeee">{{$product->unit->name}}</span>
+                                            <span id="modal-current-unit" class="input-group-addon" style="padding: 0 25px; border: none; background: #eeeeee">{{isset($product->unit) ? $product->unit->name : ''}}</span>
                                         </div>
                                     </td>
                                 </tr>

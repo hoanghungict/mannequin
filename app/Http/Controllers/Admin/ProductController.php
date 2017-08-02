@@ -132,6 +132,8 @@ class ProductController extends Controller {
                 'name',
                 'descriptions',
                 'subcategory_id',
+                'unit2_id',
+                'unit_exchange'
             ]
         );
 
