@@ -225,6 +225,8 @@ $factory->define(
             'name'           => $faker->name,
             'subcategory_id' => 1,
             'unit_id'        => 1,
+            'unit2_id'       => 1,
+            'unit_exchange'  => 1,
             'descriptions'   => $faker->sentences(3, true),
             'is_enabled'     => 1,
         ];

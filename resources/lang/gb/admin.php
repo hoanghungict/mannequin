@@ -335,6 +335,11 @@ return [
                 'sign_and_name'  => '(Sign & Full name)',
             ]
         ],
+        'units'   => [
+            'columns'  => [
+                'name' => 'Name',
+            ],
+        ],
         /* NEW PAGE STRINGS */
     ],
     'roles'      => [
