@@ -519,7 +519,7 @@ input.cmn-toggle-round-flat:checked + label:after {
     padding-right: 20px;
 }
 .import-products tr td:nth-child(6) {
-    text-align: center;
+    text-align: right;
 }
 /* End: Imports */
 
@@ -550,7 +550,7 @@ input.cmn-toggle-round-flat:checked + label:after {
     padding-right: 20px;
 }
 .export-products tr td:nth-child(6) {
-    text-align: center;
+    text-align: right;
 }
 
 #print-export-detail {

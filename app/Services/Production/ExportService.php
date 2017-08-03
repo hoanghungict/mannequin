@@ -43,7 +43,7 @@ class ExportService extends BaseService implements ExportServiceInterface
 
         foreach( $products as $product ) {
             $productOption  = $this->productOptionRepository->find($product['option_id']);
-            if( !is_numeric($product['unit_exchange']) || !is_numeric($product['unit_exchange']) ) {
+            if( !is_numeric($product['quantity']) || !is_numeric($product['unit_exchange']) ) {
                 continue;
             }
             if( $productOption->quantity >= ($product['quantity'] * $product['unit_exchange']) ) {
