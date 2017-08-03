@@ -132,6 +132,8 @@ class ProductController extends Controller {
                 'name',
                 'descriptions',
                 'subcategory_id',
+                'unit2_id',
+                'unit_exchange'
             ]
         );
 
@@ -243,12 +245,13 @@ class ProductController extends Controller {
             [
                 'name',
                 'descriptions',
-                'subcategory_id'
+                'subcategory_id',
+                'unit2_id',
+                'unit_exchange'
             ]
         );
 
         $input[ 'is_enabled' ]  = $request->get( 'is_enabled', 0 );
-        $input[ 'unit_id' ]     = $request->get( 'unit_id', 1 );
         $this->productRepository->update( $product, $input );
 
         $standardOption = $product->present()->getStandardOption;
@@ -345,7 +348,6 @@ class ProductController extends Controller {
             if( !count($properties) ) {
                 $results[$key] = $option->toAPIArray();
                 $results[$key]['name'] = trans('admin.pages.common.label.standard_option');
-                continue;
             } else {
                 $optionName = '';
                 foreach( $properties as $key2 => $propertyValue ) {
@@ -355,6 +357,12 @@ class ProductController extends Controller {
                 $results[$key] = $option->toAPIArray();
                 $results[$key]['name'] = $optionName;
             }
+
+            $results[$key]['unit_id'] = $product->unit_id;
+            $results[$key]['unit_name'] = isset($product->unit) ? $product->unit->name : '';
+            $results[$key]['unit2_id'] = $product->unit2_id;
+            $results[$key]['unit2_name'] = isset($product->unit2) ? $product->unit2->name : '';
+            $results[$key]['unit_exchange'] = $product->unit_exchange;
         }
         return response()->json(
             [

@@ -23,7 +23,7 @@ class CreateProductOptionPropertiesTable extends Migration
             $table->index('id'); 
         });
 
-        $this->updateTimestampDefaultValue('users', ['updated_at'], ['created_at']);
+        $this->updateTimestampDefaultValue('product_option_properties', ['updated_at'], ['created_at']);
     }
 
     /**

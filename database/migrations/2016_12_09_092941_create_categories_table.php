@@ -25,7 +25,7 @@ class CreateCategoriesTable extends Migration
             $table->index('id');
         });
 
-        $this->updateTimestampDefaultValue('users', ['updated_at'], ['created_at']);
+        $this->updateTimestampDefaultValue('categories', ['updated_at'], ['created_at']);
 
     }
 

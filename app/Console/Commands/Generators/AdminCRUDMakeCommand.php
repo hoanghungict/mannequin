@@ -465,7 +465,7 @@ class AdminCRUDMakeCommand extends GeneratorCommandBase
 
     protected function getLanguageFilePath()
     {
-        return $this->laravel['path'].'/../resources/lang/en/admin.php';
+        return $this->laravel['path'].'/../resources/lang/gb/admin.php';
     }
 
     protected function generateUnitTest($name)

@@ -10,6 +10,7 @@ $(function () {
         importPrice = parseInt($('#option-import-price').val());
         exportPrice = parseInt($('#option-export-price').val());
         quantity = parseInt($('#option-quantity').val());
+        unit = $('#unit-id :selected').text();
 
         propertiesName = '';
         propertiesCode = '{';
@@ -29,6 +30,10 @@ $(function () {
         }
         newRow =    '<tr>' +
                         '<td>' +
+                            propertiesName +
+                            '<input type="hidden" name="options[' + index + '][properties]" value=' + "'" + propertiesCode + "'" + '>' +
+                        '</td>' +
+                        '<td>' +
                             importPrice +
                             '<input type="hidden" name="options[' + index + '][import_price]" value="' + importPrice + '">' +
                         '</td>' +
@@ -40,10 +45,7 @@ $(function () {
                             quantity +
                             '<input type="hidden" name="options[' + index + '][quantity]" value="' + quantity + '">' +
                         '</td>' +
-                        '<td>' +
-                            propertiesName +
-                            '<input type="hidden" name="options[' + index + '][properties]" value=' + "'" + propertiesCode + "'" + '>' +
-                        '</td>' +
+                        '<td>' + unit + '</td>' +
                         '<td>' +
                             '<span onclick="deleteProductOption(this);" style="cursor: pointer; color: #ca2424;"> Delete</span>' +
                         '</td>' +
@@ -117,6 +119,32 @@ $(function () {
                 remove: '.jFiler-item-trash-action'
             }
         },
+    });
+
+    // change unit2
+    $('#save-change-unit2').on('click', function () {
+        unit = $('#unit-id :selected').text();
+        unit2Text = $('#modal-unit2-id :selected').text();
+        unit2Id = $('#modal-unit2-id :selected').val();
+        unitExchange = $('#modal-unit-exchange').val();
+
+        if( $('#modal-unit2-id :selected').val() == '' || unitExchange <= 0 ) {
+            alert('Parameters is invalid !');
+            return false;
+        }
+
+        $('#unit2-id').val(unit2Text + ' (' + unitExchange + ' ' + unit + ')');
+        $('input[name=unit2_id]').val(unit2Id);
+        $('input[name=unit_exchange]').val(unitExchange);
+        $('.close').click();
+    });
+    $('#ModalChangeUnit2').on('show.bs.modal', function () {
+        if( $('#unit-id :selected').val() == '' ) {
+            alert('Cần chọn Đơn Vị (bán lẻ) trước');
+            return false;
+        }
+        unitText = $('#unit-id :selected').text();
+        $('#modal-current-unit').text(unitText);
     });
 });
 

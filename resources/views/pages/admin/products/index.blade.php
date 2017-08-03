@@ -93,7 +93,7 @@
                         @endif
 
                         <td>{{ $product->present()->getCurrentQuantity }}</td>
-                        <td>{{ $product->unit->name }}</td>
+                        <td>{{ isset($product->unit) ? $product->unit->name : '' }}</td>
 
                         <td>
                             @if( $product->is_enabled )

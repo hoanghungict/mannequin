@@ -26,6 +26,7 @@ class ImportDetail extends Base
         'prices',
         'quantity',
         'unit_id',
+        'unit_exchange',
     ];
 
     /**
@@ -74,13 +75,14 @@ class ImportDetail extends Base
     public function toAPIArray()
     {
         return [
-            'id'                => $this->id,
-            'import_id'         => $this->import_id,
-            'product_id'        => $this->product_id,
-            'option_id'         => $this->option_id,
-            'prices'            => $this->prices,
-            'quantity'          => $this->quantity,
-            'unit_id'           => $this->unit_id,
+            'id'            => $this->id,
+            'import_id'     => $this->import_id,
+            'product_id'    => $this->product_id,
+            'option_id'     => $this->option_id,
+            'prices'        => $this->prices,
+            'quantity'      => $this->quantity,
+            'unit_id'       => $this->unit_id,
+            'unit_exchange' => $this->unit_exchange,
         ];
     }
 

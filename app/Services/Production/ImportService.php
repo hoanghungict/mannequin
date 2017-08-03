@@ -32,24 +32,28 @@ class ImportService extends BaseService implements ImportServiceInterface
         $totalAmount = $import->total_amount;
 
         foreach( $products as $product ) {
+            if( !is_numeric($product['quantity']) || !is_numeric($product['unit_exchange']) ) {
+                continue;
+            }
             $importDetail = $this->importDetailRepository->create(
                 [
-                    'import_id'         => $import->id,
-                    'product_id'        => $product['id'],
-                    'option_id'         => $product['option_id'],
-                    'prices'            => $product['import_price'],
-                    'quantity'          => $product['quantity'],
-                    'unit_id'           => $product['unit_id'],
+                    'import_id'     => $import->id,
+                    'product_id'    => $product['id'],
+                    'option_id'     => $product['option_id'],
+                    'prices'        => $product['import_price'],
+                    'quantity'      => $product['quantity'],
+                    'unit_id'       => $product['unit_id'],
+                    'unit_exchange' => $product['unit_exchange'],
                 ]
             );
 
             if( !empty($importDetail) ) {
-                $totalAmount += ($importDetail->quantity * $importDetail->prices);
+                $totalAmount += ($importDetail->quantity * $importDetail->unit_exchange * $importDetail->prices);
             }
 
             // update product option table
             $productOption  = $this->productOptionRepository->find($product['option_id']);
-            $quantity       = $productOption->quantity + $product['quantity'];
+            $quantity       = $productOption->quantity + ($product['quantity'] * $product['unit_exchange']);
             $this->productOptionRepository->update( $productOption, ['quantity' => $quantity] );
         }
 

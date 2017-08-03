@@ -25,7 +25,7 @@ class CreateProductImagesTable extends Migration
             $table->index(['product_id', 'order']);
         });
 
-        $this->updateTimestampDefaultValue('users', ['updated_at'], ['created_at']);
+        $this->updateTimestampDefaultValue('product_images', ['updated_at'], ['created_at']);
     }
 
     /**

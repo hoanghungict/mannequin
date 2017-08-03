@@ -21,6 +21,7 @@ class CreateExportDetailsTable extends Migration
             $table->bigInteger('prices');
             $table->integer('quantity');
             $table->integer('unit_id');
+            $table->integer('unit_exchange')->default(1);
 
             $table->softDeletes();
             $table->timestamps();
@@ -28,7 +29,7 @@ class CreateExportDetailsTable extends Migration
             $table->index(['id', 'export_id']);
         });
 
-        $this->updateTimestampDefaultValue('users', ['updated_at'], ['created_at']);
+        $this->updateTimestampDefaultValue('export_details', ['updated_at'], ['created_at']);
 
     }
 

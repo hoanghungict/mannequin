@@ -23,7 +23,7 @@ class CreatePropertyValuesTable extends Migration
             $table->index('id');
         });
 
-        $this->updateTimestampDefaultValue('users', ['updated_at'], ['created_at']);
+        $this->updateTimestampDefaultValue('property_values', ['updated_at'], ['created_at']);
     }
 
     /**

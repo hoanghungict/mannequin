@@ -24,6 +24,8 @@ class Product extends Base
         'name',
         'subcategory_id',
         'unit_id',
+        'unit2_id',
+        'unit_exchange',
         'descriptions',
         'is_enabled',
     ];
@@ -66,6 +68,11 @@ class Product extends Base
         return $this->belongsTo(\App\Models\Unit::class, 'unit_id', 'id');
     }
 
+    public function unit2()
+    {
+        return $this->belongsTo(\App\Models\Unit::class, 'unit2_id', 'id');
+    }
+
     // Utility Functions
 
     /*
@@ -79,6 +86,8 @@ class Product extends Base
             'name'           => $this->name,
             'subcategory_id' => $this->subcategory_id,
             'unit_id'        => $this->unit_id,
+            'unit2_id'       => $this->unit2_id,
+            'unit_exchange'  => $this->unit_exchange,
             'descriptions'   => $this->descriptions,
             'is_enabled'     => $this->is_enabled,
         ];
