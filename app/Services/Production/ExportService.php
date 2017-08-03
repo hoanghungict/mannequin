@@ -43,24 +43,29 @@ class ExportService extends BaseService implements ExportServiceInterface
 
         foreach( $products as $product ) {
             $productOption  = $this->productOptionRepository->find($product['option_id']);
-            if( $productOption->quantity >= $product['quantity'] ) {
+            if( !is_numeric($product['unit_exchange']) || !is_numeric($product['unit_exchange']) ) {
+                continue;
+            }
+            if( $productOption->quantity >= ($product['quantity'] * $product['unit_exchange']) ) {
                 $exportDetail = $this->exportDetailRepository->create(
                     [
-                        'export_id'  => $export->id,
-                        'product_id' => $product[ 'id' ],
-                        'option_id'  => $product[ 'option_id' ],
-                        'prices'     => $product[ 'export_price' ],
-                        'quantity'   => $product[ 'quantity' ],
-                        'unit_id'    => $product[ 'unit_id' ],
+                        'export_id'     => $export->id,
+                        'product_id'    => $product['id'],
+                        'option_id'     => $product['option_id'],
+                        'prices'        => $product['export_price'],
+                        'quantity'      => $product['quantity'],
+                        'unit_id'       => $product['unit_id'],
+                        'unit_exchange' => $product['unit_exchange'],
                     ]
                 );
 
                 if( !empty($exportDetail) ) {
-                    $totalAmount += ($exportDetail->quantity * $exportDetail->prices);
+                    $totalAmount += ($exportDetail->unit_exchange * $exportDetail->quantity * $exportDetail->prices);
                 }
 
-                $quantity       = $productOption->quantity - $product['quantity'];
+                $quantity       = $productOption->quantity - ($product['quantity'] * $product['unit_exchange']);
                 $this->productOptionRepository->update( $productOption, ['quantity' => $quantity] );
+
                 if( $quantity < config( 'notification.system.general_alert.products.number_limit_notice' ) ) {
                     $productName = $this->productRepository->find( $product[ 'id' ] )[ 'name' ];
                     $this->adminUserNotificationRepository->create(

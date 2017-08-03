@@ -17,8 +17,9 @@ $(document).ready(function () {
 
     $('select[name="modal_product_option"]').on('change', function () {
         $('#modal-export-price').val($('#modal-product-option option:selected').attr('p'));
-        $('#modal-current-quantity').text($('#modal-product-option option:selected').attr('q') + ' +');
+        $('#modal-current-quantity').text($('#modal-product-option option:selected').attr('q') + ' -');
         $('#modal-current-quantity').attr('value', $('#modal-product-option option:selected').attr('q'));
+        generateUnit();
     });
 
     var index = 0;
@@ -28,7 +29,8 @@ $(document).ready(function () {
         price               = $('#modal-export-price').val();
         quantity            = $('#modal-quantity').val();
         currentQuantity     = parseInt($('#modal-current-quantity').attr('value'));
-        unit                = $('#modal-unit').attr('uid');
+        unit                = $('#modal-unit').val();
+        unitExchange        = $('#modal-unit :selected').attr('exchange');
         if( productId && option && quantity > 0 && (currentQuantity >= quantity) ) {
             var content = '';
             content += '' +
@@ -44,7 +46,7 @@ $(document).ready(function () {
                     '</td>' +
 
                     '<td>' +
-                        $('#modal-export-price').val() +
+                        $('#modal-export-price').val() + '<span style="font-size: 11px;"> VND/' + $('#modal-unit').find("option:first-child").text() + '</span>' +
                         '<input type="hidden" name="products[' + index + '][export_price]" value=' + "'" + price + "'" + '>' +
                     '</td>' +
 
@@ -54,12 +56,13 @@ $(document).ready(function () {
                     '</td>' +
 
                     '<td>' +
-                        $('#modal-unit').val() +
+                        $('#modal-unit :selected').text() +
                         '<input type="hidden" name="products[' + index + '][unit_id]" value=' + "'" + unit + "'" + '>' +
+                        '<input type="hidden" name="products[' + index + '][unit_exchange]" value=' + "'" + unitExchange + "'" + '>' +
                     '</td>' +
 
                     '<td>' +
-                        quantity * price +
+                        quantity * unitExchange * price + ' <span style="font-size: 11px;">VND</span>' +
                     '</td>' +
 
                     '<td style="text-align: center">' +
@@ -73,6 +76,15 @@ $(document).ready(function () {
 
         index++;
         $('.close').click();
+    });
+
+    $('#modal-unit').on('change', function () {
+        currentQuantity = $('#modal-product-option :selected').attr('q');
+        unitExchange = $('#modal-unit :selected').attr('exchange');
+        quantityExchange = (currentQuantity - (currentQuantity%unitExchange)) / unitExchange;
+
+        $('#modal-current-quantity').attr('value', quantityExchange);
+        $('#modal-current-quantity').text(quantityExchange + ' -');
     });
 });
 
@@ -93,7 +105,7 @@ function generateOptions() {
                 });
 
                 $('#modal-export-price').val($('#modal-product-option option:selected').attr('p'));
-                $('#modal-current-quantity').text($('#modal-product-option option:selected').attr('q') + ' +');
+                $('#modal-current-quantity').text($('#modal-product-option option:selected').attr('q') + ' -');
                 $('#modal-current-quantity').attr('value', $('#modal-product-option option:selected').attr('q'));
             } else {
                 alert(response.message);
@@ -111,8 +123,11 @@ function generateUnit() {
 
     Boilerplate.products.forEach(function (product) {
         if (product.id == productId) {
-            $('#modal-unit').val(product.unit_name);
-            $('#modal-unit').attr('uid', product.unit_id);
+            $('#modal-unit').html('');
+            $('#modal-unit').append('<option value="' + product.unit_id + '" exchange="1">' + product.unit_name + '</option>');
+            if( product.unit2_id ) {
+                $('#modal-unit').append('<option value="' + product.unit2_id + '" exchange="' + product.unit_exchange + '">' + product.unit2_name + ' (' + product.unit_exchange + ' ' + product.unit_name + ')</option>');
+            }
         }
     });
 }
@@ -123,7 +138,7 @@ function resetModalExport() {
     $('#modal-product-option').append('<option value="">Select a Option</option>');
     $('#modal-export-price').val(0);
     $('#modal-quantity').val(0);
-    $('#modal-current-quantity').text('0 +');
+    $('#modal-current-quantity').text('0 -');
 }
 
 function deleteProduct(span) {

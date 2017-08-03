@@ -10,6 +10,7 @@ $(function () {
         importPrice = parseInt($('#option-import-price').val());
         exportPrice = parseInt($('#option-export-price').val());
         quantity = parseInt($('#option-quantity').val());
+        unit = $('#unit-id :selected').text();
 
         propertiesName = '';
         propertiesCode = '{';
@@ -29,6 +30,10 @@ $(function () {
         }
         newRow =    '<tr>' +
                         '<td>' +
+                            propertiesName +
+                            '<input type="hidden" name="options[' + index + '][properties]" value=' + "'" + propertiesCode + "'" + '>' +
+                        '</td>' +
+                        '<td>' +
                             importPrice +
                             '<input type="hidden" name="options[' + index + '][import_price]" value="' + importPrice + '">' +
                         '</td>' +
@@ -40,10 +45,7 @@ $(function () {
                             quantity +
                             '<input type="hidden" name="options[' + index + '][quantity]" value="' + quantity + '">' +
                         '</td>' +
-                        '<td>' +
-                            propertiesName +
-                            '<input type="hidden" name="options[' + index + '][properties]" value=' + "'" + propertiesCode + "'" + '>' +
-                        '</td>' +
+                        '<td>' + unit + '</td>' +
                         '<td>' +
                             '<span onclick="deleteProductOption(this);" style="cursor: pointer; color: #ca2424;"> Delete</span>' +
                         '</td>' +
