@@ -17,7 +17,8 @@ return [
         'imports'                  => 'Nhập Kho',
         'exports'                  => 'Xuất Kho',
         'categories'               => 'Danh Mục',
-        'subcategories'            => 'Danh Mục Con'
+        'subcategories'            => 'Danh Mục Con',
+        'units'                    => 'Đơn vị'
     ],
     'breadcrumb' => [
         'dashboard'                => 'Bảng Điều Khiển',
@@ -37,6 +38,7 @@ return [
         'categories'               => 'Danh Mục',
         'subcategories'            => 'Danh Mục Con',
         'create_new'               => 'Create New',
+        'units'                    => 'Đơn vị'
     ],
     'messages'   => [
         'general' => [

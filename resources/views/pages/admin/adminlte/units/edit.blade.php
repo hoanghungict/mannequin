@@ -16,11 +16,15 @@
 @stop
 
 @section('header')
-    Units
+    @lang('admin.breadcrumb.units')
 @stop
 
 @section('breadcrumb')
-    <li><a href="{!! action('Admin\UnitController@index') !!}"><i class="fa fa-files-o"></i> Units</a></li>
+    <li>
+        <a href="{!! action('Admin\UnitController@index') !!}"><i class="fa fa-files-o"></i>
+            @lang('admin.breadcrumb.units')
+        </a>
+    </li>
     @if( $isNew )
         <li class="active">New</li>
     @else

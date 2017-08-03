@@ -17,7 +17,8 @@ return [
         'imports'                  => 'Imports',
         'exports'                  => 'Exports',
         'categories'               => 'Categories',
-        'subcategories'            => 'SubCategories'
+        'subcategories'            => 'SubCategories',
+        'units'                    => 'Units'
     ],
     'breadcrumb' => [
         'dashboard'                => 'Dashboard',
@@ -37,6 +38,7 @@ return [
         'categories'               => 'Categories',
         'subcategories'            => 'SubCategories',
         'create_new'               => 'Create New',
+        'units'                    => 'Units'
     ],
     'messages'   => [
         'general' => [

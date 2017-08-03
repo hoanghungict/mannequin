@@ -14,11 +14,13 @@
 @stop
 
 @section('header')
-Units
+    @lang('admin.breadcrumb.units')
 @stop
 
 @section('breadcrumb')
-<li class="active">Units</li>
+<li class="active">
+    @lang('admin.breadcrumb.units')
+</li>
 @stop
 
 @section('content')
