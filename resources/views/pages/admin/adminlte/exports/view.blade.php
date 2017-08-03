@@ -41,7 +41,6 @@
                         <h1 style="margin-top: 0;">Mannequin Thu Huyền</h1>
                         <h5>Cổng số 6 - Chợ Đồng Xuân / Kiot 24 Chợ Ninh Hiệp</h5>
                         <h5>SĐT: 0986156651 / 0168862268</h5>
-                        <h5>Website: mannequinthuhuyen.com</h5>
                     </div>
                 </div>
 
@@ -76,8 +75,8 @@
                             <th>@lang('admin.pages.exports.view.options')</th>
                             <th>@lang('admin.pages.exports.view.quantity')</th>
                             <th>@lang('admin.pages.exports.view.unit')</th>
-                            <th style="width: 90px;">@lang('admin.pages.exports.view.price')</th>
-                            <th style="width: 125px;">@lang('admin.pages.exports.view.total')</th>
+                            <th>@lang('admin.pages.exports.view.price')</th>
+                            <th style="width: 150px;">@lang('admin.pages.exports.view.total')</th>
                         </tr>
 
                         @foreach( $export->details as $key => $exportDetail )
@@ -86,9 +85,14 @@
                                 <td>{{ $exportDetail->product->name }}</td>
                                 <td>{{ $exportDetail->productOption->present()->getProductOptionName }}</td>
                                 <td>{{ number_format($exportDetail->quantity, 0, ',', ' ') }}</td>
-                                <td>{{ $exportDetail->product->unit->name }}</td>
-                                <td>{{ number_format($exportDetail->prices, 0, ',', ' ') }}</td>
-                                <td>{{ number_format(($exportDetail->prices * $exportDetail->quantity), 0, ',', ' ') }} <span style="font-size: 11px;">VND</span></td>
+                                <td>
+                                    {{ $exportDetail->unit->name }}
+                                    @if( $exportDetail->unit_exchange != 1 )
+                                        <span style="font-size: 11px;">({{$exportDetail->unit_exchange}} {{$exportDetail->product->unit->name}})</span>
+                                    @endif
+                                </td>
+                                <td>{{ number_format($exportDetail->prices, 0, ',', ' ') }} <span style="font-size: 11px;">VND/{{$exportDetail->product->unit->name}}</span></td>
+                                <td>{{ number_format(($exportDetail->prices * $exportDetail->quantity * $exportDetail->unit_exchange), 0, ',', ' ') }} <span style="font-size: 11px;">VND</span></td>
                             </tr>
                         @endforeach
                     </table>

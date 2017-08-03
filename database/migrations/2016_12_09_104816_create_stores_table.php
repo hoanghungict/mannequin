@@ -24,7 +24,7 @@ class CreateStoresTable extends Migration
             $table->index('id');
         });
 
-        $this->updateTimestampDefaultValue('users', ['updated_at'], ['created_at']);
+        $this->updateTimestampDefaultValue('stores', ['updated_at'], ['created_at']);
     }
 
     /**

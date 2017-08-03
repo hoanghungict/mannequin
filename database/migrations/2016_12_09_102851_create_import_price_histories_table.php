@@ -26,7 +26,7 @@ class CreateImportPriceHistoriesTable extends Migration
             $table->index(['id', 'product_option_id']);
         });
 
-        $this->updateTimestampDefaultValue('users', ['updated_at'], ['created_at']);
+        $this->updateTimestampDefaultValue('import_price_histories', ['updated_at'], ['created_at']);
     }
 
     /**

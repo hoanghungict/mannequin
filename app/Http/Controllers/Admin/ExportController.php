@@ -213,6 +213,8 @@ class ExportController extends Controller
                 'employees' => $this->employeeRepository->all(),
                 'stores'    => $this->storeRepository->all(),
                 'products'  => $this->productRepository->allEnabled('name', 'asc'),
+                'provinces' => $this->provinceRepository->all(),
+                'districts' => $this->districtRepository->all()
             ]
         );
     }

@@ -26,7 +26,7 @@ class CreateProductOptionsTable extends Migration
             $table->index(['id', 'product_id']);
         });
 
-        $this->updateTimestampDefaultValue('users', ['updated_at'], ['created_at']);
+        $this->updateTimestampDefaultValue('product_options', ['updated_at'], ['created_at']);
     }
 
     /**

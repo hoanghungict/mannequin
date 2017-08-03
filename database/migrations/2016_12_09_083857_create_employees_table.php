@@ -27,7 +27,7 @@ class CreateEmployeesTable extends Migration
             $table->index(['id', 'name']);
         });
 
-        $this->updateTimestampDefaultValue('users', ['updated_at'], ['created_at']);
+        $this->updateTimestampDefaultValue('employees', ['updated_at'], ['created_at']);
 
     }
 

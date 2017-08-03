@@ -50,6 +50,7 @@
             @endif
 
             <li @if( $menu=='products') class="active" @endif ><a href="{!! \URL::action('Admin\ProductController@index') !!}"><i class="fa fa-product-hunt"></i> <span>@lang('admin.menu.products')</span></a></li>
+            <li @if( $menu=='units') class="active" @endif ><a href="{!! \URL::action('Admin\UnitController@index') !!}"><i class="fa fa-adjust"></i> <span>Units</span></a></li>
             <li @if( $menu=='imports') class="active" @endif ><a href="{!! \URL::action('Admin\ImportController@index') !!}"><i class="fa fa-download"></i> <span>@lang('admin.menu.imports')</span></a></li>
             <li @if( $menu=='exports') class="active" @endif ><a href="{!! \URL::action('Admin\ExportController@index') !!}"><i class="fa fa-upload"></i> <span>@lang('admin.menu.exports')</span></a></li>
             <!-- %%SIDEMENU%% -->

@@ -27,7 +27,7 @@ class CreateSubcategoriesTable extends Migration
             $table->timestamps();
         });
 
-        $this->updateTimestampDefaultValue('users', ['updated_at'], ['created_at']);
+        $this->updateTimestampDefaultValue('subcategories', ['updated_at'], ['created_at']);
     }
 
     /**

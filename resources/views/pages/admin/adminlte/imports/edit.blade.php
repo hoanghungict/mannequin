@@ -17,7 +17,8 @@
 
 @php
     foreach( $products as $key => $product ) {
-        $products[$key]['unit_name'] = $product->unit->name;
+        $products[$key]['unit_name']  = isset($product->unit) ? $product->unit->name : '';
+        $products[$key]['unit2_name'] = isset($product->unit2) ? $product->unit2->name : '';
     }
 @endphp
 @section('scripts')
@@ -142,10 +143,15 @@
                                     <tr>
                                         <td>{{ $importDetail->present()->product->name }}</td>
                                         <td>{{ $importDetail->productOption->present()->getProductOptionName }}</td>
-                                        <td>{{ number_format($importDetail->prices, 0, ',', ' ') }} <span style="font-size: 11px;">VND</span></td>
+                                        <td>{{ number_format($importDetail->prices, 0, ',', ' ') }} <span style="font-size: 11px;">VND{{isset($importDetail->product->unit) ? '/' . $importDetail->product->unit->name : ''}}</span></td>
                                         <td>{{ number_format($importDetail->quantity, 0, ',', ' ') }}</td>
-                                        <td>{{ $importDetail->product->unit->name }}</td>
-                                        <td>{{ number_format(($importDetail->prices * $importDetail->quantity), 0, ',', ' ') }} <span style="font-size: 11px;">VND</span></td>
+                                        <td>
+                                            {{ isset($importDetail->unit) ? $importDetail->unit->name : '' }}
+                                            @if( $importDetail->unit_id != $importDetail->product->unit_id )
+                                                ({{$importDetail->unit_exchange}} {{$importDetail->product->unit->name}})
+                                            @endif
+                                        </td>
+                                        <td>{{ number_format(($importDetail->prices * $importDetail->quantity * $importDetail->unit_exchange), 0, ',', ' ') }} <span style="font-size: 11px;">VND</span></td>
                                         <td></td>
                                     </tr>
                                 @endforeach
@@ -229,7 +235,9 @@
                             <tr>
                                 <th style="">@lang('admin.pages.imports.modal.unit')</th>
                                 <td>
-                                    <input type="text" name="modal_unit" id="modal-unit" disabled value="Chiếc" uid="0" class="form-control">
+                                    <select class="form-control" name="modal_unit" id="modal-unit" required="required">
+                                        <option value="">@lang('admin.pages.common.label.select_unit')</option>
+                                    </select>
                                 </td>
                             </tr>
 

@@ -26,6 +26,7 @@ class ExportDetail extends Base
         'prices',
         'quantity',
         'unit_id',
+        'unit_exchange',
     ];
 
     /**
@@ -76,13 +77,14 @@ class ExportDetail extends Base
     public function toAPIArray()
     {
         return [
-            'id'         => $this->id,
-            'export_id'  => $this->export_id,
-            'product_id' => $this->product_id,
-            'option_id'  => $this->option_id,
-            'prices'     => $this->prices,
-            'quantity'   => $this->quantity,
-            'unit_id'    => $this->unit_id,
+            'id'            => $this->id,
+            'export_id'     => $this->export_id,
+            'product_id'    => $this->product_id,
+            'option_id'     => $this->option_id,
+            'prices'        => $this->prices,
+            'quantity'      => $this->quantity,
+            'unit_id'       => $this->unit_id,
+            'unit_exchange' => $this->unit_id,
         ];
     }
 

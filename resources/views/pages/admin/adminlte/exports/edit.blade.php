@@ -11,7 +11,8 @@
 @section('scripts')
     @php
         foreach( $products as $key => $product ) {
-            $products[$key]['unit_name'] = $product->unit->name;
+            $products[$key]['unit_name']  = isset($product->unit) ? $product->unit->name : '';
+            $products[$key]['unit2_name'] = isset($product->unit2) ? $product->unit2->name : '';
         }
 
         foreach( $districts as $key => $district ) {
@@ -223,10 +224,15 @@
                                     <tr>
                                         <td>{{ $exportDetail->present()->product->name }}</td>
                                         <td>{{ $exportDetail->productOption->present()->getProductOptionName }}</td>
-                                        <td>{{ number_format($exportDetail->prices, 0, ',', ' ') }} <span style="font-size: 11px;">VND</span></td>
+                                        <td>{{ number_format($exportDetail->prices, 0, ',', ' ') }} <span style="font-size: 11px;">VND{{isset($exportDetail->product->unit) ? '/' . $exportDetail->product->unit->name : ''}}</span></td>
                                         <td>{{ number_format($exportDetail->quantity, 0, ',', ' ') }}</td>
-                                        <td>{{ $exportDetail->product->unit->name }}</td>
-                                        <td>{{ number_format(($exportDetail->prices * $exportDetail->quantity), 0, ',', ' ') }} <span style="font-size: 11px;">VND</span></td>
+                                        <td>
+                                            {{ isset($exportDetail->unit) ? $exportDetail->unit->name : '' }}
+                                            @if( $exportDetail->unit_id != $exportDetail->product->unit_id )
+                                                ({{$exportDetail->unit_exchange}} {{$exportDetail->product->unit->name}})
+                                            @endif
+                                        </td>
+                                        <td>{{ number_format(($exportDetail->prices * $exportDetail->quantity * $exportDetail->unit_exchange), 0, ',', ' ') }} <span style="font-size: 11px;">VND</span></td>
                                         <td></td>
                                     </tr>
                                 @endforeach
@@ -293,7 +299,7 @@
                                 <th style="">@lang('admin.pages.exports.modal.quantity')</th>
                                 <td>
                                     <div class="input-group" style="width: 100%; border: 1px solid #ccc;">
-                                        <span id="modal-current-quantity" class="input-group-addon" style="padding: 0 25px; border: none; background: #eeeeee">0 +</span>
+                                        <span id="modal-current-quantity" class="input-group-addon" style="padding: 0 25px; border: none; background: #eeeeee">0 -</span>
                                         <input type="number" name="modal_option_quantity" class="form-control" required="required" min="0" id="modal-quantity" value="0" style="border: none;">
                                     </div>
                                 </td>
@@ -302,7 +308,9 @@
                             <tr>
                                 <th style="">@lang('admin.pages.exports.modal.unit')</th>
                                 <td>
-                                    <input type="text" name="modal_unit" id="modal-unit" disabled value="Chiếc" uid="0" class="form-control">
+                                    <select class="form-control" name="modal_unit" id="modal-unit" required="required">
+                                        <option value="">@lang('admin.pages.common.label.select_unit')</option>
+                                    </select>
                                 </td>
                             </tr>
 

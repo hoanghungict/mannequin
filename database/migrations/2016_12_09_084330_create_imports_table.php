@@ -28,7 +28,7 @@ class CreateImportsTable extends Migration
             $table->index('id');
         });
 
-        $this->updateTimestampDefaultValue('users', ['updated_at'], ['created_at']);
+        $this->updateTimestampDefaultValue('imports', ['updated_at'], ['created_at']);
     }
 
     /**

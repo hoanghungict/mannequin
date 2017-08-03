@@ -49,6 +49,7 @@
         });
 
         \Route::resource('products', 'Admin\ProductController');
+        \Route::resource('units', 'Admin\UnitController');
         \Route::post('product-options', 'Admin\ProductOptionController@create');
         \Route::get('getOptionOfProduct/{id}', 'Admin\ProductController@getAllOptionOfProduct');
 

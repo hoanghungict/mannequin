@@ -247,7 +247,9 @@ return [
                 'name'           => 'Tên sản phẩm',
                 'category_id'    => 'Danh mục',
                 'subcategory_id' => 'Danh mục con',
-                'unit_id'        => 'Đơn vị',
+                'unit_id'        => 'Đơn vị (lẻ)',
+                'unit2_id'       => 'Đơn vị (sỉ)',
+                'unit_exchange'  => 'Tỷ lệ',
                 'descriptions'   => 'Mô tả',
                 'quantity'       => 'Số lượng',
                 'import_price'   => 'Giá nhập',
@@ -255,6 +257,7 @@ return [
                 'price'          => 'Giá',
             ],
             'options' => [
+                'change_unit2_title'   => 'Đơn vị (Bán sỉ)',
                 'create_option_title'  => 'Tạo Option mới',
                 'create_option_button' => 'Tạo mới',
                 'properties'           => 'Thuộc tính',
