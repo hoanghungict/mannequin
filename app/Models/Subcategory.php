@@ -36,7 +36,7 @@ class Subcategory extends Base
 
     protected $dates  = ['deleted_at'];
 
-//    protected $presenter = \App\Presenters\SubcategoryPresenter::class;
+    protected $presenter = \App\Presenters\SubcategoryPresenter::class;
 
     public static function boot()
     {

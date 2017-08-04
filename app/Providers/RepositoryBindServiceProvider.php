@@ -92,7 +92,7 @@ class RepositoryBindServiceProvider extends ServiceProvider
             \App\Repositories\UserNotificationRepositoryInterface::class,
             \App\Repositories\Eloquent\UserNotificationRepository::class
         );
-        
+            
         $this->app->singleton(
             \App\Repositories\AdminUserNotificationRepositoryInterface::class,
             \App\Repositories\Eloquent\AdminUserNotificationRepository::class

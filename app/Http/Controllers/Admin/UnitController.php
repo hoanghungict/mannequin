@@ -38,7 +38,7 @@ class UnitController extends Controller
         $count = $this->unitRepository->count();
         $units = $this->unitRepository->get( $paginate['order'], $paginate['direction'], $paginate['offset'], $paginate['limit'] );
 
-        return view('pages.admin.units.index', [
+        return view('pages.admin.' . config('view.admin') . '.units.index', [
             'units'    => $units,
             'count'         => $count,
             'paginate'      => $paginate,
@@ -52,7 +52,7 @@ class UnitController extends Controller
      */
     public function create()
     {
-        return view('pages.admin.units.edit', [
+        return view('pages.admin.' . config('view.admin') . '.units.edit', [
             'isNew'     => true,
             'unit' => $this->unitRepository->getBlankModel(),
         ]);
@@ -91,7 +91,7 @@ class UnitController extends Controller
             abort(404);
         }
 
-        return view('pages.admin.units.edit', [
+        return view('pages.admin.' . config('view.admin') . '.units.edit', [
             'isNew' => false,
             'unit' => $unit,
         ]);

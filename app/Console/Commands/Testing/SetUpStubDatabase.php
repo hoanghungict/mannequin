@@ -26,10 +26,10 @@ class SetUpStubDatabase extends Command
 
     protected $stubDbPath = '';
 
-    public function __construct( Filesystem $files )
+    public function __construct(Filesystem $files)
     {
         parent::__construct();
-        $this->stubDbPath = config( 'database.testing.stubdb' );
+        $this->stubDbPath = config('database.testing.stubdb');
         $this->files = $files;
     }
 
@@ -40,12 +40,12 @@ class SetUpStubDatabase extends Command
      */
     public function handle()
     {
-        if( $this->files->exists( $this->stubDbPath ) ) {
-            $this->files->delete( $this->stubDbPath );
+        if ( $this->files->exists($this->stubDbPath) ) {
+            $this->files->delete($this->stubDbPath);
         }
-        $this->files->put( $this->stubDbPath, '' );
+        $this->files->put($this->stubDbPath, '');
 
-        \Artisan::call( 'migrate:refresh', ['--seed' => true, '--database' => 'setup', '--env' => 'testing'] );
+        \Artisan::call('migrate:refresh', ['--seed' => true, '--database' => 'setup', '--env' => 'testing']);
     }
 
 }

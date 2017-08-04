@@ -9,7 +9,8 @@ use App\Http\Requests\PaginationRequest;
 use App\Services\FileUploadServiceInterface;
 use App\Repositories\ImageRepositoryInterface;
 
-class UserController extends Controller {
+class UserController extends Controller
+{
 
     /** @var \App\Repositories\UserRepositoryInterface */
     protected $userRepository;
@@ -21,13 +22,14 @@ class UserController extends Controller {
     protected $imageRepository;
 
     public function __construct(
-        UserRepositoryInterface         $userRepository,
-        FileUploadServiceInterface      $fileUploadService,
-        ImageRepositoryInterface        $imageRepository
-    ) {
-        $this->userRepository           = $userRepository;
-        $this->fileUploadService        = $fileUploadService;
-        $this->imageRepository          = $imageRepository;
+        UserRepositoryInterface $userRepository,
+        FileUploadServiceInterface $fileUploadService,
+        ImageRepositoryInterface $imageRepository
+    )
+    {
+        $this->userRepository = $userRepository;
+        $this->fileUploadService = $fileUploadService;
+        $this->imageRepository = $imageRepository;
     }
 
     /**
@@ -37,23 +39,24 @@ class UserController extends Controller {
      *
      * @return \Response
      */
-    public function index( PaginationRequest $request ) {
-        $paginate[ 'offset' ]    = $request->offset();
-        $paginate[ 'limit' ]     = $request->limit();
-        $paginate[ 'order' ]     = $request->order();
-        $paginate[ 'direction' ] = $request->direction();
-        $paginate[ 'baseUrl' ]   = action( 'Admin\UserController@index' );
+    public function index(PaginationRequest $request)
+    {
+        $paginate['offset'] = $request->offset();
+        $paginate['limit'] = $request->limit();
+        $paginate['order'] = $request->order();
+        $paginate['direction'] = $request->direction();
+        $paginate['baseUrl'] = action('Admin\UserController@index');
 
-        $count  = $this->userRepository->count();
+        $count = $this->userRepository->count();
         $models = $this->userRepository->get(
-            $paginate[ 'order' ],
-            $paginate[ 'direction' ],
-            $paginate[ 'offset' ],
-            $paginate[ 'limit' ]
+            $paginate['order'],
+            $paginate['direction'],
+            $paginate['offset'],
+            $paginate['limit']
         );
 
         return view(
-            'pages.admin.users.index',
+            'pages.admin.' . config('view.admin') . '.users.index',
             [
                 'models'   => $models,
                 'count'    => $count,
@@ -67,9 +70,10 @@ class UserController extends Controller {
      *
      * @return \Response
      */
-    public function create() {
+    public function create()
+    {
         return view(
-            'pages.admin.users.edit',
+            'pages.admin.' . config('view.admin') . '.users.edit',
             [
                 'isNew' => true,
                 'user'  => $this->userRepository->getBlankModel(),
@@ -84,7 +88,8 @@ class UserController extends Controller {
      *
      * @return \Response
      */
-    public function store( UserRequest $request ) {
+    public function store(UserRequest $request)
+    {
         $input = $request->only(
             [
                 'name',
@@ -97,26 +102,29 @@ class UserController extends Controller {
             ]
         );
 
-        $input['is_activated']  = $request->get('is_activated', 0);
-        $input['gender']        = $request->get('gender', 1);
-        $input['locale']        = $request->get('locale', 'en');
-        $model = $this->userRepository->create( $input );
+        $input['is_activated'] = $request->get('is_activated', 0);
+        $input['gender'] = $request->get('gender', 1);
+        $input['locale'] = $request->get('locale', 'en');
+        $model = $this->userRepository->create($input);
 
-        if( empty( $model ) ) {
+        if (empty($model)) {
             return redirect()
                 ->back()
-                ->withErrors( trans( 'admin.errors.general.save_failed' ) );
+                ->withErrors(trans('admin.errors.general.save_failed'));
         }
 
         if ($request->hasFile('profile_image')) {
-            $file       = $request->file('profile_image');
-            $mediaType  = $file->getClientMimeType();
-            $path       = $file->getPathname();
-            $image      = $this->fileUploadService->upload('user-profile-image', $path, $mediaType, [
-                'entityType' => 'user-profile-image',
-                'entityId'   => $model->id,
-                'title'      => $request->input('name', ''),
-            ]);
+            $file = $request->file('profile_image');
+
+            $image = $this->fileUploadService->upload(
+                'user_profile_image',
+                $file,
+                [
+                    'entity_type' => 'user_profile_image',
+                    'entity_id'   => $model->id,
+                    'title'       => $request->input('name', ''),
+                ]
+            );
 
             if (!empty($image)) {
                 $this->userRepository->update($model, ['profile_image_id' => $image->id]);
@@ -124,8 +132,8 @@ class UserController extends Controller {
         }
 
         return redirect()
-            ->action( 'Admin\UserController@index' )
-            ->with( 'message-success', trans( 'admin.messages.general.create_success' ) );
+            ->action('Admin\UserController@index')
+            ->with('message-success', trans('admin.messages.general.create_success'));
     }
 
     /**
@@ -135,14 +143,15 @@ class UserController extends Controller {
      *
      * @return \Response
      */
-    public function show( $id ) {
-        $model = $this->userRepository->find( $id );
-        if( empty( $model ) ) {
-            \App::abort( 404 );
+    public function show($id)
+    {
+        $model = $this->userRepository->find($id);
+        if (empty($model)) {
+            abort(404);
         }
 
         return view(
-            'pages.admin.users.edit',
+            'pages.admin.' . config('view.admin') . '.users.edit',
             [
                 'isNew' => false,
                 'user'  => $model,
@@ -157,7 +166,8 @@ class UserController extends Controller {
      *
      * @return \Response
      */
-    public function edit( $id ) {
+    public function edit($id)
+    {
         //
     }
 
@@ -169,11 +179,12 @@ class UserController extends Controller {
      *
      * @return \Response
      */
-    public function update( $id, UserRequest $request ) {
+    public function update($id, UserRequest $request)
+    {
         /** @var \App\Models\User $model */
-        $model = $this->userRepository->find( $id );
-        if( empty( $model ) ) {
-            \App::abort( 404 );
+        $model = $this->userRepository->find($id);
+        if (empty($model)) {
+            abort(404);
         }
         $input = $request->only(
             [
@@ -187,34 +198,36 @@ class UserController extends Controller {
             ]
         );
 
-        $input['is_activated']  = $request->get('is_activated', 0);
-        $input['gender']        = $request->get('gender', 1);
-        $model = $this->userRepository->update( $model, $input );
+        $input['is_activated'] = $request->get('is_activated', 0);
+        $input['gender'] = $request->get('gender', 1);
+        $model = $this->userRepository->update($model, $input);
 
         if ($request->hasFile('profile_image')) {
-            $file       = $request->file('profile_image');
-            $mediaType  = $file->getClientMimeType();
-            $path       = $file->getPathname();
-            $image      = $this->fileUploadService->upload('user-profile-image', $path, $mediaType, [
-                'entityType' => 'user-profile-image',
-                'entityId'   => $model->id,
-                'title'      => $request->input('name', ''),
-            ]);
+            $file = $request->file('profile_image');
 
-            if (!empty($image)) {
+            $newImage = $this->fileUploadService->upload(
+                'user_profile_image',
+                $file,
+                [
+                    'entity_type' => 'user_profile_image',
+                    'entity_id'   => $model->id,
+                    'title'       => $request->input('name', ''),
+                ]
+            );
+
+            if (!empty($newImage)) {
                 $oldImage = $model->coverImage;
                 if (!empty($oldImage)) {
                     $this->fileUploadService->delete($oldImage);
-                    $this->imageRepository->delete($oldImage);
                 }
 
-                $this->userRepository->update($model, [ 'profile_image_id' => $image->id ]);
+                $this->userRepository->update($model, ['profile_image_id' => $newImage->id]);
             }
         }
 
         return redirect()
-            ->action( 'Admin\UserController@show', [$id] )
-            ->with( 'message-success', trans( 'admin.messages.general.update_success' ) );
+            ->action('Admin\UserController@show', [$id])
+            ->with('message-success', trans('admin.messages.general.update_success'));
     }
 
     /**
@@ -224,17 +237,18 @@ class UserController extends Controller {
      *
      * @return \Response
      */
-    public function destroy( $id ) {
+    public function destroy($id)
+    {
         /** @var \App\Models\User $model */
-        $model = $this->userRepository->find( $id );
-        if( empty( $model ) ) {
-            \App::abort( 404 );
+        $model = $this->userRepository->find($id);
+        if (empty($model)) {
+            abort(404);
         }
-        $this->userRepository->delete( $model );
+        $this->userRepository->delete($model);
 
         return redirect()
-            ->action( 'Admin\UserController@index' )
-            ->with( 'message-success', trans( 'admin.messages.general.delete_success' ) );
+            ->action('Admin\UserController@index')
+            ->with('message-success', trans('admin.messages.general.delete_success'));
     }
 
 }

@@ -5,12 +5,13 @@ namespace App\Services;
 interface ImageServiceInterface extends BaseServiceInterface
 {
     /**
-     * @param string      $src    file path
-     * @param string      $dst    file path
-     * @param string|null $format file format
-     * @param array       $size   [ width, height ]
+     * resize image as config
      *
-     * @return array
+     * @params  string  $path path to tmp upload image
+     *          array   $config[width, height]
+     *          string  $fileUploadedPath like public/static/common/images/products/product1.png
+     *
+     * @return  boolean
      */
-    public function convert($src, $dst, $format, $size);
+    public function resizeImage($path, $config, $fileUploadedPath);
 }

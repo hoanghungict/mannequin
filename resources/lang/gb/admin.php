@@ -16,6 +16,9 @@ return [
         'products'                 => 'Products',
         'imports'                  => 'Imports',
         'exports'                  => 'Exports',
+        'categories'               => 'Categories',
+        'subcategories'            => 'SubCategories',
+        'units'                    => 'Units'
     ],
     'breadcrumb' => [
         'dashboard'                => 'Dashboard',
@@ -32,7 +35,10 @@ return [
         'products'                 => 'Products',
         'imports'                  => 'Imports',
         'exports'                  => 'Exports',
+        'categories'               => 'Categories',
+        'subcategories'            => 'SubCategories',
         'create_new'               => 'Create New',
+        'units'                    => 'Units'
     ],
     'messages'   => [
         'general' => [
@@ -212,11 +218,18 @@ return [
                 'name'                 => 'Name',
                 'email'                => 'Email',
                 'password'             => 'Password',
+                'gender'               => 'Gender',
+                'gender_male'          => 'Male',
+                'gender_female'        => 'Female',
+                'telephone'            => 'Telephone',
+                'birthday'             => 'Birthday',
                 'locale'               => 'Locale',
+                'address'              => 'Address',
                 'remember_token'       => 'Remember Token',
                 'api_access_token'     => 'Api Access Token',
                 'profile_image_id'     => 'Profile Image',
                 'last_notification_id' => 'Last Notification Id',
+                'is_activated'         => 'is Activated',
             ],
         ],
         'customers'                => [
@@ -335,11 +348,28 @@ return [
                 'sign_and_name'  => '(Sign & Full name)',
             ]
         ],
-        'units'   => [
-            'columns'  => [
+        'categories'               => [
+            'columns' => [
+                'name'  => 'Name',
+                'slug'  => 'Slug',
+                'order' => 'Order',
+                'notes' => 'Notes',
+            ],
+        ],
+        'subcategories'            => [
+            'columns' => [
+                'category_id' => 'Category ID',
+                'name'        => 'Name',
+                'slug'        => 'Slug',
+                'order'       => 'Order',
+            ],
+        ],
+        'units'                    => [
+            'columns' => [
                 'name' => 'Name',
             ],
         ],
+
         /* NEW PAGE STRINGS */
     ],
     'roles'      => [

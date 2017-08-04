@@ -15,14 +15,13 @@ interface FileUploadServiceInterface extends BaseServiceInterface
     public function uploadFromText($categoryType, $text, $mediaType, $metaInputs);
 
     /**
-     * @param int    $categoryType
-     * @param string $path
-     * @param string $mediaType
-     * @param array  $metaInputs
+     * @params  string  $configKey
+     *          object  $file {path, mimeType, size ...}
+     *          array   $storageInfo [ entityType, entityId, title ]
      *
-     * @return \App\Models\Image|\App\Models\File|null
+     * @return \App\Models\Image | \App\Models\File | null
      */
-    public function upload($categoryType, $path, $mediaType, $metaInputs);
+    public function upload($configKey, $file, $storageInfo);
 
     /**
      * @param \App\Models\Image|\App\Models\File $model

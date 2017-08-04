@@ -12,4 +12,9 @@ class CacheHelper implements CacheHelperInterface
     {
         return $this->appPrefix . '_' . $name;
     }
+
+    public function cacheRedisEnabled()
+    {
+        return ( env('CACHE_ENABLED') && env('CACHE_DRIVER') == 'redis' ) ? true : false;
+    }
 }

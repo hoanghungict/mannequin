@@ -92,7 +92,7 @@ class ExportController extends Controller
         );
 
         return view(
-            'pages.admin.exports.index',
+            'pages.admin.' . config('view.admin') . '.exports.index',
             [
                 'exports'  => $exports,
                 'count'    => $count,
@@ -109,7 +109,7 @@ class ExportController extends Controller
     public function create()
     {
         return view(
-            'pages.admin.exports.edit',
+            'pages.admin.' . config('view.admin') . '.exports.edit',
             [
                 'isNew'     => true,
                 'export'    => $this->exportRepository->getBlankModel(),
@@ -181,7 +181,7 @@ class ExportController extends Controller
         }
 
         return view(
-            'pages.admin.exports.view',
+            'pages.admin.' . config('view.admin') . '.exports.view',
             [
                 'export'    => $export,
                 'provinces' => $this->provinceRepository->all(),

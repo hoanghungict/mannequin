@@ -1,4 +1,4 @@
-@extends('layouts.admin.application', ['menu' => '%%classes-snake%%'] )
+@extends('layouts.admin.' . config('view.admin') . '.application', ['menu' => '%%classes-snake%%'] )
 
 @section('metadata')
 @stop

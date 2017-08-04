@@ -1,9 +1,6 @@
-<<<<<<< HEAD
+
 .env
-!/resources/views/pages/admin/logs/
-=======
 /vendor
-.env
 .env.*
 !.env.example
 
@@ -28,12 +25,10 @@ bower_components
 !.elasticbeanstalk/*.cfg.yml
 !.elasticbeanstalk/*.global.yml
 
-storage/debugbar/
+storage
 
 /.env.production
 
 ingore.php
 
 public/static/swagger-ui
->>>>>>> 08b53dacd65bc178a46f2644a16eff016e7fec53
-storage

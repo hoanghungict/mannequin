@@ -24,13 +24,13 @@ class Execute extends Command
     /** @var Filesystem */
     protected $files;
 
-    /** @var mixed|string */
+    /** @var mixed|string  */
     protected $testDbPath = '';
 
-    public function __construct( Filesystem $files )
+    public function __construct(Filesystem $files)
     {
         parent::__construct();
-        $this->testDbPath = config( 'database.testing.testdb' );
+        $this->testDbPath = config('database.testing.testdb');
         $this->files = $files;
     }
 
@@ -41,14 +41,14 @@ class Execute extends Command
      */
     public function handle()
     {
-        if( $this->files->exists( $this->testDbPath ) ) {
-            $this->files->delete( $this->testDbPath );
+        if ( $this->files->exists($this->testDbPath) ) {
+            $this->files->delete($this->testDbPath);
         }
 
-        system( base_path( 'vendor/bin/phpunit' ) );
+        system(base_path('vendor/bin/phpunit'));
 
-        if( $this->files->exists( $this->testDbPath ) ) {
-            $this->files->delete( $this->testDbPath );
+        if ( $this->files->exists($this->testDbPath) ) {
+            $this->files->delete($this->testDbPath);
         }
     }
 
